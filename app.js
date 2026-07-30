@@ -1031,11 +1031,13 @@ function renderNotifications() {
   container.innerHTML = '';
   
   const unreadList = appState.notifications.filter(n => !n.read);
-  if (unreadList.length > 0) {
-    badge.style.display = 'flex';
-    badge.innerText = unreadList.length;
-  } else {
-    badge.style.display = 'none';
+  if (badge) {
+    if (unreadList.length > 0) {
+      badge.style.display = 'flex';
+      badge.innerText = unreadList.length;
+    } else {
+      badge.style.display = 'none';
+    }
   }
 
   appState.notifications.forEach(n => {
