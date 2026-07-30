@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SART - Universal Transport Booking Portal</title>
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Leaflet Map CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  
+  <!-- Local Styles -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="web-app-layout">
+    
+    <!-- TOP NAVIGATION BAR -->
+    <header class="web-navbar">
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <div class="nav-brand" onclick="switchTab('home')">
+          <i class="fa-solid fa-compass-drafting brand-icon"></i>
+          <span>SART</span>
+          <span class="brand-badge">UNIVERSAL</span>
+        </div>
+        
+        <!-- Location badge moved near logo -->
+        <div class="location-nav-btn" onclick="requestLocation()" style="flex-shrink: 0; align-self: center;">
+          <i class="fa-solid fa-location-dot"></i>
+          <span id="nav-location-txt">Indiranagar, Bengaluru</span>
+          <i class="fa-solid fa-chevron-down" style="font-size: 8px;"></i>
+        </div>
+      </div>
+      
+      <!-- Center Links (with AI and Wallet options removed) -->
+      <nav class="nav-links">
+        <div class="nav-link active" id="nav-btn-home" onclick="switchTab('home')">
+          <i class="fa-solid fa-house"></i>
+          <span>Home</span>
+        </div>
+        <div class="nav-link" id="nav-btn-store" onclick="switchTab('store')">
+          <i class="fa-solid fa-bag-shopping"></i>
+          <span>Store</span>
+        </div>
+        <div class="nav-link" id="nav-btn-profile" onclick="switchTab('profile')">
+          <i class="fa-solid fa-user-gear"></i>
+          <span>Profile</span>
+        </div>
+      </nav>
+      
+      <!-- Right Controls -->
+      <div class="nav-controls">
+        <!-- Wallet quick display (points removed) -->
+        <div class="wallet-badge" onclick="switchTab('wallet')">
+          <i class="fa-solid fa-wallet"></i>
+          <span class="wallet-val" id="nav-wallet-balance">₹15,000.00</span>
+        </div>
+        
+        <!-- Search icon button (Bokspot Style) -->
+        <div class="ctrl-btn" onclick="openModal('modal-search')">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </div>
+        
+        <!-- Liked routes icon button (Bokspot Style) -->
+        <div class="ctrl-btn" onclick="openModal('modal-liked')">
+          <i class="fa-solid fa-heart"></i>
+        </div>
+
+        <!-- Bookings Registry icon button (Bokspot Style) -->
+        <div class="ctrl-btn" onclick="openModal('modal-bookings-registry')">
+          <i class="fa-solid fa-bag-shopping"></i>
+        </div>
+        
+        <!-- Profile Dropdown -->
+        <div class="profile-nav-btn" onclick="toggleProfileDropdown(event)" style="position: relative;">
+          <i class="fa-solid fa-circle-user"></i>
+          <span>Alex Carter</span>
+          <i class="fa-solid fa-chevron-down" style="font-size: 9px;"></i>
+        </div>
+
+        <!-- Profile Dropdown Menu Overlay -->
+        <div class="profile-dropdown-menu" id="profile-dropdown-menu">
+          <div class="dropdown-header">
+            <span class="lbl">SIGNED IN AS</span>
+            <strong class="val">alex.carter@sart.com</strong>
+            <span class="flag">🇮🇳 India</span>
+          </div>
+          
+          <div class="dropdown-divider"></div>
+          
+          <a class="dropdown-item" onclick="switchTab('profile'); closeProfileDropdown();">
+            <i class="fa-solid fa-user-gear"></i> Account Profile
+          </a>
+          <div class="dropdown-item-meta">
+            <span class="label"><i class="fa-solid fa-language"></i> Language</span>
+            <span class="value">English</span>
+          </div>
+          <div class="dropdown-item-meta">
+            <span class="label"><i class="fa-solid fa-coins"></i> Currency</span>
+            <span class="value">INR (₹)</span>
+          </div>
+          <div class="dropdown-item-meta">
+            <span class="label"><i class="fa-solid fa-flag"></i> Country</span>
+            <span class="value">India</span>
+          </div>
+          <div class="dropdown-item-meta">
+            <span class="label"><i class="fa-solid fa-shield-halved"></i> Beta Trust</span>
+            <span class="value" style="color: var(--primary);">85%</span>
+          </div>
+          
+          <div class="dropdown-divider"></div>
+          
+          <div class="theme-switch-container">
+            <span class="theme-lbl">DISPLAY THEME</span>
+            <div class="theme-toggles">
+              <button class="theme-toggle-btn" id="theme-btn-light" onclick="setAppTheme('light')">LIGHT</button>
+              <button class="theme-toggle-btn active" id="theme-btn-dark" onclick="setAppTheme('dark')">DARK</button>
+              <button class="theme-toggle-btn" id="theme-btn-system" onclick="setAppTheme('system')">SYSTEM</button>
+            </div>
+          </div>
+          
+          <div class="dropdown-divider"></div>
+          
+          <a class="dropdown-item signout-btn" onclick="alert('Signed out successfully.'); closeProfileDropdown();">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i> Sign out
+          </a>
+        </div>
+
+        <!-- BIT Tool Button (Custom dynamic SVG logo shape) -->
+        <button class="bit-nav-btn" onclick="openModal('modal-bit-feed')" style="background: transparent !important; box-shadow: none !important; border: 1.5px solid var(--primary) !important; color: var(--primary) !important;">
+          <svg class="bit-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle;">
+            <circle cx="5" cy="4" r="2" fill="currentColor"/>
+            <rect x="3" y="8" width="4" height="12" rx="2" fill="currentColor"/>
+            <rect x="10" y="4" width="4" height="16" rx="2" fill="currentColor"/>
+            <rect x="17" y="4" width="4" height="12" rx="2" fill="currentColor"/>
+            <circle cx="19" cy="20" r="2" fill="currentColor"/>
+          </svg>
+          <span style="margin-left: 6px;">BIT Tool</span>
+        </button>
+      </div>
+    </header>
+    
+    <!-- SUB-NAVIGATION BAR (Bokspot Style) -->
+    <div class="web-subnavbar">
+      <div class="subnav-links">
+        <a class="subnav-link" onclick="openModal('modal-air')">
+          <i class="fa-solid fa-plane"></i> Travel
+        </a>
+        <a class="subnav-link" onclick="openModal('modal-rental')">
+          <i class="fa-solid fa-hotel"></i> Stay & Accommodation
+        </a>
+        <a class="subnav-link" onclick="switchTab('store')">
+          <i class="fa-solid fa-film"></i> Entertainment
+        </a>
+        <a class="subnav-link" onclick="openModal('modal-parking')">
+          <i class="fa-solid fa-football"></i> Sports
+        </a>
+        <a class="subnav-link" onclick="openModal('modal-mechanic')">
+          <i class="fa-solid fa-award"></i> Lifestyle Services
+        </a>
+      </div>
+      <div class="subnav-actions">
+        <button class="subnav-btn" onclick="switchTab('home')">
+          <i class="fa-solid fa-chart-pie"></i> DASHBOARD
+        </button>
+        <button class="subnav-btn btn-vendor" onclick="alert('SART Vendor Registration Panel loading...')">
+          <i class="fa-solid fa-store"></i> VENDOR
+        </button>
+      </div>
+    </div>
+    
+    <!-- MAIN CONTENT AREA -->
+    <main class="web-main-content">
+      
+      <!-- 1. HOME TAB (Wireframe-aligned Dashboard) -->
+      <section class="tab-screen active" id="tab-home">
+        
+        <!-- Home Header Row (Search Only - Location moved to Nav) -->
+        <div class="home-top-bar" style="justify-content: center; margin-bottom: 20px;">
+          <div class="home-search-bar" onclick="openModal('modal-search')" style="max-width: 700px; width: 100%;">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="home-portal-search-placeholder" placeholder="Search rides, flights, trains, carriers, diagnostics..." readonly>
+            <button class="search-btn">Search Portal</button>
+          </div>
+        </div>
+
+
+
+        <!-- Shortcuts Row (Transport Only) -->
+        <div class="shortcuts-row">
+          <div class="shortcut-pill" onclick="openModal('modal-ride')">
+            <i class="fa-solid fa-car-side" style="color: #ef4444;"></i>
+            <span>Rides</span>
+          </div>
+          <div class="shortcut-pill" onclick="openModal('modal-carrier')">
+            <i class="fa-solid fa-truck-moving" style="color: #f97316;"></i>
+            <span>Carrier</span>
+          </div>
+          <div class="shortcut-pill" onclick="openModal('modal-rental')">
+            <i class="fa-solid fa-key" style="color: #3b82f6;"></i>
+            <span>Rental</span>
+          </div>
+          <div class="shortcut-pill" onclick="openModal('modal-community')">
+            <i class="fa-solid fa-users" style="color: #a855f7;"></i>
+            <span>Community</span>
+          </div>
+          <div class="shortcut-pill" onclick="openModal('modal-drivers')">
+            <i class="fa-solid fa-user-tie" style="color: #10b981;"></i>
+            <span>Drivers On Demand</span>
+          </div>
+          <div class="shortcut-pill" onclick="openModal('modal-air')">
+            <i class="fa-solid fa-plane-departure" style="color: #06b6d4;"></i>
+            <span>Air Travel</span>
+          </div>
+          <div class="shortcut-pill" onclick="openModal('modal-train')">
+            <i class="fa-solid fa-train" style="color: #6366f1;"></i>
+            <span>Train</span>
+          </div>
+          <div class="shortcut-pill" onclick="openModal('modal-parking')">
+            <i class="fa-solid fa-square-parking" style="color: #14b8a6;"></i>
+            <span>Shared Parking</span>
+          </div>
+          <div class="shortcut-pill" onclick="openModal('modal-find-vehicle')">
+            <i class="fa-solid fa-location-crosshairs" style="color: #ec4899;"></i>
+            <span>Find My Vehicle</span>
+          </div>
+          <div class="shortcut-pill" onclick="openModal('modal-bookings-registry')">
+            <i class="fa-solid fa-receipt" style="color: #f5c518;"></i>
+            <span>My Bookings</span>
+          </div>
+          <div class="shortcut-pill shortcut-add" onclick="alert('Configure custom shortcut widget')">
+            <i class="fa-solid fa-plus"></i>
+            <span>Shortcut +</span>
+          </div>
+        </div>
+
+        <!-- SART Transport Services Grid -->
+        <div class="recommended-section">
+          <h2>Book a Service</h2>
+          <p>All SART transportation services at your fingertips</p>
+          <div class="recommended-grid" style="grid-template-columns: repeat(5, 1fr);">
+
+            <!-- Card 1: Rides (Red) -->
+            <div class="recommended-card rec-card-red" onclick="openModal('modal-ride')">
+              <div class="rec-card-top-row">
+                <span class="rec-card-tag">Road</span>
+                <span class="rec-card-rating"><i class="fa-solid fa-star"></i> 4.9</span>
+              </div>
+              <div class="rec-card-body">
+                <span class="rec-card-illustration">🚗</span>
+              </div>
+              <div class="rec-card-footer">
+                <h3 class="rec-card-title">Rides</h3>
+                <span class="rec-card-price">From ₹800</span>
+              </div>
+            </div>
+
+            <!-- Card 2: Carrier (Orange) -->
+            <div class="recommended-card rec-card-orange" onclick="openModal('modal-carrier')">
+              <div class="rec-card-top-row">
+                <span class="rec-card-tag">Logistics</span>
+                <span class="rec-card-rating"><i class="fa-solid fa-star"></i> 4.8</span>
+              </div>
+              <div class="rec-card-body">
+                <span class="rec-card-illustration">🚛</span>
+              </div>
+              <div class="rec-card-footer">
+                <h3 class="rec-card-title">Carrier</h3>
+                <span class="rec-card-price">From ₹3,500</span>
+              </div>
+            </div>
+
+            <!-- Card 3: Rental (Blue) -->
+            <div class="recommended-card rec-card-blue" onclick="openModal('modal-rental')">
+              <div class="rec-card-top-row">
+                <span class="rec-card-tag">Self-Drive</span>
+                <span class="rec-card-rating"><i class="fa-solid fa-star"></i> 4.9</span>
+              </div>
+              <div class="rec-card-body">
+                <span class="rec-card-illustration">🔑</span>
+              </div>
+              <div class="rec-card-footer">
+                <h3 class="rec-card-title">Rental</h3>
+                <span class="rec-card-price">From ₹1,800/day</span>
+              </div>
+            </div>
+
+            <!-- Card 4: Community (Purple) -->
+            <div class="recommended-card rec-card-purple" onclick="openModal('modal-community')">
+              <div class="rec-card-top-row">
+                <span class="rec-card-tag">Shared</span>
+                <span class="rec-card-rating"><i class="fa-solid fa-star"></i> 4.7</span>
+              </div>
+              <div class="rec-card-body">
+                <span class="rec-card-illustration">👥</span>
+              </div>
+              <div class="rec-card-footer">
+                <h3 class="rec-card-title">Community</h3>
+                <span class="rec-card-price">Ride Pooling</span>
+              </div>
+            </div>
+
+            <!-- Card 5: Drivers On Demand (Green) -->
+            <div class="recommended-card rec-card-green" onclick="openModal('modal-drivers')">
+              <div class="rec-card-top-row">
+                <span class="rec-card-tag">On Demand</span>
+                <span class="rec-card-rating"><i class="fa-solid fa-star"></i> 4.8</span>
+              </div>
+              <div class="rec-card-body">
+                <span class="rec-card-illustration">👨‍✈️</span>
+              </div>
+              <div class="rec-card-footer">
+                <h3 class="rec-card-title">Drivers On Demand</h3>
+                <span class="rec-card-price">From ₹1,200</span>
+              </div>
+            </div>
+
+            <!-- Card 6: Shared Parking (Teal) -->
+            <div class="recommended-card rec-card-teal" onclick="openModal('modal-parking')">
+              <div class="rec-card-top-row">
+                <span class="rec-card-tag">Parking</span>
+                <span class="rec-card-rating"><i class="fa-solid fa-star"></i> 4.6</span>
+              </div>
+              <div class="rec-card-body">
+                <span class="rec-card-illustration">🅿️</span>
+              </div>
+              <div class="rec-card-footer">
+                <h3 class="rec-card-title">Shared Parking</h3>
+                <span class="rec-card-price">From ₹150</span>
+              </div>
+            </div>
+
+            <!-- Card 7: Air (Yellow/Gold) -->
+            <div class="recommended-card rec-card-pink" onclick="openModal('modal-air')" style="--glow-pink: #f59e0b;">
+              <div class="rec-card-top-row">
+                <span class="rec-card-tag">Fly</span>
+                <span class="rec-card-rating"><i class="fa-solid fa-star"></i> 4.9</span>
+              </div>
+              <div class="rec-card-body">
+                <span class="rec-card-illustration">✈️</span>
+              </div>
+              <div class="rec-card-footer">
+                <h3 class="rec-card-title">Air Travel</h3>
+                <span class="rec-card-price">From ₹4,500</span>
+              </div>
+            </div>
+
+            <!-- Card 8: Train (Indigo) -->
+            <div class="recommended-card rec-card-indigo" onclick="openModal('modal-train')">
+              <div class="rec-card-top-row">
+                <span class="rec-card-tag">Rail</span>
+                <span class="rec-card-rating"><i class="fa-solid fa-star"></i> 4.9</span>
+              </div>
+              <div class="rec-card-body">
+                <span class="rec-card-illustration">🚆</span>
+              </div>
+              <div class="rec-card-footer">
+                <h3 class="rec-card-title">Train</h3>
+                <span class="rec-card-price">From ₹850</span>
+              </div>
+            </div>
+
+            <!-- Card 9: Sea (Cyan) -->
+            <div class="recommended-card rec-card-cyan" onclick="openModal('modal-sea')">
+              <div class="rec-card-top-row">
+                <span class="rec-card-tag">Sail</span>
+                <span class="rec-card-rating"><i class="fa-solid fa-star"></i> 4.7</span>
+              </div>
+              <div class="rec-card-body">
+                <span class="rec-card-illustration">⛴️</span>
+              </div>
+              <div class="rec-card-footer">
+                <h3 class="rec-card-title">Sea Voyage</h3>
+                <span class="rec-card-price">From ₹600</span>
+              </div>
+            </div>
+
+            <!-- Card 10: Mechanic (Slate) -->
+            <div class="recommended-card rec-card-slate" onclick="openModal('modal-mechanic')">
+              <div class="rec-card-top-row">
+                <span class="rec-card-tag">Service</span>
+                <span class="rec-card-rating"><i class="fa-solid fa-star"></i> 4.8</span>
+              </div>
+              <div class="rec-card-body">
+                <span class="rec-card-illustration">🔧</span>
+              </div>
+              <div class="rec-card-footer">
+                <h3 class="rec-card-title">Mechanic</h3>
+                <span class="rec-card-price">From ₹1,200</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Hero Carousel Section (Bokspot Style) -->
+        <div class="hero-carousel-container" style="margin-bottom: 20px;">
+          <!-- Slide 1 (Rides) -->
+          <div class="carousel-slide active" id="slide-0">
+            <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&w=1200&q=80');"></div>
+            <div class="slide-content">
+              <span class="slide-tag" style="background: rgba(239, 68, 68, 0.15); color: #ef4444; border-color: rgba(239,68,68,0.3);">City Rides</span>
+              <h2 class="slide-title">Book a Ride Instantly</h2>
+              <p class="slide-desc">Get a cab, share a ride or book a premium vehicle — wherever you are, in seconds.</p>
+              <button class="slide-btn" onclick="openModal('modal-ride')">BOOK RIDE NOW</button>
+            </div>
+          </div>
+          <!-- Slide 2 (EV Rental) -->
+          <div class="carousel-slide" id="slide-1">
+            <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1200&q=80');"></div>
+            <div class="slide-content">
+              <span class="slide-tag" style="background: rgba(59, 130, 246, 0.15); color: #3b82f6; border-color: rgba(59,130,246,0.3);">Self Drive</span>
+              <h2 class="slide-title">Tata Nexon EV Rental</h2>
+              <p class="slide-desc">Sleek, eco-friendly electric SUVs. 100% charged and ready for daily commutes.</p>
+              <button class="slide-btn" onclick="openModal('modal-rental')">RENT EV NOW</button>
+            </div>
+          </div>
+          <!-- Slide 3 (Carrier & Logistics) -->
+          <div class="carousel-slide" id="slide-2">
+            <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=1200&q=80');"></div>
+            <div class="slide-content">
+              <span class="slide-tag" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; border-color: rgba(245,158,11,0.3);">Carrier & Logistics</span>
+              <h2 class="slide-title">Heavy Carrier On Demand</h2>
+              <p class="slide-desc">Move goods, parcels and industrial cargo with full-track visibility across India.</p>
+              <button class="slide-btn" onclick="openModal('modal-carrier')">BOOK CARRIER</button>
+            </div>
+          </div>
+
+          <!-- Dots -->
+          <div class="carousel-dots">
+            <span class="carousel-dot active" onclick="setSlide(0)"></span>
+            <span class="carousel-dot" onclick="setSlide(1)"></span>
+            <span class="carousel-dot" onclick="setSlide(2)"></span>
+          </div>
+        </div>
+
+        <!-- Live Fleet & Route Tracker Map Section -->
+        <div class="home-map-wrapper">
+          <div class="home-map-title-row">
+            <h2>Live Fleet & Route Tracker</h2>
+            <span class="action-link" onclick="toggleMapHotspots()"><i class="fa-solid fa-radar"></i> Refresh Nearby Fleet</span>
+          </div>
+          
+          <div class="home-map-panel">
+            <div id="explore-map"></div>
+            
+            <!-- Floating Actions Overlay -->
+            <div class="map-floating-bottom-left">
+              <button class="map-action-btn-liked" id="home-liked-btn" onclick="openModal('modal-liked')">
+                <i class="fa-solid fa-star"></i> LIKED
+              </button>
+            </div>
+            <div class="map-floating-bottom-right">
+              <button class="map-action-btn-nearby" id="home-nearby-btn" onclick="toggleMapHotspots()">
+                <i class="fa-solid fa-radar"></i> NEAR BY FIND
+              </button>
+            </div>
+            
+            <!-- Floating Map Controls -->
+            <div class="map-floating-controls">
+              <button class="map-circle-btn" onclick="zoomInMap()"><i class="fa-solid fa-plus"></i></button>
+              <button class="map-circle-btn" onclick="zoomOutMap()"><i class="fa-solid fa-minus"></i></button>
+              <button class="map-circle-btn" onclick="recenterMap()"><i class="fa-solid fa-crosshairs"></i></button>
+            </div>
+
+            <!-- Floating Active Booking Card overlay on Map -->
+            <div class="map-active-booking-panel floating-map-booking-panel" id="map-active-booking-card" style="display: none;">
+              <div class="panel-header-badge">LIVE TRACKING ACTIVE</div>
+              <div class="panel-main">
+                <div class="panel-icon-wrap" id="map-active-booking-icon-container">
+                  <i class="fa-solid fa-car-side" id="map-active-booking-icon"></i>
+                </div>
+                <div class="panel-desc">
+                  <h4 id="map-active-booking-title">Ride to Kempegowda Airport</h4>
+                  <p id="map-active-booking-desc">Driver is starting journey...</p>
+                </div>
+              </div>
+              <button class="cancel-booking-btn" onclick="openModal('modal-bookings-registry')">Manage Ticket Details</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- News Feed Grid Area -->
+        <div class="dashboard-card" id="news-section-div" style="margin-top: 18px;">
+          <div class="section-header-row">
+            <h2 class="card-headline">Latest Transit Ecosystem News</h2>
+            <span class="action-link" onclick="alert('Auto News RSS Feed connected.')">See All Feed</span>
+          </div>
+          <div class="web-news-row" id="news-cards-container">
+            <!-- Loaded dynamically -->
+          </div>
+        </div>
+      </section>
+      
+      <!-- 3. PREMIUM SART STORE TAB -->
+      <section class="tab-screen" id="tab-store">
+        <div class="store-container">
+          
+          <div class="store-hero">
+            <div class="store-hero-text">
+              <h1>SART Smart Store</h1>
+              <p>Enhance your commute with certified telemetry upgrades, advanced diagnostics, and premium vehicle accessories.</p>
+            </div>
+            <div class="store-hero-image">🔋</div>
+          </div>
+          
+          <div class="store-grid-layout">
+            <!-- Left Products Section -->
+            <div class="store-products-section">
+              <div>
+                <h3 class="store-category-title">Popular Accessories</h3>
+                <div class="store-products-grid">
+                  <!-- Card 1 -->
+                  <div class="store-product-card">
+                    <span class="product-badge">Top Seller</span>
+                    <div class="product-image-container">⚡</div>
+                    <div class="product-info">
+                      <h3>Smart Fast Charger Pro</h3>
+                      <p>Ultra-compact 7.2kW AC home charger with auto battery cut-off and mobile app telemetry link.</p>
+                    </div>
+                    <div class="product-footer">
+                      <span class="product-price">₹18,500</span>
+                      <button class="product-buy-btn" onclick="addStoreItemToCart('Smart Fast Charger Pro', 18500)">Add to Cart</button>
+                    </div>
+                  </div>
+                  <!-- Card 2 -->
+                  <div class="store-product-card">
+                    <span class="product-badge">New</span>
+                    <div class="product-image-container">🧭</div>
+                    <div class="product-info">
+                      <h3>GPS Tracker Pro</h3>
+                      <p>Anti-theft satellite-linked tracker featuring real-time geofence alerts and remote engine lock.</p>
+                    </div>
+                    <div class="product-footer">
+                      <span class="product-price">₹4,200</span>
+                      <button class="product-buy-btn" onclick="addStoreItemToCart('GPS Tracker Pro', 4200)">Add to Cart</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <h3 class="store-category-title">Safety & Comfort</h3>
+                <div class="store-products-grid">
+                  <!-- Card 3 -->
+                  <div class="store-product-card">
+                    <span class="product-badge">Safety</span>
+                    <div class="product-image-container">🛞</div>
+                    <div class="product-info">
+                      <h3>Smart Tire Pressure Gauge</h3>
+                      <p>Bluetooth tire valve caps displaying precise PSI diagnostics directly on SART AI dashboard.</p>
+                    </div>
+                    <div class="product-footer">
+                      <span class="product-price">₹2,800</span>
+                      <button class="product-buy-btn" onclick="addStoreItemToCart('Smart Tire Pressure Gauge', 2800)">Add to Cart</button>
+                    </div>
+                  </div>
+                  <!-- Card 4 -->
+                  <div class="store-product-card">
+                    <span class="product-badge">Upgrade</span>
+                    <div class="product-image-container">🛋️</div>
+                    <div class="product-info">
+                      <h3>Chauffeur Comfort Cushion</h3>
+                      <p>Ergonomic memory foam cushion with orthopedic support, tailor-made for long distance trips.</p>
+                    </div>
+                    <div class="product-footer">
+                      <span class="product-price">₹1,950</span>
+                      <button class="product-buy-btn" onclick="addStoreItemToCart('Chauffeur Comfort Cushion', 1950)">Add to Cart</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Right Cart Panel -->
+            <div class="store-cart-panel">
+              <div class="cart-header">
+                <h3>Shopping Cart</h3>
+                <i class="fa-solid fa-cart-shopping" style="color: var(--primary);"></i>
+              </div>
+              <div class="cart-items-list" id="store-cart-items">
+                <!-- Cart items list dynamically populated -->
+                <div style="text-align: center; color: var(--text-secondary); padding: 30px; font-size:12px;">Your cart is empty.</div>
+              </div>
+              <div class="cart-totals">
+                <div class="cart-total-row">
+                  <span>Subtotal</span>
+                  <span id="store-cart-subtotal">₹0.00</span>
+                </div>
+                <div class="cart-total-row" style="font-weight: 800; border-top: 1px solid var(--dark-border); padding-top: 10px; margin-top: 5px;">
+                  <span>Grand Total</span>
+                  <span id="store-cart-total" style="color: var(--primary);">₹0.00</span>
+                </div>
+              </div>
+              <button class="checkout-btn" onclick="checkoutStoreCart()">Pay via SART Wallet</button>
+            </div>
+          </div>
+          
+        </div>
+      </section>
+      
+      <!-- 3. AI ASSISTANT TAB -->
+      <section class="tab-screen" id="tab-ai">
+        <div class="ai-assistant-layout">
+          <div class="dashboard-card ai-chat-card">
+            <div class="ai-chat-header">
+              <div class="ai-copilot-title">
+                <i class="fa-solid fa-robot"></i>
+                <div>
+                  <h3>SART AI Copilot</h3>
+                  <p>Vehicle Telemetry & Route Optimizer</p>
+                </div>
+              </div>
+              <span class="ai-status-pulse"><span class="pulse-dot"></span> Online</span>
+            </div>
+            
+            <div class="ai-chat-body" id="ai-chat-history">
+              <div class="chat-msg system">
+                <p>System Initialized: AI Copilot diagnostics connected to Tata Nexon EV [KA-03-MY-8820].</p>
+              </div>
+              <div class="chat-msg assistant">
+                <p>Hello Alex! I am your SART AI Assistant. I have analyzed your vehicles. Your Tata Nexon EV battery status is healthy at 84% charge. Front-left tire pressure is slightly low (28 PSI). Let me know if you want me to search route traffic updates or schedule a tire inflator upgrade from the store!</p>
+              </div>
+            </div>
+            
+            <div class="ai-chat-footer">
+              <input type="text" id="ai-chat-input" placeholder="Ask AI Copilot: 'Diagnose vehicle warnings', 'Optimize commute for NH-44', 'Suggest nearest EV spot'..." onkeydown="if(event.key==='Enter') sendAiMessage()">
+              <button class="ai-send-btn" onclick="sendAiMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. SUPER WALLET TAB -->
+      <section class="tab-screen" id="tab-wallet">
+        <div class="wallet-page-layout">
+          
+          <div class="wallet-dashboard-col">
+            <div class="dashboard-card wallet-card-wide">
+              <div class="wallet-page-header">
+                <h2>Super Wallet Dashboard</h2>
+                <span class="gold-tier-badge">GOLD ELITE MEMBER</span>
+              </div>
+              
+              <div class="wallet-page-metrics">
+                <div class="wallet-metric-box">
+                  <span class="lbl">Available Balance</span>
+                  <h1 class="val" id="wallet-pg-balance">₹15,000.00</h1>
+                  <span class="subtext">Secure escrow holding</span>
+                </div>
+                <div class="wallet-metric-box">
+                  <span class="lbl">Loyalty Points</span>
+                  <h1 class="val" style="color:var(--secondary);" id="wallet-pg-points">2,450 pts</h1>
+                  <span class="subtext">Claim details under profile</span>
+                </div>
+                <div class="wallet-metric-box">
+                  <span class="lbl">Accumulated Cashback</span>
+                  <h1 class="val" style="color:var(--success);" id="wallet-pg-cashback">₹350.00</h1>
+                  <button class="claim-btn" onclick="claimCashbackMoney()">Claim to Balance</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Wallet Forms row -->
+            <div class="wallet-forms-row">
+              <div class="dashboard-card" style="flex: 1;">
+                <h3><i class="fa-solid fa-plus" style="color:var(--success);"></i> Load Funds</h3>
+                <p style="font-size:11px; color:var(--text-secondary); margin-bottom:12px;">Add instant digital currency to your wallet balance.</p>
+                
+                <div class="form-group">
+                  <label>Amount to Deposit (INR)</label>
+                  <input type="number" class="input-field" id="wallet-pg-deposit-amount" value="5000">
+                </div>
+                <div class="form-group">
+                  <label>Payment Source Card</label>
+                  <select class="input-field select-field" id="wallet-pg-deposit-source">
+                    <option value="Visa (last 4: 4242)">Visa •••• 4242</option>
+                    <option value="Mastercard (last 4: 8839)">Mastercard •••• 8839</option>
+                  </select>
+                </div>
+                <button class="action-btn" onclick="executeWalletPageDeposit()">Process Deposit</button>
+              </div>
+
+              <div class="dashboard-card" style="flex: 1;">
+                <h3><i class="fa-solid fa-paper-plane" style="color:var(--primary);"></i> Send Money (UPI)</h3>
+                <p style="font-size:11px; color:var(--text-secondary); margin-bottom:12px;">Transfer funds immediately to any UPI ID or account number.</p>
+                
+                <div class="form-group">
+                  <label>Recipient Address</label>
+                  <input type="text" class="input-field" id="wallet-pg-transfer-recipient" placeholder="upi-id@bank or account no" value="rajesh.kumar@upi">
+                </div>
+                <div class="form-group">
+                  <label>Amount to Send (INR)</label>
+                  <input type="number" class="input-field" id="wallet-pg-transfer-amount" value="1000">
+                </div>
+                <button class="action-btn" onclick="executeWalletPageTransfer()">Transfer Funds</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="wallet-history-col">
+            <div class="dashboard-card" style="height: 100%; display: flex; flex-direction: column;">
+              <h3>Recent Transaction Registry</h3>
+              <p style="font-size:11px; color:var(--text-secondary); margin-bottom:14px;">Audit log of recent wallet charges and top-ups.</p>
+              <div class="transactions-full-list" id="wallet-pg-transactions-list" style="flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:10px;">
+                <!-- Dynamically loaded -->
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+      
+      <!-- 5. PROFILE TAB (Premium Redesign) -->
+      <section class="tab-screen" id="tab-profile">
+        <div class="profile-container">
+          
+          <div class="profile-card">
+            <div class="profile-avatar-container">
+              <div class="profile-avatar">
+                AC
+              </div>
+              <div class="profile-avatar-badge"></div>
+            </div>
+            <div class="profile-info-details">
+              <h2>Alex Carter</h2>
+              <p>alex.carter@sart.com • +91 98765 43210</p>
+              <span class="profile-tier">SART TEAL ELITE</span>
+            </div>
+          </div>
+          
+          <div class="profile-stats-row">
+            <div class="profile-stat-box">
+              <div class="num">142</div>
+              <div class="lbl">Total Trips</div>
+            </div>
+            <div class="profile-stat-box">
+              <div class="num">₹15,000.00</div>
+              <div class="lbl">Wallet Balance</div>
+            </div>
+            <div class="profile-stat-box">
+              <div class="num">85%</div>
+              <div class="lbl">Beta Trust</div>
+            </div>
+          </div>
+          
+          <div class="profile-sections-list">
+            <div class="profile-section-item" onclick="openProfileSubpage('documents', 'Documents & Verification')">
+              <div class="profile-section-left">
+                <div class="profile-section-icon"><i class="fa-solid fa-folder-open"></i></div>
+                <div class="profile-section-text">
+                  <h4>Documents & DigiLocker</h4>
+                  <p>Manage driving licenses, vehicle permit credentials & verified ID cards.</p>
+                </div>
+              </div>
+              <i class="fa-solid fa-chevron-right" style="font-size:12px; color:var(--text-secondary);"></i>
+            </div>
+            
+            <div class="profile-section-item" onclick="openProfileSubpage('payment', 'Payment Settings')">
+              <div class="profile-section-left">
+                <div class="profile-section-icon"><i class="fa-solid fa-credit-card"></i></div>
+                <div class="profile-section-text">
+                  <h4>Linked Payments & Wallets</h4>
+                  <p>Configure bank accounts, credit cards, auto-recharge settings and UPI IDs.</p>
+                </div>
+              </div>
+              <i class="fa-solid fa-chevron-right" style="font-size:12px; color:var(--text-secondary);"></i>
+            </div>
+            
+            <div class="profile-section-item" onclick="openProfileSubpage('safety', 'Safety & Ride Settings')">
+              <div class="profile-section-left">
+                <div class="profile-section-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                <div class="profile-section-text">
+                  <h4>Safety & Ride Preferences</h4>
+                  <p>Configure kids & women protection, professional chauffeur mode, speed alerts.</p>
+                </div>
+              </div>
+              <i class="fa-solid fa-chevron-right" style="font-size:12px; color:var(--text-secondary);"></i>
+            </div>
+            
+            <div class="profile-section-item" onclick="openProfileSubpage('language', 'Language & Country')">
+              <div class="profile-section-left">
+                <div class="profile-section-icon"><i class="fa-solid fa-globe"></i></div>
+                <div class="profile-section-text">
+                  <h4>Localization Settings</h4>
+                  <p>Set standard language (English), local currency (INR) and home country (India).</p>
+                </div>
+              </div>
+              <i class="fa-solid fa-chevron-right" style="font-size:12px; color:var(--text-secondary);"></i>
+            </div>
+            
+            <div class="profile-section-item" onclick="openProfileSubpage('help', 'Help & Support')">
+              <div class="profile-section-left">
+                <div class="profile-section-icon"><i class="fa-solid fa-circle-question"></i></div>
+                <div class="profile-section-text">
+                  <h4>Customer Help Desk</h4>
+                  <p>Read FAQs, initiate safety contacts, or open support ticket entries.</p>
+                </div>
+              </div>
+              <i class="fa-solid fa-chevron-right" style="font-size:12px; color:var(--text-secondary);"></i>
+            </div>
+            
+            <div class="profile-section-item" onclick="openProfileSubpage('about', 'About SART')">
+              <div class="profile-section-left">
+                <div class="profile-section-icon"><i class="fa-solid fa-info"></i></div>
+                <div class="profile-section-text">
+                  <h4>About Universal SART</h4>
+                  <p>Version 2.4.0-Beta. Standard legal privacy policy, terms of service agreements.</p>
+                </div>
+              </div>
+              <i class="fa-solid fa-chevron-right" style="font-size:12px; color:var(--text-secondary);"></i>
+            </div>
+            
+            <div class="profile-section-item" onclick="openModal('modal-bit-feed')">
+              <div class="profile-section-left">
+                <div class="profile-section-icon" style="background: rgba(21,127,138,0.15);"><i class="fa-solid fa-compass"></i></div>
+                <div class="profile-section-text">
+                  <h4>BIT Tool Active Feed</h4>
+                  <p>Access the live activity dashboard tracking vehicle events across city sectors.</p>
+                </div>
+              </div>
+              <i class="fa-solid fa-chevron-right" style="font-size:12px; color:var(--text-secondary);"></i>
+            </div>
+          </div>
+          
+        </div>
+      </section>
+      
+      <!-- 5. DYNAMIC PROFILE SUB-PAGE VIEW PANEL -->
+      <section class="tab-screen" id="tab-profile-subpage">
+        <div class="dashboard-card" style="max-width: 800px; margin: 20px auto;">
+          <div class="subpage-header">
+            <button class="back-btn" onclick="backToProfile()"><i class="fa-solid fa-chevron-left"></i> Back to Profile</button>
+            <h2 id="subpage-title-txt" style="font-size: 20px; font-weight: 800;">Settings Section</h2>
+          </div>
+          <hr style="border:0; border-top: 1px solid var(--dark-border); margin: 20px 0;">
+          <div id="subpage-content-container">
+            <!-- Loaded dynamically via js -->
+          </div>
+        </div>
+      </section>
+      
+    </main>
+    
+  </div><!-- End Web App Layout -->
+
+  <!-- ==============================================
+       OVERLAY MODALS (Centered Card Sheets)
+       ============================================== -->
+  
+  <!-- 1. Ride (Road Vehicle) Modal -->
+  <div class="modal-overlay" id="modal-ride">
+    <div class="modal-sheet centered-modal">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-car" style="color: var(--primary);"></i> Book a Ride</div>
+        <div class="modal-close-btn" onclick="closeModal('modal-ride')"><i class="fa-solid fa-circle-xmark"></i></div>
+      </div>
+      <div class="form-group">
+        <label>Pickup Location</label>
+        <input type="text" class="input-field" placeholder="Enter pickup address" id="ride-from" value="Indiranagar, Bengaluru">
+      </div>
+      <div class="form-group">
+        <label>Dropoff Destination</label>
+        <input type="text" class="input-field" placeholder="Enter destination address" id="ride-to" value="Kempegowda Int'l Airport">
+      </div>
+      <div class="form-group">
+        <label>Select Vehicle Tier</label>
+        <div class="option-select-grid">
+          <div class="option-select-card selected" onclick="selectBookingOption(this, 'ride-tier', '800')" data-val="Economy Sedan">
+            <i class="fa-solid fa-car-side"></i>
+            <span class="option-title">Economy Sedan</span>
+            <span class="option-desc">Affordable daily rides</span>
+            <span class="option-price">₹800.00</span>
+          </div>
+          <div class="option-select-card" onclick="selectBookingOption(this, 'ride-tier', '1500')" data-val="Premium SUV">
+            <i class="fa-solid fa-truck-pickup"></i>
+            <span class="option-title">Premium SUV</span>
+            <span class="option-desc">Luxury and style</span>
+            <span class="option-price">₹1,500.00</span>
+          </div>
+        </div>
+      </div>
+      <button class="action-btn" onclick="submitRoadRideBooking()">Book Ride</button>
+    </div>
+  </div>
+  
+  <!-- 2. Carrier (Cargo Carrier) Modal -->
+  <div class="modal-overlay" id="modal-carrier">
+    <div class="modal-sheet centered-modal">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-truck" style="color: var(--secondary);"></i> Request Logistics Carrier</div>
+        <div class="modal-close-btn" onclick="closeModal('modal-carrier')"><i class="fa-solid fa-circle-xmark"></i></div>
+      </div>
+      <div class="form-group">
+        <label>Pickup address</label>
+        <input type="text" class="input-field" placeholder="Sender pickup point" id="carrier-from" value="Whitefield Industrial Hub">
+      </div>
+      <div class="form-group">
+        <label>Delivery address</label>
+        <input type="text" class="input-field" placeholder="Recipient dropoff point" id="carrier-to" value="Electronic City Depot">
+      </div>
+      <div class="form-group">
+        <label>Cargo Type & Capacity</label>
+        <div class="option-select-grid">
+          <div class="option-select-card selected" onclick="selectBookingOption(this, 'carrier-tier', '3500')" data-val="Mini Cargo Van">
+            <i class="fa-solid fa-van-shuttle"></i>
+            <span class="option-title">Mini Van</span>
+            <span class="option-desc">Up to 800 kg cargo</span>
+            <span class="option-price">₹3,500.00</span>
+          </div>
+          <div class="option-select-card" onclick="selectBookingOption(this, 'carrier-tier', '7500')" data-val="Heavy Duty Truck">
+            <i class="fa-solid fa-truck-moving"></i>
+            <span class="option-title">Heavy Truck</span>
+            <span class="option-desc">Up to 5 tonnes cargo</span>
+            <span class="option-price">₹7,500.00</span>
+          </div>
+        </div>
+      </div>
+      <button class="action-btn" onclick="submitCarrierBooking()">Confirm Logistics Cargo</button>
+    </div>
+  </div>
+  
+  <!-- 3. Rental (Hourly/Daily Drives) Modal -->
+  <div class="modal-overlay" id="modal-rental">
+    <div class="modal-sheet centered-modal">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-key" style="color: var(--accent);"></i> Rent a Car/Bike</div>
+        <div class="modal-close-btn" onclick="closeModal('modal-rental')"><i class="fa-solid fa-circle-xmark"></i></div>
+      </div>
+      <div class="form-group">
+        <label>Select Rental Vehicle</label>
+        <div class="option-select-grid">
+          <div class="option-select-card selected" onclick="selectBookingOption(this, 'rental-tier', '4500')" data-val="Tata Nexon EV">
+            <i class="fa-solid fa-charging-station"></i>
+            <span class="option-title">Tata Nexon EV</span>
+            <span class="option-desc">Electric SUV • 3 Days</span>
+            <span class="option-price">₹4,500.00</span>
+          </div>
+          <div class="option-select-card" onclick="selectBookingOption(this, 'rental-tier', '1800')" data-val="RE Himalayan">
+            <i class="fa-solid fa-motorcycle"></i>
+            <span class="option-title">Himalayan 450</span>
+            <span class="option-desc">Adventure Bike • 1 Day</span>
+            <span class="option-price">₹1,800.00</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Duration</label>
+        <select class="input-field select-field" id="rental-days">
+          <option value="1">1 Day Duration</option>
+          <option value="3" selected>3 Days Duration</option>
+          <option value="7">7 Days Duration</option>
+        </select>
+      </div>
+      <button class="action-btn" onclick="submitRentalBooking()">Book Rental Car</button>
+    </div>
+  </div>
+  
+  <!-- 4. Drivers On Demand Modal -->
+  <div class="modal-overlay" id="modal-drivers">
+    <div class="modal-sheet centered-modal">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-user-tie" style="color: var(--warning);"></i> Hire a Driver</div>
+        <div class="modal-close-btn" onclick="closeModal('modal-drivers')"><i class="fa-solid fa-circle-xmark"></i></div>
+      </div>
+      <div class="form-group">
+        <label>Pickup Location</label>
+        <input type="text" class="input-field" id="driver-pickup" value="Indiranagar, Bengaluru">
+      </div>
+      <div class="form-group">
+        <label>Select Driver Service Period</label>
+        <div class="option-select-grid">
+          <div class="option-select-card selected" onclick="selectBookingOption(this, 'driver-tier', '1200')" data-val="Short Commute Driver">
+            <i class="fa-solid fa-clock"></i>
+            <span class="option-title">Half Day</span>
+            <span class="option-desc">Up to 4 hours shift</span>
+            <span class="option-price">₹1,200.00</span>
+          </div>
+          <div class="option-select-card" onclick="selectBookingOption(this, 'driver-tier', '2200')" data-val="Full Day Driver">
+            <i class="fa-solid fa-business-time"></i>
+            <span class="option-title">Full Day</span>
+            <span class="option-desc">Up to 10 hours shift</span>
+            <span class="option-price">₹2,200.00</span>
+          </div>
+        </div>
+      </div>
+      <button class="action-btn" onclick="submitDriverBooking()">Hire Verified Chauffeur</button>
+    </div>
+  </div>
+  
+  <!-- 5. Shared Parking Spot Modal -->
+  <div class="modal-overlay" id="modal-parking">
+    <div class="modal-sheet centered-modal">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-square-p" style="color: #8b5cf6;"></i> Reserve Parking Spot</div>
+        <div class="modal-close-btn" onclick="closeModal('modal-parking')"><i class="fa-solid fa-circle-xmark"></i></div>
+      </div>
+      <div class="form-group">
+        <label>Area Zone</label>
+        <input type="text" class="input-field" id="parking-zone" value="Indiranagar Tech Hub">
+      </div>
+      <div class="form-group">
+        <label>Select Parking Space Type</label>
+        <div class="option-select-grid">
+          <div class="option-select-card selected" onclick="selectBookingOption(this, 'parking-tier', '150')" data-val="Standard Spot">
+            <i class="fa-solid fa-parking"></i>
+            <span class="option-title">Standard Slot</span>
+            <span class="option-desc">Open roof space • 3 hrs</span>
+            <span class="option-price">₹150.00</span>
+          </div>
+          <div class="option-select-card" onclick="selectBookingOption(this, 'parking-tier', '350')" data-val="Premium EV Slot">
+            <i class="fa-solid fa-charging-station"></i>
+            <span class="option-title">EV Charged Slot</span>
+            <span class="option-desc">Covered + EV Charger</span>
+            <span class="option-price">₹350.00</span>
+          </div>
+        </div>
+      </div>
+      <button class="action-btn" onclick="submitParkingBooking()">Reserve Spot</button>
+    </div>
+  </div>
+  
+  <!-- 6. Mechanic Diagnosis Modal -->
+  <div class="modal-overlay" id="modal-mechanic">
+    <div class="modal-sheet centered-modal">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-screwdriver-wrench" style="color: #64748b;"></i> Schedule Mechanic Visit</div>
+        <div class="modal-close-btn" onclick="closeModal('modal-mechanic')"><i class="fa-solid fa-circle-xmark"></i></div>
+      </div>
+      <div class="form-group">
+        <label>Describe Diagnostics Issue</label>
+        <input type="text" class="input-field" id="mech-issue" value="Electric motor warning notification on dashboard panel.">
+      </div>
+      <div class="form-group">
+        <label>Service Pack Tiers</label>
+        <div class="option-select-grid">
+          <div class="option-select-card selected" onclick="selectBookingOption(this, 'mechanic-tier', '1200')" data-val="Tire / Wheel Inspection">
+            <i class="fa-solid fa-circle-radiation"></i>
+            <span class="option-title">Diagnostics & Check</span>
+            <span class="option-desc">Basic motor scan</span>
+            <span class="option-price">₹1,200.00</span>
+          </div>
+          <div class="option-select-card" onclick="selectBookingOption(this, 'mechanic-tier', '4500')" data-val="Full Powertrain Diagnostic">
+            <i class="fa-solid fa-gears"></i>
+            <span class="option-title">Full EV Overhaul</span>
+            <span class="option-desc">Powertrain and cell test</span>
+            <span class="option-price">₹4,500.00</span>
+          </div>
+        </div>
+      </div>
+      <button class="action-btn" onclick="submitMechanicBooking()">Schedule Diagnostic Dispatch</button>
+    </div>
+  </div>
+  
+  <!-- 7. NEW MODULE: Sea Booking Modal -->
+  <div class="modal-overlay" id="modal-sea">
+    <div class="modal-sheet centered-modal">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-ship" style="color: var(--success);"></i> Marine Booking</div>
+        <div class="modal-close-btn" onclick="closeModal('modal-sea')"><i class="fa-solid fa-circle-xmark"></i></div>
+      </div>
+      <div class="form-group">
+        <label>Departure Port</label>
+        <input type="text" class="input-field" id="sea-from" value="Gateway of India, Mumbai">
+      </div>
+      <div class="form-group">
+        <label>Arrival Port</label>
+        <input type="text" class="input-field" id="sea-to" value="Mandwa Jetty, Alibaug">
+      </div>
+      <div class="form-group">
+        <label>Select Sea Vessel & Tier</label>
+        <div class="option-select-grid">
+          <div class="option-select-card selected" onclick="selectBookingOption(this, 'sea-tier', '600')" data-val="Ferry Speedliner">
+            <i class="fa-solid fa-ship"></i>
+            <span class="option-title">Ferry Speedliner</span>
+            <span class="option-desc">High speed economy transit</span>
+            <span class="option-price">₹600.00</span>
+          </div>
+          <div class="option-select-card" onclick="selectBookingOption(this, 'sea-tier', '12500')" data-val="Sapphire Ocean Yacht">
+            <i class="fa-solid fa-anchor"></i>
+            <span class="option-title">Luxury Yacht Charter</span>
+            <span class="option-desc">Private cruise charter</span>
+            <span class="option-price">₹12,500.00</span>
+          </div>
+        </div>
+      </div>
+      <button class="action-btn" onclick="submitSeaBooking()">Book Maritime Voyage</button>
+    </div>
+  </div>
+  
+  <!-- 8. NEW MODULE: Air Booking Modal -->
+  <div class="modal-overlay" id="modal-air">
+    <div class="modal-sheet centered-modal">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-plane" style="color: var(--warning);"></i> Flight & Heli Booking</div>
+        <div class="modal-close-btn" onclick="closeModal('modal-air')"><i class="fa-solid fa-circle-xmark"></i></div>
+      </div>
+      <div class="form-group">
+        <label>Origin Airport</label>
+        <input type="text" class="input-field" id="air-from" value="BLR - Kempegowda Intl">
+      </div>
+      <div class="form-group">
+        <label>Destination Airport</label>
+        <input type="text" class="input-field" id="air-to" value="BOM - Chhatrapati Shivaji Intl">
+      </div>
+      <div class="form-group">
+        <label>Select Flight Tier</label>
+        <div class="option-select-grid">
+          <div class="option-select-card selected" onclick="selectBookingOption(this, 'air-tier', '4500')" data-val="Commercial Economy">
+            <i class="fa-solid fa-plane-up"></i>
+            <span class="option-title">Air Airbus A320</span>
+            <span class="option-desc">Standard economy cabin</span>
+            <span class="option-price">₹4,500.00</span>
+          </div>
+          <div class="option-select-card" onclick="selectBookingOption(this, 'air-tier', '14000')" data-val="Helicopter Charter">
+            <i class="fa-solid fa-helicopter"></i>
+            <span class="option-title">Heli Apex Charter</span>
+            <span class="option-desc">Point-to-point chopper transit</span>
+            <span class="option-price">₹14,000.00</span>
+          </div>
+        </div>
+      </div>
+      <button class="action-btn" onclick="submitAirBooking()">Book Air Space</button>
+    </div>
+  </div>
+  
+  <!-- 9. NEW MODULE: Train Booking Modal -->
+  <div class="modal-overlay" id="modal-train">
+    <div class="modal-sheet centered-modal">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-train" style="color: #c864ff;"></i> Train Booking</div>
+        <div class="modal-close-btn" onclick="closeModal('modal-train')"><i class="fa-solid fa-circle-xmark"></i></div>
+      </div>
+      <div class="form-group">
+        <label>Source Station</label>
+        <input type="text" class="input-field" id="train-from" value="KSR Bengaluru Station">
+      </div>
+      <div class="form-group">
+        <label>Destination Station</label>
+        <input type="text" class="input-field" id="train-to" value="Chennai Central Station">
+      </div>
+      <div class="form-group">
+        <label>Select Train & Class</label>
+        <div class="option-select-grid">
+          <div class="option-select-card selected" onclick="selectBookingOption(this, 'train-tier', '850')" data-val="Vande Bharat AC Chair">
+            <i class="fa-solid fa-train-subway"></i>
+            <span class="option-title">Vande Bharat Express</span>
+            <span class="option-desc">AC Premium Chair Car</span>
+            <span class="option-price">₹850.00</span>
+          </div>
+          <div class="option-select-card" onclick="selectBookingOption(this, 'train-tier', '1650')" data-val="Rajdhani First Class AC">
+            <i class="fa-solid fa-train-tram"></i>
+            <span class="option-title">Rajdhani Express</span>
+            <span class="option-desc">First Class AC Sleeper</span>
+            <span class="option-price">₹1,650.00</span>
+          </div>
+        </div>
+      </div>
+      <button class="action-btn" onclick="submitTrainBooking()">Book Train Ticket</button>
+    </div>
+  </div>
+  
+  <!-- 10. Wallet Subpage Modal -->
+  <div class="modal-overlay" id="modal-wallet">
+    <div class="modal-sheet centered-modal">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-wallet" style="color: var(--primary);"></i> Super App Wallet</div>
+        <div class="modal-close-btn" onclick="closeModal('modal-wallet')"><i class="fa-solid fa-circle-xmark"></i></div>
+      </div>
+      
+      <div class="wallet-box" style="margin-top: 10px;">
+        <div class="wallet-balance-row">
+          <span class="wallet-balance-title">Balance Available</span>
+          <span class="wallet-balance-val" id="wallet-balance-txt">₹15,000.00</span>
+        </div>
+        <div class="wallet-perks-row">
+          <div class="wallet-perk">
+            <span class="wallet-perk-title">Reward Points</span>
+            <span class="wallet-perk-val" id="wallet-points-txt">2,450 pts</span>
+          </div>
+          <div class="wallet-perk">
+            <span class="wallet-perk-title">Claimable Cashback</span>
+            <span class="wallet-perk-val" id="wallet-cashback-txt">₹350.00</span>
+          </div>
+        </div>
+        <div class="wallet-actions" style="margin-top:14px;">
+          <button class="wallet-btn" onclick="toggleWalletForm('deposit')"><i class="fa-solid fa-plus"></i> Load Cash</button>
+          <button class="wallet-btn" onclick="toggleWalletForm('transfer')"><i class="fa-solid fa-paper-plane"></i> Send Money</button>
+          <button class="wallet-btn" onclick="claimCashbackMoney()"><i class="fa-solid fa-gift"></i> Claim Cashback</button>
+        </div>
+      </div>
+      
+      <!-- Hidden form: Topup deposit -->
+      <div id="wallet-deposit-form" style="display: none; border: 1px solid var(--dark-border); padding: 12px; border-radius: 12px; background: rgba(255,255,255,0.01); margin-top:10px;">
+        <div class="form-group">
+          <label>Deposit Amount (INR)</label>
+          <input type="number" class="input-field" id="deposit-amount" value="5000">
+        </div>
+        <div class="form-group">
+          <label>Select payment method</label>
+          <select class="input-field select-field" id="deposit-source">
+            <option value="Visa (last 4: 4242)">Visa •••• 4242</option>
+            <option value="Mastercard (last 4: 8839)">Mastercard •••• 8839</option>
+          </select>
+        </div>
+        <button class="action-btn" onclick="executeWalletDeposit()" style="padding: 10px; font-size: 12px;">Process Load Cash</button>
+      </div>
+      
+      <!-- Hidden form: Transfer -->
+      <div id="wallet-transfer-form" style="display: none; border: 1px solid var(--dark-border); padding: 12px; border-radius: 12px; background: rgba(255,255,255,0.01); margin-top:10px;">
+        <div class="form-group">
+          <label>Recipient UPI ID / A/c No.</label>
+          <input type="text" class="input-field" id="transfer-recipient" placeholder="Enter UPI ID or Account Number" value="rajesh.kumar@upi">
+        </div>
+        <div class="form-group">
+          <label>Amount (INR)</label>
+          <input type="number" class="input-field" id="transfer-amount" value="1000">
+        </div>
+        <button class="action-btn" onclick="executeWalletTransfer()" style="padding: 10px; font-size: 12px;">Transfer Funds</button>
+      </div>
+      
+      <div style="font-size: 11px; font-weight: 700; color: var(--text-secondary); margin-top: 14px; text-transform: uppercase;">Recent Activity</div>
+      <div style="display: flex; flex-direction: column; gap: 8px; max-height: 150px; overflow-y: auto;" id="wallet-transactions-list">
+        <!-- Transaction log list injected via js -->
+      </div>
+    </div>
+  </div>
+  
+  <!-- 11. Bookings Registry / Ticket Manager Modal -->
+  <div class="modal-overlay" id="modal-bookings-registry">
+    <div class="modal-sheet centered-modal" style="max-width: 600px;">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-receipt" style="color: var(--primary);"></i> Bookings Registry</div>
+        <div class="modal-close-btn" onclick="closeModal('modal-bookings-registry')"><i class="fa-solid fa-circle-xmark"></i></div>
+      </div>
+      
+      <!-- Filter choices -->
+      <div class="booking-tabs" style="margin-top: 10px;">
+        <div class="booking-tab active" onclick="filterBookingsRegistry('All', this)">All</div>
+        <div class="booking-tab" onclick="filterBookingsRegistry('Active', this)">Active</div>
+        <div class="booking-tab" onclick="filterBookingsRegistry('Completed', this)">Past</div>
+        <div class="booking-tab" onclick="filterBookingsRegistry('Cancelled', this)">Cancelled</div>
+      </div>
+      
+      <div class="bookings-list" id="registry-bookings-container" style="max-height: 350px; overflow-y: auto;">
+        <!-- Injected dynamically via JS -->
+      </div>
+    </div>
+  </div>
+  
+  <!-- 12. Single Booking Receipt Invoice Modal (Detailed invoice pop-up) -->
+  <div class="modal-overlay" id="modal-booking-receipt">
+    <div class="modal-sheet centered-modal" style="max-width: 500px;">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-file-invoice-dollar" style="color: var(--primary);"></i> Booking Invoice</div>
+        <div class="modal-close-btn" onclick="closeModal('modal-booking-receipt')"><i class="fa-solid fa-circle-xmark"></i></div>
+      </div>
+      
+      <div id="receipt-invoice-body" style="margin-top: 10px;">
+        <!-- Injected dynamically -->
+      </div>
+      
+      <button class="action-btn action-btn-danger" id="receipt-cancel-btn" style="display: none;" onclick="executeBookingCancel()">Cancel Booking & Refund</button>
+    </div>
+  </div>
+  
+  <!-- 13. Notifications Modal -->
+  <div class="modal-overlay" id="modal-notifications">
+    <div class="modal-sheet centered-modal" style="max-width: 500px;">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-bell" style="color: var(--primary);"></i> Notifications</div>
+        <div class="modal-close-btn" onclick="closeModal('modal-notifications')"><i class="fa-solid fa-circle-xmark"></i></div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px; max-height: 300px; overflow-y: auto; margin-top: 10px;" id="notifications-container">
+        <!-- Loaded via JS -->
+      </div>
+    </div>
+  </div>
+  
+  <!-- 14. Smart Search Results Overlay Modal -->
+  <div class="modal-overlay" id="modal-search">
+    <div class="modal-sheet centered-modal" style="max-width: 600px;">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-magnifying-glass" style="color: var(--primary);"></i> Search SART Portal</div>
+        <div class="modal-close-btn" onclick="closeModal('modal-search')"><i class="fa-solid fa-circle-xmark"></i></div>
+      </div>
+      <div class="form-group" style="margin-top: 10px;">
+        <input type="text" class="input-field" placeholder="Search services (e.g. taxi, yacht, flight, train, mechanic)..." id="portal-search-input" oninput="executePortalSearch()">
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px; max-height: 250px; overflow-y: auto;" id="portal-search-results">
+        <!-- Search matching cards loaded dynamically -->
+      </div>
+    </div>
+  </div>
+  
+  <!-- 15. BIT Live Booking Activity Feed Modal -->
+  <div class="modal-overlay" id="modal-bit-feed">
+    <div class="modal-sheet centered-modal" style="max-width: 500px;">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-satellite-dish" style="color: var(--primary);"></i> BIT Live Activity Feed</div>
+        <div class="modal-close-btn" onclick="closeModal('modal-bit-feed');"><i class="fa-solid fa-circle-xmark"></i></div>
+      </div>
+      
+      <div style="margin-top: 10px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--dark-border); padding-bottom: 10px;">
+          <span style="font-size: 11px; font-weight: 700; color: var(--success); display: flex; align-items: center; gap: 6px;">
+            <span style="width: 6px; height: 6px; background: var(--success); border-radius: 50%; display: inline-block; animation: pulseGreen 1.2s infinite alternate;"></span>
+            LIVE ACTIVITY STREAMING
+          </span>
+          <button class="action-btn" style="padding: 6px 12px; font-size: 10.5px; width: auto; margin: 0;" onclick="simulateNewLiveActivity()">
+            <i class="fa-solid fa-plus"></i> Simulate Booking
+          </button>
+        </div>
+        
+        <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.4;">
+          This panel displays real-time booking alerts across the SART network. You can simulate activities manually or toggle toast notifications.
+        </p>
+
+        <!-- Feed List -->
+        <div id="bit-feed-list" style="display: flex; flex-direction: column; gap: 10px; max-height: 250px; overflow-y: auto; padding-right: 4px;">
+          <!-- Loaded dynamically via JS -->
+        </div>
+
+        <div style="border-top: 1px solid var(--dark-border); padding-top: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 11px;">
+          <span style="color: var(--text-secondary);">Show Toast Popup Alerts</span>
+          <label class="switch-label" style="display: flex; align-items: center; cursor: pointer; gap: 6px;">
+            <input type="checkbox" id="bit-alert-toggle" checked onchange="toggleBitToasts(this.checked)" style="accent-color: var(--primary);">
+            <span style="color: var(--text-primary); font-weight: bold;">Enabled</span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 16. SART Community Hub Modal -->
+  <div class="modal-overlay" id="modal-community">
+    <div class="modal-sheet centered-modal" style="max-width: 550px;">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-users" style="color: var(--secondary);"></i> SART Transit Community</div>
+        <div class="modal-close-btn" onclick="closeModal('modal-community')"><i class="fa-solid fa-circle-xmark"></i></div>
+      </div>
+      <div style="margin-top: 14px;">
+        <h4 style="font-size: 14px; margin-bottom: 6px;">Active Local Carpool Matches</h4>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; border:1px solid var(--dark-border); padding:10px; border-radius:12px; background:rgba(255,255,255,0.01);">
+            <div>
+              <div style="font-size:12px; font-weight:bold;">Indiranagar to Electronic City</div>
+              <div style="font-size:10px; color:var(--text-secondary);">3 seats vacant • Leaves at 05:30 PM</div>
+            </div>
+            <button class="action-btn" style="padding:6px 12px; font-size:10px; width:auto;" onclick="alert('Joined ride-share group. Details sent!')">Join Pool</button>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; border:1px solid var(--dark-border); padding:10px; border-radius:12px; background:rgba(255,255,255,0.01);">
+            <div>
+              <div style="font-size:12px; font-weight:bold;">Koramangala to Kempegowda Airport</div>
+              <div style="font-size:10px; color:var(--text-secondary);">1 seat vacant • Leaves at 08:00 AM</div>
+            </div>
+            <button class="action-btn" style="padding:6px 12px; font-size:10px; width:auto;" onclick="alert('Joined ride-share group. Details sent!')">Join Pool</button>
+          </div>
+        </div>
+        
+        <h4 style="font-size: 14px; margin-top: 16px; margin-bottom: 6px;">Community Bulletins & Chat</h4>
+        <div style="border: 1px solid var(--dark-border); border-radius: 12px; padding: 12px; background: rgba(0,0,0,0.2); font-size: 11.5px; line-height: 1.4; color: var(--text-secondary);">
+          <p>💬 <strong style="color:var(--text-primary);">Rohan K:</strong> High traffic noted near Tin Factory flyover. Suggest taking outer ring road.</p>
+          <p style="margin-top: 6px;">💬 <strong style="color:var(--text-primary);">Sneha M:</strong> EV fast charger at Indiranagar Metro station is now vacant!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 17. Find My Vehicle Modal -->
+  <div class="modal-overlay" id="modal-find-vehicle">
+    <div class="modal-sheet centered-modal" style="max-width: 450px;">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-location-crosshairs" style="color: var(--primary);"></i> Find My Connected Vehicle</div>
+        <div class="modal-close-btn" onclick="closeModal('modal-find-vehicle')"><i class="fa-solid fa-circle-xmark"></i></div>
+      </div>
+      <div style="margin-top: 14px; text-align: center;">
+        <div style="font-size: 48px; color: var(--primary); margin-bottom: 14px;"><i class="fa-solid fa-satellite-dish"></i></div>
+        <h3>Tata Nexon EV KA-03-MY-8820</h3>
+        <p style="font-size: 12px; color: var(--text-secondary); margin-top: 6px;">Last polled: 20 seconds ago via SART Telemetry</p>
+        
+        <div style="border: 1px solid var(--dark-border); padding: 12px; border-radius: 12px; background: rgba(0,0,0,0.1); margin: 16px 0; text-align: left;">
+          <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px;">
+            <span>Battery Charge</span>
+            <strong>84% (310 km range)</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px;">
+            <span>GPS Status</span>
+            <strong>Locked (Indiranagar Stage 2)</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size:12px;">
+            <span>Climate Control</span>
+            <strong>ON (Set to 22°C)</strong>
+          </div>
+        </div>
+        
+        <button class="action-btn" onclick="executeFindMyVehicle()">Pinpoint Live Location on Map</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 18. Liked Locations & Saved Routes Modal -->
+  <div class="modal-overlay" id="modal-liked">
+    <div class="modal-sheet centered-modal" style="max-width: 500px;">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-star" style="color: var(--secondary);"></i> Liked Routes & Places</div>
+        <div class="modal-close-btn" onclick="closeModal('modal-liked')"><i class="fa-solid fa-circle-xmark"></i></div>
+      </div>
+      <div style="margin-top: 14px; display:flex; flex-direction:column; gap:10px;">
+        <p style="font-size:12px; color:var(--text-secondary); margin-bottom:4px;">Select a saved route below to pre-populate and launch a quick ride dispatch booking.</p>
+        
+        <div style="display:flex; justify-content:space-between; align-items:center; border: 1px solid var(--dark-border); padding: 12px; border-radius: 12px; background: rgba(212, 167, 41, 0.02); border-color: rgba(212, 167, 41, 0.25); cursor:pointer;" onclick="triggerLikedRoute('Home', 'Office')">
+          <div>
+            <div style="font-size:13px; font-weight:bold; color:var(--text-primary);"><i class="fa-solid fa-house-user" style="color: var(--secondary); margin-right:6px;"></i> Indiranagar Home to Tech Office</div>
+            <div style="font-size:10.5px; color:var(--text-secondary); margin-top:2px;">Route: Indiranagar 100 Feet Rd → Whitefield IT Park</div>
+          </div>
+          <i class="fa-solid fa-chevron-right" style="font-size:10px; color: var(--secondary);"></i>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; border: 1px solid var(--dark-border); padding: 12px; border-radius: 12px; background: rgba(255,255,255,0.01); cursor:pointer;" onclick="triggerLikedRoute('Office', 'Airport')">
+          <div>
+            <div style="font-size:13px; font-weight:bold; color:var(--text-primary);"><i class="fa-solid fa-plane-up" style="color:var(--warning); margin-right:6px;"></i> Tech Office to Kempegowda Airport</div>
+            <div style="font-size:10.5px; color:var(--text-secondary); margin-top:2px;">Route: Whitefield → Outer Ring Road → NH-44 Tollroad</div>
+          </div>
+          <i class="fa-solid fa-chevron-right" style="font-size:10px; color:var(--text-secondary);"></i>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; border: 1px solid var(--dark-border); padding: 12px; border-radius: 12px; background: rgba(255,255,255,0.01); cursor:pointer;" onclick="triggerLikedRoute('Home', 'Weekend Villa')">
+          <div>
+            <div style="font-size:13px; font-weight:bold; color:var(--text-primary);"><i class="fa-solid fa-anchor" style="color:var(--success); margin-right:6px;"></i> Indiranagar to Mandwa Yacht Marina</div>
+            <div style="font-size:10.5px; color:var(--text-secondary); margin-top:2px;">Route: Bangalore Highway → Mumbai Coastal NH-66 → Jetty</div>
+          </div>
+          <i class="fa-solid fa-chevron-right" style="font-size:10px; color:var(--text-secondary);"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 19. Travel Guide recommendations Modal -->
+  <div class="modal-overlay" id="modal-travel-guide">
+    <div class="modal-sheet centered-modal" style="max-width: 500px;">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-compass" style="color: var(--warning);"></i> Scenic Travel Guide</div>
+        <div class="modal-close-btn" onclick="closeModal('modal-travel-guide')"><i class="fa-solid fa-circle-xmark"></i></div>
+      </div>
+      <div style="margin-top: 14px; display:flex; flex-direction:column; gap:12px;">
+        <p style="font-size:12px; color:var(--text-secondary);">Unlock curated routes, travel highlights, and charging station spots along scenic pathways.</p>
+        
+        <div style="border: 1px solid var(--dark-border); padding: 12px; border-radius: 12px; background: rgba(251, 191, 36, 0.03); border-color: rgba(251,191,36,0.25);">
+          <h4 style="font-size: 13.5px; display:flex; align-items:center; gap:6px; color:#fff;">
+            <i class="fa-solid fa-route" style="color:var(--warning);"></i> Western Ghats Coastal Route (NH-66)
+          </h4>
+          <p style="font-size: 11px; color: var(--text-secondary); margin-top: 4px; line-height: 1.4;">
+            Experience gorgeous driving lanes overlooking the Arabian Sea, featuring 6 high-speed EV charging stations and scenic seafood local shacks.
+          </p>
+          <button class="action-btn" style="padding:6px 12px; font-size:10px; width:auto; margin-top:8px;" onclick="loadScenicRouteNH66()">Plot Scenic Route</button>
+        </div>
+
+        <div style="border: 1px solid var(--dark-border); padding: 12px; border-radius: 12px; background: rgba(255,255,255,0.01);">
+          <h4 style="font-size: 13.5px; display:flex; align-items:center; gap:6px; color:#fff;">
+            <i class="fa-solid fa-water" style="color:var(--secondary);"></i> Mandwa Yacht Pier & Speedboats
+          </h4>
+          <p style="font-size: 11px; color: var(--text-secondary); margin-top: 4px; line-height: 1.4;">
+            Hop on standard hovercraft speedboats or reserve private yacht charters from Mumbai Harbor straight to Alibaug Mandwa Jetty (20 minutes).
+          </p>
+          <button class="action-btn" style="padding:6px 12px; font-size:10px; width:auto; margin-top:8px;" onclick="closeModal('modal-travel-guide'); openModal('modal-sea');">Book Maritime Charter</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Leaflet Map JS CDN -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  
+  <!-- Local Javascript logic -->
+  <script src="app.js"></script>
+</body>
+</html>
