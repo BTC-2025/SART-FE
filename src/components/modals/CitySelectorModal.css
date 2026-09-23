@@ -1,0 +1,165 @@
+.new-city-modal {
+  background: #f4f5f7; /* Light grayish/white background from screenshot */
+  border-radius: 16px;
+  width: 90%;
+  max-width: 750px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  color: #111827;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  font-family: var(--font-sans);
+  overflow: hidden;
+}
+
+.new-city-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 30px;
+}
+
+.new-city-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.new-city-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #4b5563;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.new-city-close:hover {
+  color: #000;
+}
+
+.new-city-body {
+  padding: 0 30px 30px 30px;
+  overflow-y: auto;
+}
+
+.new-city-search {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.new-city-search input {
+  width: 100%;
+  padding: 16px 16px 16px 45px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 15px;
+  color: #111827;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.new-city-search input:focus {
+  border-color: #b08a32;
+}
+
+.new-city-search .search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6b7280;
+  font-size: 16px;
+}
+
+.use-current-location {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #b08a32; /* Gold text */
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 30px;
+}
+
+.use-current-location:hover {
+  opacity: 0.8;
+}
+
+.new-cities-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.new-city-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 24px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.new-city-card:hover {
+  border-color: #d1d5db;
+  background: #f9fafb;
+}
+
+.new-city-card.active {
+  border-color: #d1d5db; /* Same as hover or default */
+  background: #fdfbf7;
+}
+
+.city-pin {
+  font-size: 24px;
+  color: #6b7280;
+}
+
+.new-city-card.active .city-pin {
+  color: #6b7280; /* Same as default */
+}
+
+.city-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.all-cities-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #6b7280;
+  margin: 0 0 20px 0;
+}
+
+.alphabet-row {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  padding-bottom: 10px;
+}
+
+.alphabet-letter {
+  font-size: 14px;
+  font-weight: 700;
+  color: #b08a32; /* Default gold from screenshot */
+  cursor: pointer;
+}
+
+/* Make some grey as if disabled/no cities */
+.alphabet-letter:nth-child(n+15):nth-child(-n+17), 
+.alphabet-letter:nth-child(24),
+.alphabet-letter:nth-child(25),
+.alphabet-letter:nth-child(26) {
+  color: #d1d5db;
+}

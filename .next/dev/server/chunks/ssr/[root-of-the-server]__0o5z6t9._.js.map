@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 10, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/gmvin/Desktop/Projects/SART/SART-FE/app/page.jsx"],"sourcesContent":["export default function Home() {\n  return (\n    <div className=\"min-h-screen flex items-center justify-center bg-gray-900 text-white\">\n      <div className=\"text-center\">\n        <h1 className=\"text-4xl font-bold mb-4\">SART Next.js Upgrade in Progress 🚀</h1>\n        <p className=\"text-lg text-gray-400\">Tailwind CSS v4 has been successfully configured.</p>\n        <p className=\"text-sm mt-8 text-gray-500\">We are now migrating the static UI into React Components.</p>\n      </div>\n    </div>\n  )\n}\n"],"names":["Home","className"],"mappings":";;;;;;AAAe,SAASA;IACtB,qBACE,8OAAC;QAAIC,WAAU;kBACb,cAAA,8OAAC;YAAIA,WAAU;;8BACb,8OAAC;oBAAGA,WAAU;8BAA0B;;;;;;8BACxC,8OAAC;oBAAEA,WAAU;8BAAwB;;;;;;8BACrC,8OAAC;oBAAEA,WAAU;8BAA6B;;;;;;;;;;;;;;;;;AAIlD"}}]
+}

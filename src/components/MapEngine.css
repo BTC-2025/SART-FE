@@ -1,0 +1,164 @@
+/* ----------------------------------------------------------------------------
+   EXPLORE MAP TRACKER VIEW (SaaS Layout)
+   ---------------------------------------------------------------------------- */
+.full-map-layout {
+  display: flex;
+  height: calc(100vh - 70px);
+  width: 100%;
+}
+.map-overlay-sidebar {
+  width: 320px;
+  background: var(--panel-bg);
+  border-right: 1px solid var(--dark-border);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+.map-search-bar {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.map-search-bar input {
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 12.5px;
+  outline: none;
+  flex: 1;
+}
+.map-search-bar i {
+  color: var(--primary);
+}
+
+.map-filters-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.map-filter-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.map-filter-item input {
+  accent-color: var(--primary);
+}
+
+/* Active booking panel inside Map Sidebar */
+.map-active-booking-panel {
+  background: var(--primary-gradient);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 10px 20px rgba(0, 82, 255, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: slideUp 0.3s ease;
+}
+.panel-header-badge {
+  font-size: 8px;
+  font-weight: 900;
+  background: #fff;
+  color: var(--primary);
+  padding: 2px 6px;
+  border-radius: 6px;
+  display: inline-block;
+  align-self: flex-start;
+  letter-spacing: 0.05em;
+}
+.panel-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.panel-icon-wrap {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 18px;
+}
+.panel-desc h4 {
+  font-size: 13px;
+  color: #fff;
+  line-height: 1.3;
+}
+.panel-desc p {
+  font-size: 10.5px;
+  color: rgba(255,255,255,0.8);
+  margin-top: 2px;
+}
+.cancel-booking-btn {
+  background: rgba(255,255,255,0.2);
+  border: none;
+  color: #fff;
+  padding: 8px;
+  border-radius: 10px;
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.cancel-booking-btn:hover {
+  background: rgba(255,255,255,0.3);
+}
+
+.map-canvas-container {
+  flex: 1;
+  height: 100%;
+  position: relative;
+}
+#explore-map {
+  width: 100%;
+  height: 100%;
+  background: #0d1117;
+  z-index: 1;
+}
+
+/* Floating control buttons on Map */
+.map-floating-controls {
+  position: absolute;
+  right: 20px;
+  bottom: 30px;
+  z-index: 99;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.map-circle-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(15, 20, 28, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--card-border);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-premium);
+  transition: var(--transition);
+  font-size: 16px;
+}
+.map-circle-btn:hover {
+  background: var(--dark-border);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}

@@ -1,0 +1,108 @@
+/* [project]/src/components/QuickBookingForm.css [app-client] (css) */
+.quick-booking-container {
+  background-color: #e5e7eb;
+  border-radius: 16px;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 32px;
+  padding: 32px 40px;
+  display: flex;
+  box-shadow: 0 10px 25px #00000026;
+}
+
+.quick-booking-title {
+  color: #111827;
+  text-align: center;
+  margin-bottom: 24px;
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.quick-booking-form {
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+  width: 100%;
+  display: flex;
+}
+
+.qb-field {
+  flex-direction: column;
+  flex: 1;
+  min-width: 200px;
+  display: flex;
+}
+
+.qb-field label {
+  color: #111827;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.qb-input-wrap {
+  border-bottom: 2px solid #11182733;
+  align-items: center;
+  padding-bottom: 6px;
+  transition: border-color .2s;
+  display: flex;
+  position: relative;
+}
+
+.qb-input-wrap:focus-within {
+  border-bottom-color: #111827;
+}
+
+.qb-input-wrap input, .qb-input-wrap select {
+  color: #111827;
+  appearance: none;
+  background: none;
+  border: none;
+  outline: none;
+  width: 100%;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.qb-input-wrap input::placeholder {
+  color: #11182780;
+  font-weight: 500;
+}
+
+.target-icon {
+  color: #111827;
+  cursor: pointer;
+  font-size: 16px;
+  position: absolute;
+  right: 0;
+}
+
+.qb-action {
+  justify-content: center;
+  width: 100%;
+  margin-top: 32px;
+  display: flex;
+}
+
+.qb-confirm-btn {
+  color: #fff;
+  cursor: pointer;
+  letter-spacing: .5px;
+  background: #111827;
+  border: none;
+  border-radius: 30px;
+  padding: 14px 40px;
+  font-size: 15px;
+  font-weight: 800;
+  transition: transform .2s, background .2s;
+  box-shadow: 0 4px 10px #0000004d;
+}
+
+.qb-confirm-btn:hover {
+  background: #000;
+  transform: translateY(-2px);
+}
+
+/*# sourceMappingURL=src_components_QuickBookingForm_css_1igg3k2._.single.css.map*/

@@ -1,0 +1,237 @@
+/* [project]/src/components/tabs/WalletTab.css [app-client] (css) */
+.wallet-page-layout {
+  grid-template-columns: 1fr 340px;
+  gap: 30px;
+  max-width: 1440px;
+  height: calc(100vh - 70px);
+  margin: 0 auto;
+  padding: 30px;
+  display: grid;
+  overflow: hidden;
+}
+
+.wallet-dashboard-col {
+  flex-direction: column;
+  gap: 30px;
+  display: flex;
+  overflow-y: auto;
+}
+
+.wallet-history-col {
+  height: 100%;
+  overflow-y: hidden;
+}
+
+.wallet-card-wide {
+  box-shadow: var(--shadow-premium), 0 0 30px #0052ff0d;
+  background: linear-gradient(135deg, #0052ff1f 0%, #7928ca1a 100%);
+  border-color: #0052ff59;
+}
+
+.wallet-page-header {
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  display: flex;
+}
+
+.wallet-page-metrics {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  display: grid;
+}
+
+.wallet-metric-box {
+  border: 1px solid var(--card-border);
+  background: #080b1073;
+  border-radius: 18px;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+  display: flex;
+  position: relative;
+}
+
+.wallet-metric-box .lbl {
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  letter-spacing: .05em;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.wallet-metric-box .val {
+  font-family: var(--font-display);
+  color: #fff;
+  margin: 10px 0;
+  font-size: 28px;
+  font-weight: 900;
+}
+
+.wallet-metric-box .subtext {
+  color: var(--text-secondary);
+  font-size: 10px;
+}
+
+.wallet-metric-box .claim-btn {
+  background: var(--success);
+  color: #000;
+  cursor: pointer;
+  transition: var(--transition);
+  border: none;
+  border-radius: 8px;
+  align-self: flex-start;
+  margin-top: 6px;
+  padding: 5px 10px;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.wallet-metric-box .claim-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px #34d39959;
+}
+
+.wallet-forms-row {
+  gap: 24px;
+  display: flex;
+}
+
+.transactions-full-list {
+  padding-right: 4px;
+}
+
+@media (max-width: 1024px) {
+  .wallet-page-layout {
+    grid-template-columns: 1fr;
+    height: auto;
+    overflow: visible;
+  }
+
+  .wallet-history-col {
+    height: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .home-top-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .home-services-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .btn-drivers {
+    grid-column: span 2;
+  }
+
+  .btn-parking, .btn-liked, .btn-travel-guide, .btn-booking {
+    grid-column: span 1;
+  }
+
+  .btn-find-vehicle {
+    grid-column: span 3;
+  }
+
+  .home-bottom-actions {
+    flex-direction: column;
+  }
+
+  .wallet-page-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .wallet-forms-row {
+    flex-direction: column;
+  }
+}
+
+.store-wireframe-container {
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 20px;
+  display: grid;
+}
+
+.store-wireframe-card {
+  border: 1.5px solid var(--text-primary);
+  text-align: center;
+  cursor: pointer;
+  height: 140px;
+  transition: var(--transition);
+  color: var(--text-primary);
+  background: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.store-wireframe-card:hover {
+  border-color: var(--primary);
+  background: #ffffff0d;
+}
+
+.store-card-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: normal;
+}
+
+.store-card-sub {
+  opacity: .8;
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+.profile-wireframe-container {
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 20px;
+  display: grid;
+}
+
+.profile-col {
+  flex-direction: column;
+  gap: 15px;
+  display: flex;
+}
+
+.profile-btn {
+  border: 1.5px solid var(--text-primary);
+  text-align: center;
+  cursor: pointer;
+  height: 60px;
+  font-family: var(--font-display);
+  color: var(--text-primary);
+  transition: var(--transition);
+  background: none;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  font-weight: normal;
+  display: flex;
+}
+
+.profile-btn:hover {
+  border-color: var(--primary);
+  background: #ffffff0d;
+}
+
+.profile-btn-bit {
+  border-color: var(--primary);
+  color: var(--text-primary);
+}
+
+.profile-btn-bit:hover {
+  background: #157f8a26;
+}
+
+/*# sourceMappingURL=src_components_tabs_WalletTab_css_1igg3k2._.single.css.map*/
