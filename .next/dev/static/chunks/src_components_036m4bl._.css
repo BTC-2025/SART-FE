@@ -5,8 +5,8 @@
   flex-shrink: 0;
   justify-content: space-between;
   align-items: center;
-  height: 44px;
-  padding: 0 24px;
+  height: 22px;
+  padding: 0 10px;
   display: flex;
 }
 
@@ -47,21 +47,50 @@
 .subnav-btn {
   cursor: pointer;
   transition: var(--transition);
-  color: #fff;
-  background: #ffffff08;
-  border: 1px solid #ffffff1f;
-  border-radius: 20px;
+  color: #000;
+  z-index: 1;
+  background: none;
+  border: 1px solid #0000;
+  border-radius: 9px;
   align-items: center;
   gap: 6px;
-  padding: 5px 12px;
-  font-size: 11px;
-  font-weight: 700;
+  padding: 2px;
+  font-size: 12px;
+  font-weight: 800;
   display: flex;
+  position: relative;
+}
+
+.subnav-btn:before {
+  content: "";
+  -webkit-mask-composite: xor;
+  opacity: 0;
+  transition: var(--transition);
+  pointer-events: none;
+  background: linear-gradient(to right, #556b2f, #fff);
+  border-radius: 9px;
+  padding: 1px;
+  position: absolute;
+  inset: -1px;
+  -webkit-mask-image: linear-gradient(#fff 0 0), linear-gradient(#fff 0 0);
+  -webkit-mask-position: 0 0, 0 0;
+  -webkit-mask-size: auto, auto;
+  -webkit-mask-repeat: repeat, repeat;
+  -webkit-mask-clip: content-box, border-box;
+  -webkit-mask-origin: content-box, border-box;
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  -webkit-mask-source-type: auto, auto;
+  mask-mode: match-source, match-source;
 }
 
 .subnav-btn:hover {
   background: #ffffff14;
-  border-color: #ffffff40;
+  border-color: #0000;
+}
+
+.subnav-btn:hover:before {
+  opacity: 1;
 }
 
 .subnav-btn.btn-vendor {
@@ -71,8 +100,8 @@
 }
 
 .subnav-btn.btn-vendor:hover {
-  border-color: var(--primary-header);
   background: #f5c51826;
+  border-color: #0000;
 }
 
 .subnav-btn.btn-wallet {
@@ -83,7 +112,7 @@
 
 .subnav-btn.btn-wallet:hover {
   background: #10b98126;
-  border-color: #10b981;
+  border-color: #0000;
 }
 
 .profile-dropdown-menu {
@@ -345,160 +374,62 @@
 
 /* [project]/src/components/ServicesGrid.css [app-client] (css) */
 .tire-grid {
-  grid-template-columns: repeat(7, 1fr);
-  justify-items: center;
-  gap: 16px;
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 16px 0 32px;
-  display: grid;
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .tire-card {
+  aspect-ratio: 1;
   cursor: pointer;
   perspective: 1000px;
+  pointer-events: auto;
   border-radius: 50%;
   justify-content: center;
   align-items: center;
-  width: 120px;
-  height: 120px;
-  margin-bottom: 12px;
-  display: flex;
-  position: relative;
-}
-
-.tire-outer-assembly {
-  background: #1f2937;
-  border-radius: 50%;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  transition: transform 1s cubic-bezier(.25, 1, .5, 1);
+  width: 3.6%;
   display: flex;
   position: absolute;
-  top: 0;
-  left: 0;
-  overflow: hidden;
-  box-shadow: 0 10px 20px #00000026, inset 0 0 15px #0009;
-}
-
-.tire-card:hover .tire-outer-assembly {
-  transform: rotate(360deg);
-}
-
-.tire-rubber {
-  box-sizing: border-box;
-  border: 18px solid #111827;
-  border-radius: 50%;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-.tire-tread {
-  z-index: 2;
-  background: #1f2937;
-  width: 4px;
-  margin-left: -2px;
-  position: absolute;
-  top: -18px;
-  bottom: -18px;
-  left: 50%;
-}
-
-.tire-alloy {
-  background: conic-gradient(#f9fafb 0%, #e5e7eb 50%, #f9fafb 100%);
-  border: 4px solid #374151;
-  border-radius: 50%;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  position: absolute;
-  inset: 18px;
-  box-shadow: inset 0 0 10px #0006;
+  transform: translate(-50%, -50%);
 }
 
 .tire-center-cap {
   z-index: 10;
-  background: #fff;
-  border: 2px solid #e5e7eb;
+  -webkit-backdrop-filter: blur(2px);
+  background: #8c8c8cd9;
+  border: 1px solid #ffffff4d;
   border-radius: 50%;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 68px;
-  height: 68px;
-  transition: transform .2s, box-shadow .2s;
+  width: 100%;
+  height: 100%;
+  transition: background .2s;
   display: flex;
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  box-shadow: 0 4px 10px #0003, inset 0 2px 4px #ffffff80;
-}
-
-.tire-card:hover .tire-center-cap {
-  border-color: var(--primary-header);
-  transform: translate(-50%, -50%)scale(1.1);
-  box-shadow: 0 8px 15px #00000040, inset 0 2px 4px #ffffff80;
+  top: 0;
+  left: 0;
+  box-shadow: 0 4px 8px #0009;
 }
 
 .tire-icon {
+  filter: drop-shadow(0 2px 4px #000c);
   margin-bottom: 2px;
-  font-size: 24px;
+  font-size: 16px;
   line-height: 1;
 }
 
 .tire-title {
   text-transform: uppercase;
-  color: #111827;
+  color: #fff;
   text-align: center;
-  font-size: 9px;
-  font-weight: 800;
+  text-shadow: 0 1px 3px #000000e6, 0 0 5px #000c;
+  font-size: 8px;
+  font-weight: 900;
   line-height: 1.1;
-}
-
-.rec-card-red .alloy-star {
-  color: #ef444433;
-}
-
-.rec-card-orange .alloy-star {
-  color: #f9731633;
-}
-
-.rec-card-blue .alloy-star {
-  color: #3b82f633;
-}
-
-.rec-card-purple .alloy-star {
-  color: #a855f733;
-}
-
-.rec-card-green .alloy-star {
-  color: #10b98133;
-}
-
-.rec-card-teal .alloy-star {
-  color: #14b8a633;
-}
-
-.rec-card-pink .alloy-star {
-  color: #ec489933;
-}
-
-.rec-card-indigo .alloy-star {
-  color: #6366f133;
-}
-
-.rec-card-cyan .alloy-star {
-  color: #06b6d433;
-}
-
-.rec-card-slate .alloy-star {
-  color: #64748b33;
 }
 
 /* [project]/src/components/QuickBookingForm.css [app-client] (css) */
@@ -787,14 +718,55 @@
 }
 
 /* [project]/src/components/tabs/HomeTab.css [app-client] (css) */
-.hero-sliding-banner {
-  background: #000;
-  border-radius: 20px;
-  height: 240px;
+.truck-hero-container {
+  aspect-ratio: 1024 / 384;
+  background-image: url("/truck-bg.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 0;
+  width: 100vw;
+  margin-top: -32px;
   margin-bottom: 32px;
   position: relative;
+  left: 50%;
   overflow: hidden;
+  transform: translateX(-50%);
   box-shadow: 0 15px 35px #0006;
+}
+
+.truck-subnav-overlay {
+  z-index: 100;
+  padding: 4px 8px;
+  position: absolute;
+  top: 8px;
+  right: 24px;
+}
+
+.truck-cargo-overlay {
+  border-radius: 0;
+  width: 61%;
+  height: 51.7%;
+  position: absolute;
+  top: 10.5%;
+  left: 11.8%;
+  overflow: hidden;
+}
+
+.truck-wheels-overlay {
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.hero-sliding-banner {
+  background: #000;
+  width: 100%;
+  height: 100%;
+  position: relative;
 }
 
 .hero-slider-track {
@@ -809,17 +781,6 @@
   background-size: cover;
   min-width: 100%;
   height: 100%;
-  animation: 20s infinite alternate slowZoom;
-}
-
-@keyframes slowZoom {
-  from {
-    transform: scale(1);
-  }
-
-  to {
-    transform: scale(1.1);
-  }
 }
 
 .road-overlay-text {

@@ -1,0 +1,32 @@
+<html>
+<body style="margin:0; background: #333;">
+  <div id="container" style="position: relative; width: 1024px; height: 384px; background: url('truck-bg.jpg'); background-size: cover; cursor: crosshair;">
+  </div>
+  <div id="log" style="color: white; font-family: monospace; padding: 20px;"></div>
+  <script>
+    const container = document.getElementById('container');
+    const log = document.getElementById('log');
+    let points = [];
+    container.addEventListener('click', (e) => {
+      const rect = container.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const xPercent = (x / rect.width * 100).toFixed(2);
+      const yPercent = (y / rect.height * 100).toFixed(2);
+      points.push({ left: xPercent + '%', top: yPercent + '%' });
+      log.innerText = JSON.stringify(points, null, 2);
+      
+      const dot = document.createElement('div');
+      dot.style.position = 'absolute';
+      dot.style.left = xPercent + '%';
+      dot.style.top = yPercent + '%';
+      dot.style.width = '10px';
+      dot.style.height = '10px';
+      dot.style.background = 'red';
+      dot.style.transform = 'translate(-50%, -50%)';
+      dot.style.borderRadius = '50%';
+      container.appendChild(dot);
+    });
+  </script>
+</body>
+</html>

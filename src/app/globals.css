@@ -38,8 +38,8 @@
   /* Bokspot-inspired Colors & Theme variables */
   --background: #f9fafb;     /* Light grayish background for UI sheets */
   --surface: #ffffff;        /* Pure white for cards */
-  --primary-header: #10b981; /* Light Green */
-  --header-text: #ffffff;    /* White text for contrast on green/dark */
+  --primary-header: #b4cee0; /* Light Sky Blue */
+  --header-text: #111827;    /* Dark text for contrast on light blue */
   --primary: #000000;        /* Deep black for main primary actions */
   --secondary: #f9fafb;      /* Subtle secondary elements */
   --accent: #2563eb;         /* Bright blue for interactive highlights */
@@ -84,7 +84,7 @@ body {
   background-color: var(--bg-color);
   color: var(--text-primary);
   min-height: 100vh;
-  overflow-x: hidden;
+  overflow: hidden;
   line-height: 1.5;
 }
 
@@ -121,10 +121,10 @@ h1, h2, h3, h4, h5, h6 {
 /* Premium Top Navigation Bar */
 .web-navbar {
   height: 70px;
-  background: rgba(15, 20, 28, 0.85);
+  background: #dae5ec;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--dark-border);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -170,7 +170,7 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   gap: 6px;
   height: 44px;
-  background: rgba(10, 14, 23, 0.7);
+  background: #808000; /* Olive Green */
   border-radius: 22px;
   padding: 0 8px;
   align-items: center;
@@ -181,7 +181,7 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   gap: 8px;
   padding: 0 16px;
-  color: var(--text-secondary);
+  color: #ffffff; /* Better contrast on olive green */
   font-size: 13.5px;
   font-weight: 600;
   cursor: pointer;
@@ -321,7 +321,14 @@ h1, h2, h3, h4, h5, h6 {
 .web-main-content {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   position: relative;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.web-main-content::-webkit-scrollbar {
+  display: none;
 }
 
 /* Screen Sections */
@@ -1398,12 +1405,12 @@ h1, h2, h3, h4, h5, h6 {
 .nav-links {
   align-items: center !important;
   gap: 8px !important;
-  background: #facc15 !important;
+  background: #556B2F !important; /* Olive Green */
   border-radius: 50px !important;
   padding: 6px 12px !important;
 }
 .nav-link {
-  color: #000000 !important;
+  color: #ffffff !important;
   font-weight: 700 !important;
   border-bottom: none !important;
   padding: 8px 18px !important;

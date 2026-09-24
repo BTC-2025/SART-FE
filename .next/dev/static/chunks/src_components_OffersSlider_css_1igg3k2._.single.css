@@ -1,0 +1,122 @@
+/* [project]/src/components/OffersSlider.css [app-client] (css) */
+.offers-container {
+  width: 100%;
+  margin: 32px 0;
+}
+
+.offers-header {
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  display: flex;
+}
+
+.offers-header h2 {
+  color: #94a3b8;
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.offers-nav {
+  gap: 12px;
+  display: flex;
+}
+
+.offers-nav-btn {
+  color: #475569;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 4px;
+  font-size: 18px;
+  transition: color .2s;
+}
+
+.offers-nav-btn:hover {
+  color: #0f172a;
+}
+
+.offers-slider-wrapper {
+  width: 100%;
+  overflow: hidden;
+}
+
+.offers-slider-track {
+  gap: 16px;
+  transition: transform .4s ease-in-out;
+  display: flex;
+}
+
+.offer-card {
+  background: #fff;
+  border-radius: 16px;
+  flex-direction: column;
+  flex: 0 0 calc(33.333% - 11px);
+  min-width: 320px;
+  height: 180px;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 12px #0000000d;
+}
+
+.offer-card-top {
+  flex: 1;
+  padding: 20px;
+}
+
+.offer-title-row {
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+  display: flex;
+}
+
+.offer-title {
+  color: #1e293b;
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.offer-discount {
+  color: #0ea5e9;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.offer-desc {
+  color: #64748b;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.offer-card-bottom {
+  justify-content: space-between;
+  align-items: flex-end;
+  height: 60px;
+  padding: 0 20px 15px;
+  display: flex;
+  position: relative;
+}
+
+.offer-code {
+  color: #0f172a;
+  background: #fff;
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  box-shadow: 0 2px 4px #0000001a;
+}
+
+.offer-tnc {
+  color: #fff;
+  cursor: pointer;
+  font-size: 12px;
+  text-decoration: underline;
+}
+
+/*# sourceMappingURL=src_components_OffersSlider_css_1igg3k2._.single.css.map*/

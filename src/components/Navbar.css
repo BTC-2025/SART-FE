@@ -2,12 +2,12 @@
    SUB NAVBAR
    ============================================================================ */
 .web-subnavbar {
-  height: 44px;
+  height: 22px;
   background: transparent;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px;
+  padding: 0 10px;
   z-index: 99;
   flex-shrink: 0;
 }
@@ -15,10 +15,12 @@
 .subnav-actions .ctrl-btn {
   border-radius: 50%;
 }
+
 .subnav-links {
   display: flex;
   gap: 20px;
 }
+
 .subnav-link {
   color: var(--text-secondary);
   font-size: 12.5px;
@@ -30,42 +32,73 @@
   transition: var(--transition);
   text-decoration: none;
 }
+
 .subnav-link:hover {
   color: var(--text-primary);
 }
+
 .subnav-link.active {
   color: #fff;
 }
+
 .subnav-actions {
   display: flex;
   gap: 10px;
 }
+
 .subnav-btn {
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 700;
+  padding: 2px 2px;
+  border-radius: 9px;
+  font-size: 12px;
+  font-weight: 800;
   cursor: pointer;
   transition: var(--transition);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.03);
-  color: #fff;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #000;
   display: flex;
   align-items: center;
   gap: 6px;
+  position: relative;
+  z-index: 1;
 }
+
+.subnav-btn::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  bottom: -1px;
+  border-radius: 9px;
+  padding: 1px;
+  background: linear-gradient(to right, #556b2f, #ffffff);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: var(--transition);
+  pointer-events: none;
+}
+
 .subnav-btn:hover {
   background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.25);
+  border-color: transparent;
 }
+
+.subnav-btn:hover::before {
+  opacity: 1;
+}
+
 .subnav-btn.btn-vendor {
   border-color: rgba(245, 197, 24, 0.3);
   background: rgba(245, 197, 24, 0.06);
   color: var(--primary-header);
 }
+
 .subnav-btn.btn-vendor:hover {
   background: rgba(245, 197, 24, 0.15);
-  border-color: var(--primary-header);
+  border-color: transparent;
 }
 
 .subnav-btn.btn-wallet {
@@ -73,9 +106,10 @@
   background: rgba(16, 185, 129, 0.06);
   color: #10b981;
 }
+
 .subnav-btn.btn-wallet:hover {
   background: rgba(16, 185, 129, 0.15);
-  border-color: #10b981;
+  border-color: transparent;
 }
 
 /* ============================================================================
@@ -91,46 +125,61 @@
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--dark-border);
   border-radius: 16px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.7);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
   display: none;
   flex-direction: column;
   padding: 16px;
   z-index: 1000;
   animation: slideDownMenu 0.2s ease;
 }
+
 .profile-dropdown-menu.show {
   display: flex;
 }
+
 @keyframes slideDownMenu {
-  from { transform: translateY(-10px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
+
 .dropdown-header {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
+
 .dropdown-header .lbl {
   font-size: 8px;
   font-weight: 800;
   color: var(--text-secondary);
   letter-spacing: 0.05em;
 }
+
 .dropdown-header .val {
   font-size: 12px;
   font-weight: 700;
   color: #fff;
 }
+
 .dropdown-header .flag {
   font-size: 10px;
   color: var(--text-secondary);
   margin-top: 4px;
 }
+
 .dropdown-divider {
   height: 1px;
   background: var(--dark-border);
   margin: 12px 0;
 }
+
 .dropdown-item {
   display: flex;
   align-items: center;
@@ -144,10 +193,12 @@
   text-decoration: none;
   transition: var(--transition);
 }
+
 .dropdown-item:hover {
   background: rgba(255, 255, 255, 0.05);
   color: var(--secondary);
 }
+
 .dropdown-item-meta {
   display: flex;
   justify-content: space-between;
@@ -155,6 +206,7 @@
   padding: 6px 10px;
   font-size: 11.5px;
 }
+
 .dropdown-item-meta .label {
   color: var(--text-secondary);
   display: flex;
@@ -169,7 +221,8 @@
   display: flex;
   align-items: center;
   position: absolute;
-  right: 260px; /* Increased to not hide heart and bag icons */
+  right: 260px;
+  /* Increased to not hide heart and bag icons */
   width: 320px;
   z-index: 100;
   animation: expandSearch 0.3s ease forwards;
@@ -177,14 +230,22 @@
 }
 
 @keyframes expandSearch {
-  from { opacity: 0; transform: scaleX(0.5); }
-  to { opacity: 1; transform: scaleX(1); }
+  from {
+    opacity: 0;
+    transform: scaleX(0.5);
+  }
+
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
 }
 
 .expanded-search-input {
   width: 100%;
   padding: 12px 40px;
-  background: #161b22; /* Reverted to dark theme */
+  background: #161b22;
+  /* Reverted to dark theme */
   border: 1px solid var(--card-border);
   border-radius: 50px;
   font-size: 14px;
@@ -262,29 +323,34 @@
 .close-search-btn:hover {
   color: #ef4444;
 }
+
 .dropdown-item-meta .value {
   color: var(--text-primary);
   font-weight: 600;
 }
+
 .theme-switch-container {
   display: flex;
   flex-direction: column;
   gap: 6px;
   padding: 0 10px;
 }
+
 .theme-lbl {
   font-size: 8px;
   font-weight: 800;
   color: var(--text-secondary);
   letter-spacing: 0.05em;
 }
+
 .theme-toggles {
   display: flex;
-  background: rgba(0,0,0,0.3);
+  background: rgba(0, 0, 0, 0.3);
   border: 1px solid var(--dark-border);
   border-radius: 10px;
   padding: 2px;
 }
+
 .theme-toggle-btn {
   flex: 1;
   background: transparent;
@@ -297,13 +363,16 @@
   cursor: pointer;
   transition: var(--transition);
 }
+
 .theme-toggle-btn.active {
   background: var(--primary);
   color: #fff;
 }
+
 .signout-btn {
   color: var(--error);
 }
+
 .signout-btn:hover {
   background: rgba(239, 68, 68, 0.1);
   color: var(--error) !important;

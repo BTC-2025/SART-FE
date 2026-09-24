@@ -264,6 +264,10 @@ img, video {
   visibility: visible;
 }
 
+.static {
+  position: static;
+}
+
 .fixed {
   position: fixed;
 }
@@ -354,8 +358,8 @@ img, video {
   --transition: all .3s cubic-bezier(.4, 0, .2, 1);
   --background: #f9fafb;
   --surface: #fff;
-  --primary-header: #10b981;
-  --header-text: #fff;
+  --primary-header: #b4cee0;
+  --header-text: #111827;
   --text-tertiary: #9ca3af;
   --header-text-hover: #157f8a;
   --subnav-bg: #090d16;
@@ -392,7 +396,7 @@ body {
   color: var(--text-primary);
   min-height: 100vh;
   line-height: 1.5;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -428,9 +432,9 @@ h1, h2, h3, h4, h5, h6 {
 
 .web-navbar {
   -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--dark-border);
   z-index: 100;
-  background: #0f141cd9;
+  background: #dae5ec;
+  border-bottom: 1px solid #0000000d;
   flex-shrink: 0;
   justify-content: space-between;
   align-items: center;
@@ -474,7 +478,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .nav-links {
   border: 1px solid var(--dark-border);
-  background: #0a0e17b3;
+  background: olive;
   border-radius: 22px;
   align-items: center;
   gap: 6px;
@@ -484,7 +488,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .nav-link {
-  color: var(--text-secondary);
+  color: #fff;
   cursor: pointer;
   transition: var(--transition);
   border-radius: 16px;
@@ -627,9 +631,15 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .web-main-content {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   flex: 1;
   position: relative;
-  overflow-y: auto;
+  overflow: hidden auto;
+}
+
+.web-main-content::-webkit-scrollbar {
+  display: none;
 }
 
 .tab-screen {
@@ -1852,7 +1862,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .nav-links {
-  background: #facc15 !important;
+  background: #556b2f !important;
   border-radius: 50px !important;
   align-items: center !important;
   gap: 8px !important;
@@ -1860,7 +1870,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .nav-link {
-  color: #000 !important;
+  color: #fff !important;
   height: auto !important;
   transition: var(--transition) !important;
   border-bottom: none !important;

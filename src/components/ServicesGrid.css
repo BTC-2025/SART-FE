@@ -3,138 +3,66 @@
    ============================================================================ */
 
 .tire-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 16px; /* Reduced gap to fit 7 columns */
-  justify-items: center;
-  padding: 16px 0 32px 0;
-  max-width: 1000px;
-  margin: 0 auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }
 
 .tire-card {
-  position: relative;
-  width: 120px;
-  height: 120px;
+  position: absolute;
+  width: 3.6%;
+  /* Reduced size to fit exactly inside the inner rim */
+  aspect-ratio: 1/1;
   border-radius: 50%;
   cursor: pointer;
   perspective: 1000px;
-  margin-bottom: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
+  pointer-events: auto;
+  /* Re-enable clicks on the cards themselves */
+  transform: translate(-50%, -50%);
+  /* Fix: Center the rim on the given coordinates exactly */
 }
 
-/* 1. The Outer Assembly (Spins on Hover) */
-.tire-outer-assembly {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  transition: transform 1s cubic-bezier(0.25, 1, 0.5, 1);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.15), inset 0 0 15px rgba(0,0,0,0.6);
-  background: #1f2937; /* Base rubber color */
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.tire-card:hover .tire-outer-assembly {
-  transform: rotate(360deg);
-}
-
-/* 2. The Tire Treads (Dashed borders rotating) */
-.tire-rubber {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  border: 18px solid #111827; /* Thick outer rubber */
-  box-sizing: border-box;
-}
-
-/* Create treads using lines crossing the border area */
-.tire-tread {
-  position: absolute;
-  top: -18px;
-  bottom: -18px;
-  left: 50%;
-  width: 4px;
-  margin-left: -2px;
-  background: #1f2937;
-  z-index: 2;
-}
-
-/* 3. The Alloy Wheel & Star Spokes */
-.tire-alloy {
-  position: absolute;
-  top: 18px;
-  left: 18px;
-  right: 18px;
-  bottom: 18px;
-  border-radius: 50%;
-  background: conic-gradient(from 0deg, #f9fafb 0%, #e5e7eb 50%, #f9fafb 100%);
-  border: 4px solid #374151; /* Inner rim lip */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: inset 0 0 10px rgba(0,0,0,0.4);
-}
-
-/* 4. The Stationary Center Cap (Rolls-Royce Effect) */
+/* 4. The Hubcap (Text directly on the truck rim) */
 .tire-center-cap {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 68px;
-  height: 68px;
-  background: #ffffff;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(140, 140, 140, 0.85);
+  /* Light dark ash background */
   border-radius: 50%;
-  border: 2px solid #e5e7eb;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.5);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  z-index: 10; /* Above the spinning assembly */
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.tire-card:hover .tire-center-cap {
-  transform: translate(-50%, -50%) scale(1.1); /* Slightly pops out but DOES NOT SPIN! */
-  box-shadow: 0 8px 15px rgba(0,0,0,0.25), inset 0 2px 4px rgba(255,255,255,0.5);
-  border-color: var(--primary-header);
+  z-index: 10;
+  transition: background 0.2s ease;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
 }
 
 .tire-icon {
-  font-size: 24px;
+  font-size: 16px;
   line-height: 1;
   margin-bottom: 2px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8));
 }
 
 .tire-title {
-  font-size: 9px;
-  font-weight: 800;
+  font-size: 8px;
+  font-weight: 900;
   text-transform: uppercase;
-  color: #111827;
+  color: #ffffff;
   text-align: center;
   line-height: 1.1;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 5px rgba(0, 0, 0, 0.8);
 }
-
-/* Color Accents for the Alloy (Optional subtle glow) */
-.rec-card-red .alloy-star { color: rgba(239, 68, 68, 0.2); }
-.rec-card-orange .alloy-star { color: rgba(249, 115, 22, 0.2); }
-.rec-card-blue .alloy-star { color: rgba(59, 130, 246, 0.2); }
-.rec-card-purple .alloy-star { color: rgba(168, 85, 247, 0.2); }
-.rec-card-green .alloy-star { color: rgba(16, 185, 129, 0.2); }
-.rec-card-teal .alloy-star { color: rgba(20, 184, 166, 0.2); }
-.rec-card-pink .alloy-star { color: rgba(236, 72, 153, 0.2); }
-.rec-card-indigo .alloy-star { color: rgba(99, 102, 241, 0.2); }
-.rec-card-cyan .alloy-star { color: rgba(6, 182, 212, 0.2); }
-.rec-card-slate .alloy-star { color: rgba(100, 116, 139, 0.2); }

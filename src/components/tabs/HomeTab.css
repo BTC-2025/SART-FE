@@ -1,14 +1,64 @@
 /* ============================================================================
-   SINGLE SLIDING BANNER
+   TRUCK HERO CONTAINER
+   ============================================================================ */
+.truck-hero-container {
+  position: relative;
+  width: 100vw;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: -32px;
+  /* Pull up more to close top gap */
+  aspect-ratio: 1024 / 384;
+  /* Matches truck-bg.jpg dimensions */
+  background-image: url('/truck-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 0;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  margin-bottom: 32px;
+}
+
+/* SubNavbar Overlay (Top Right) */
+.truck-subnav-overlay {
+  position: absolute;
+  top: 8px;
+  right: 24px;
+  z-index: 100;
+  padding: 4px 8px;
+}
+
+/* Cargo Box Overlay (The Carousel Area) */
+.truck-cargo-overlay {
+  position: absolute;
+  top: 10.5%;
+  left: 11.8%;
+  width: 61%;
+  height: 51.7%;
+  border-radius: 0px;
+  overflow: hidden;
+}
+
+/* Wheels Overlay (The Services Grid) */
+.truck-wheels-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  /* Let clicks pass through except on the wheels */
+}
+
+/* ============================================================================
+   SINGLE SLIDING BANNER (Inside Cargo Overlay)
    ============================================================================ */
 .hero-sliding-banner {
-  height: 240px;
-  margin-bottom: 32px;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-  background: #000;
+  height: 100%;
+  width: 100%;
   position: relative;
+  background: #000;
 }
 
 .hero-slider-track {
@@ -23,13 +73,6 @@
   height: 100%;
   background-size: cover;
   background-position: center;
-  /* Optional slight zoom effect on the image itself */
-  animation: slowZoom 20s infinite alternate;
-}
-
-@keyframes slowZoom {
-  from { transform: scale(1); }
-  to { transform: scale(1.1); }
 }
 
 
@@ -41,7 +84,7 @@
   left: 20px;
   color: #fff;
   z-index: 10;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
 }
 
 .road-overlay-text h2 {

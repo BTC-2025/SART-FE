@@ -12,12 +12,14 @@ import StoreTab from '@/components/tabs/StoreTab';
 import ProfileTab from '@/components/tabs/ProfileTab';
 import WalletTab from '@/components/tabs/WalletTab';
 import CitySelectorModal from '@/components/modals/CitySelectorModal';
+import BookingsRegistryModal from '@/components/BookingsRegistryModal';
 
 export default function Home() {
   const [isRideModalOpen, setIsRideModalOpen] = useState(false);
   const [isCarrierModalOpen, setIsCarrierModalOpen] = useState(false);
   const [isRentalModalOpen, setIsRentalModalOpen] = useState(false);
   const [isCityModalOpen, setIsCityModalOpen] = useState(false);
+  const [isBookingsModalOpen, setIsBookingsModalOpen] = useState(false);
 
   useEffect(() => {
     const handleOpenModal = (e: any) => {
@@ -29,6 +31,8 @@ export default function Home() {
         setIsRentalModalOpen(true);
       } else if (e.detail === 'modal-city-selector') {
         setIsCityModalOpen(true);
+      } else if (e.detail === 'modal-bookings-registry') {
+        setIsBookingsModalOpen(true);
       }
     };
     
@@ -42,7 +46,6 @@ export default function Home() {
   return (
     <div className="web-app-layout">
       <Navbar />
-      <SubNavbar />
       
       <main className="web-main-content">
         <HomeTab />
@@ -59,6 +62,7 @@ export default function Home() {
       <CarrierBookingModal isOpen={isCarrierModalOpen} onClose={() => setIsCarrierModalOpen(false)} />
       <RentalBookingModal isOpen={isRentalModalOpen} onClose={() => setIsRentalModalOpen(false)} />
       <CitySelectorModal isOpen={isCityModalOpen} onClose={() => setIsCityModalOpen(false)} />
+      <BookingsRegistryModal isOpen={isBookingsModalOpen} onClose={() => setIsBookingsModalOpen(false)} />
     </div>
   );
 }

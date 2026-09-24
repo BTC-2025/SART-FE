@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './Navbar.css';
 import { useSartStore } from '../store/useSartStore';
 
@@ -10,6 +10,7 @@ export default function Navbar() {
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [currentLocation, setCurrentLocation] = useState('Chennai');
+  const profileRef = useRef<HTMLDivElement>(null);
 
   const SEARCH_OPTIONS = [
     { title: 'Road Ride Booking', kw: ['ride', 'taxi', 'car', 'cab', 'economy', 'suv'], modal: 'modal-ride', icon: 'fa-car', color: 'var(--primary)' },
@@ -29,6 +30,16 @@ export default function Navbar() {
     };
     window.addEventListener('updateLocation', handleLocationUpdate);
     return () => window.removeEventListener('updateLocation', handleLocationUpdate);
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
+        setIsProfileOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   return (
@@ -112,44 +123,53 @@ export default function Navbar() {
           <i className="fa-solid fa-heart"></i>
         </div>
         
-        <div className="ctrl-btn" onClick={() => (window as any).openModal('modal-bookings-registry')}>
+        <div className="ctrl-btn" onClick={() => {
+          if (typeof window !== 'undefined') {
+            window.dispatchEvent(new CustomEvent('openReactModal', { detail: 'modal-bookings-registry' }));
+          }
+        }}>
           <i className="fa-solid fa-bag-shopping"></i>
         </div>
         
-        <div className="profile-nav-btn" onClick={() => setIsProfileOpen(!isProfileOpen)} style={{ position: 'relative' }}>
-          <i className="fa-solid fa-circle-user"></i>
-          <span>Alex Carter</span>
-          <i className="fa-solid fa-chevron-down" style={{ fontSize: '9px' }}></i>
-        </div>
-
-        {isProfileOpen && (
-          <div className="profile-dropdown-menu show" style={{ width: '320px', padding: '24px', borderRadius: '28px', textAlign: 'center', background: '#ffffff', border: '1px solid #e5e7eb', boxShadow: '0 4px 12px rgba(0,0,0,0.15)', color: '#000000' }}>
-            <div style={{ position: 'relative', display: 'inline-block', marginBottom: '12px' }}>
-              <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: '#0b57d0', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '36px', fontWeight: 500, margin: '0 auto' }}>V</div>
-              <div style={{ position: 'absolute', bottom: 0, right: 0, background: 'white', color: 'black', width: '26px', height: '26px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', boxShadow: '0 1px 3px rgba(0,0,0,0.2)' }}><i className="fa-solid fa-camera"></i></div>
-            </div>
-            <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 600, color: '#000000' }}>vinothkumar</h3>
-            <p style={{ margin: '4px 0 16px', fontSize: '14px', color: '#4b5563' }}>gmvinoth@bnxmail.com</p>
-            
-            <button onClick={() => console.log('Manage Account')} style={{ background: 'transparent', border: '1px solid #d1d5db', color: '#000000', borderRadius: '24px', padding: '10px 20px', fontSize: '14px', fontWeight: 500, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px', marginBottom: '20px', width: 'auto' }}>
-              <i className="fa-solid fa-user-gear"></i> Manage your account
-            </button>
-            
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginBottom: '20px' }}>
-              <button onClick={() => { document.body.classList.add('light-theme'); localStorage.setItem('sart-theme', 'light'); }} style={{ background: '#f3f4f6', border: 'none', color: '#000000', padding: '8px 16px', borderRadius: '12px', fontSize: '13px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}><i className="fa-solid fa-sun"></i> Light</button>
-              <button onClick={() => { document.body.classList.remove('light-theme'); localStorage.setItem('sart-theme', 'dark'); }} style={{ background: '#f3f4f6', border: 'none', color: '#000000', padding: '8px 16px', borderRadius: '12px', fontSize: '13px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}><i className="fa-solid fa-moon"></i> Dark</button>
-            </div>
-
-            <div style={{ borderTop: '1px solid #e5e7eb', margin: '0 -24px 10px' }}></div>
-            
-            <a className="dropdown-item" style={{ padding: '12px 24px', textAlign: 'left', fontSize: '14px', fontWeight: 500, color: '#000000', display: 'flex', alignItems: 'center', gap: '12px' }} onClick={() => console.log('Add account')}>
-              <i className="fa-solid fa-user-plus" style={{ fontSize: '18px', color: '#4b5563' }}></i> Add another account
-            </a>
-            <a className="dropdown-item signout-btn" style={{ padding: '12px 24px', textAlign: 'left', fontSize: '14px', fontWeight: 500, color: '#000000', display: 'flex', alignItems: 'center', gap: '12px' }} onClick={() => { console.log('Sign out'); setIsProfileOpen(false); }}>
-              <i className="fa-solid fa-arrow-right-from-bracket" style={{ fontSize: '18px', color: '#4b5563' }}></i> Sign out of this account
-            </a>
+        <div ref={profileRef}>
+          <div className="profile-nav-btn" onClick={() => setIsProfileOpen(!isProfileOpen)} style={{ position: 'relative' }}>
+            <i className="fa-solid fa-circle-user"></i>
+            <span>Alex Carter</span>
+            <i className="fa-solid fa-chevron-down" style={{ fontSize: '9px' }}></i>
           </div>
-        )}
+
+          {isProfileOpen && (
+            <div className="profile-dropdown-menu show" style={{ width: '320px', padding: '24px', borderRadius: '28px', textAlign: 'center', background: '#ffffff', border: '1px solid #e5e7eb', boxShadow: '0 4px 12px rgba(0,0,0,0.15)', color: '#000000' }}>
+              <div style={{ position: 'relative', width: '80px', height: '80px', margin: '0 auto 12px' }}>
+                <div style={{ width: '100%', height: '100%', borderRadius: '50%', background: '#0b57d0', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '36px', fontWeight: 500 }}>V</div>
+                <label style={{ position: 'absolute', bottom: 0, right: 0, background: 'white', color: 'black', width: '26px', height: '26px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', boxShadow: '0 1px 3px rgba(0,0,0,0.2)', cursor: 'pointer' }}>
+                  <i className="fa-solid fa-camera"></i>
+                  <input type="file" accept="image/*" style={{ display: 'none' }} onChange={(e) => { if(e.target.files && e.target.files[0]) alert('Selected file: ' + e.target.files[0].name) }} />
+                </label>
+              </div>
+              <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 600, color: '#000000' }}>vinothkumar</h3>
+              <p style={{ margin: '4px 0 16px', fontSize: '14px', color: '#4b5563' }}>gmvinoth@bnxmail.com</p>
+              
+              <button onClick={() => console.log('Manage Account')} style={{ background: 'transparent', border: '1px solid #d1d5db', color: '#000000', borderRadius: '24px', padding: '10px 20px', fontSize: '14px', fontWeight: 500, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px', marginBottom: '20px', width: 'auto' }}>
+                <i className="fa-solid fa-user-gear"></i> Manage your account
+              </button>
+              
+              <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginBottom: '20px' }}>
+                <button onClick={() => { document.body.classList.add('light-theme'); localStorage.setItem('sart-theme', 'light'); }} style={{ background: '#f3f4f6', border: 'none', color: '#000000', padding: '8px 16px', borderRadius: '12px', fontSize: '13px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}><i className="fa-solid fa-sun"></i> Light</button>
+                <button onClick={() => { document.body.classList.remove('light-theme'); localStorage.setItem('sart-theme', 'dark'); }} style={{ background: '#f3f4f6', border: 'none', color: '#000000', padding: '8px 16px', borderRadius: '12px', fontSize: '13px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}><i className="fa-solid fa-moon"></i> Dark</button>
+              </div>
+
+              <div style={{ borderTop: '1px solid #e5e7eb', margin: '0 -24px 10px' }}></div>
+              
+              <a className="dropdown-item" style={{ padding: '12px 24px', textAlign: 'left', fontSize: '14px', fontWeight: 500, color: '#000000', display: 'flex', alignItems: 'center', gap: '12px' }} onClick={() => console.log('Add account')}>
+                <i className="fa-solid fa-user-plus" style={{ fontSize: '18px', color: '#4b5563' }}></i> Add another account
+              </a>
+              <a className="dropdown-item signout-btn" style={{ padding: '12px 24px', textAlign: 'left', fontSize: '14px', fontWeight: 500, color: '#000000', display: 'flex', alignItems: 'center', gap: '12px' }} onClick={() => { console.log('Sign out'); setIsProfileOpen(false); }}>
+                <i className="fa-solid fa-arrow-right-from-bracket" style={{ fontSize: '18px', color: '#4b5563' }}></i> Sign out of this account
+              </a>
+            </div>
+          )}
+        </div>
       </div>
     </header>
   );
