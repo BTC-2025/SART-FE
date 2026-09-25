@@ -11,8 +11,12 @@ import HomeTab from '@/components/tabs/HomeTab';
 import StoreTab from '@/components/tabs/StoreTab';
 import ProfileTab from '@/components/tabs/ProfileTab';
 import WalletTab from '@/components/tabs/WalletTab';
+import BookingsTab from '@/components/tabs/BookingsTab';
 import CitySelectorModal from '@/components/modals/CitySelectorModal';
 import BookingsRegistryModal from '@/components/BookingsRegistryModal';
+import DriversBookingModal from '@/components/DriversBookingModal';
+import CommunityModal from '@/components/CommunityModal';
+import MechanicModal from '@/components/MechanicModal';
 
 export default function Home() {
   const [isRideModalOpen, setIsRideModalOpen] = useState(false);
@@ -20,6 +24,9 @@ export default function Home() {
   const [isRentalModalOpen, setIsRentalModalOpen] = useState(false);
   const [isCityModalOpen, setIsCityModalOpen] = useState(false);
   const [isBookingsModalOpen, setIsBookingsModalOpen] = useState(false);
+  const [isDriversModalOpen, setIsDriversModalOpen] = useState(false);
+  const [isCommunityModalOpen, setIsCommunityModalOpen] = useState(false);
+  const [isMechanicModalOpen, setIsMechanicModalOpen] = useState(false);
 
   useEffect(() => {
     const handleOpenModal = (e: any) => {
@@ -33,6 +40,12 @@ export default function Home() {
         setIsCityModalOpen(true);
       } else if (e.detail === 'modal-bookings-registry') {
         setIsBookingsModalOpen(true);
+      } else if (e.detail === 'modal-drivers') {
+        setIsDriversModalOpen(true);
+      } else if (e.detail === 'modal-community') {
+        setIsCommunityModalOpen(true);
+      } else if (e.detail === 'modal-mechanic') {
+        setIsMechanicModalOpen(true);
       }
     };
     
@@ -50,6 +63,7 @@ export default function Home() {
       <main className="web-main-content">
         <HomeTab />
         <StoreTab />
+        <BookingsTab />
         <WalletTab />
         <ProfileTab />
         
@@ -63,6 +77,9 @@ export default function Home() {
       <RentalBookingModal isOpen={isRentalModalOpen} onClose={() => setIsRentalModalOpen(false)} />
       <CitySelectorModal isOpen={isCityModalOpen} onClose={() => setIsCityModalOpen(false)} />
       <BookingsRegistryModal isOpen={isBookingsModalOpen} onClose={() => setIsBookingsModalOpen(false)} />
+      <DriversBookingModal isOpen={isDriversModalOpen} onClose={() => setIsDriversModalOpen(false)} />
+      <CommunityModal isOpen={isCommunityModalOpen} onClose={() => setIsCommunityModalOpen(false)} />
+      <MechanicModal isOpen={isMechanicModalOpen} onClose={() => setIsMechanicModalOpen(false)} />
     </div>
   );
 }

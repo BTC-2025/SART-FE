@@ -1870,7 +1870,7 @@ function setAppTheme(theme) {
 }
 
 function initAppTheme() {
-  const savedTheme = localStorage.getItem('sart-theme') || 'dark';
+  const savedTheme = localStorage.getItem('sart-theme') || 'light';
   setAppTheme(savedTheme);
   
   // Listen for system theme changes if set to system

@@ -264,6 +264,10 @@ img, video {
   visibility: visible;
 }
 
+.collapse {
+  visibility: collapse;
+}
+
 .static {
   position: static;
 }
@@ -280,6 +284,18 @@ img, video {
   position: relative;
 }
 
+.ms-1 {
+  margin-inline-start: .25rem;
+}
+
+.ms-2 {
+  margin-inline-start: .5rem;
+}
+
+.ms-3 {
+  margin-inline-start: .75rem;
+}
+
 .block {
   display: block;
 }
@@ -294,6 +310,10 @@ img, video {
 
 .inline-flex {
   display: inline-flex;
+}
+
+.table {
+  display: table;
 }
 
 .grid {
@@ -314,6 +334,10 @@ img, video {
 
 .uppercase {
   text-transform: uppercase;
+}
+
+.outline {
+  outline-style: solid;
 }
 
 .ring {

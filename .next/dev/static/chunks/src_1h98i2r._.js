@@ -73,7 +73,7 @@ function Home() {
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$Navbar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                 fileName: "[project]/src/app/page.tsx",
-                lineNumber: 48,
+                lineNumber: 49,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
@@ -81,33 +81,33 @@ function Home() {
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$tabs$2f$HomeTab$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                         fileName: "[project]/src/app/page.tsx",
-                        lineNumber: 51,
+                        lineNumber: 52,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$tabs$2f$StoreTab$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                         fileName: "[project]/src/app/page.tsx",
-                        lineNumber: 52,
+                        lineNumber: 53,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$tabs$2f$WalletTab$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                         fileName: "[project]/src/app/page.tsx",
-                        lineNumber: 53,
+                        lineNumber: 54,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$tabs$2f$ProfileTab$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                         fileName: "[project]/src/app/page.tsx",
-                        lineNumber: 54,
+                        lineNumber: 55,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$modals$2f$UniversalModals$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                         fileName: "[project]/src/app/page.tsx",
-                        lineNumber: 57,
+                        lineNumber: 58,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/page.tsx",
-                lineNumber: 50,
+                lineNumber: 51,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$script$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -115,7 +115,7 @@ function Home() {
                 strategy: "lazyOnload"
             }, void 0, false, {
                 fileName: "[project]/src/app/page.tsx",
-                lineNumber: 60,
+                lineNumber: 61,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$RideBookingModal$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -123,7 +123,7 @@ function Home() {
                 onClose: ()=>setIsRideModalOpen(false)
             }, void 0, false, {
                 fileName: "[project]/src/app/page.tsx",
-                lineNumber: 61,
+                lineNumber: 62,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$CarrierBookingModal$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -131,7 +131,7 @@ function Home() {
                 onClose: ()=>setIsCarrierModalOpen(false)
             }, void 0, false, {
                 fileName: "[project]/src/app/page.tsx",
-                lineNumber: 62,
+                lineNumber: 63,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$RentalBookingModal$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -139,7 +139,7 @@ function Home() {
                 onClose: ()=>setIsRentalModalOpen(false)
             }, void 0, false, {
                 fileName: "[project]/src/app/page.tsx",
-                lineNumber: 63,
+                lineNumber: 64,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$modals$2f$CitySelectorModal$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -147,7 +147,7 @@ function Home() {
                 onClose: ()=>setIsCityModalOpen(false)
             }, void 0, false, {
                 fileName: "[project]/src/app/page.tsx",
-                lineNumber: 64,
+                lineNumber: 65,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$BookingsRegistryModal$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -155,13 +155,13 @@ function Home() {
                 onClose: ()=>setIsBookingsModalOpen(false)
             }, void 0, false, {
                 fileName: "[project]/src/app/page.tsx",
-                lineNumber: 65,
+                lineNumber: 66,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/page.tsx",
-        lineNumber: 47,
+        lineNumber: 48,
         columnNumber: 5
     }, this);
 }
@@ -238,14 +238,46 @@ function BookingsRegistryModal({ isOpen, onClose }) {
     if (!isOpen) return null;
     const filteredBookings = MOCK_BOOKINGS.filter((b)=>activeTab === 'active' ? b.status === 'Active' : b.status === 'Completed');
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        className: "react-modal-overlay",
+        className: "modal-overlay open",
+        style: {
+            display: 'flex',
+            zIndex: 1000,
+            background: 'rgba(0,0,0,0.6)'
+        },
+        onClick: onClose,
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-            className: "react-modal-content slide-up",
+            className: "modal-sheet centered-modal",
+            style: {
+                maxWidth: '600px',
+                width: '95%',
+                height: '80vh',
+                display: 'flex',
+                flexDirection: 'column',
+                backgroundColor: '#f9fafb',
+                borderRadius: '24px',
+                overflow: 'hidden'
+            },
+            onClick: (e)=>e.stopPropagation(),
             children: [
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "react-modal-header",
+                    style: {
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: '20px 24px',
+                        background: '#ffffff',
+                        borderBottom: '1px solid #e5e7eb'
+                    },
                     children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            style: {
+                                fontSize: '22px',
+                                fontWeight: '800',
+                                color: '#111827',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '12px'
+                            },
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("i", {
                                     className: "fa-solid fa-bag-shopping",
@@ -254,39 +286,55 @@ function BookingsRegistryModal({ isOpen, onClose }) {
                                     }
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/BookingsRegistryModal.tsx",
-                                    lineNumber: 67,
-                                    columnNumber: 15
+                                    lineNumber: 69,
+                                    columnNumber: 13
                                 }, this),
                                 " My Bookings"
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/BookingsRegistryModal.tsx",
-                            lineNumber: 67,
+                            lineNumber: 68,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                            className: "react-modal-close",
                             onClick: onClose,
+                            style: {
+                                background: '#f3f4f6',
+                                border: 'none',
+                                width: '36px',
+                                height: '36px',
+                                borderRadius: '50%',
+                                color: '#4b5563',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '16px'
+                            },
                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("i", {
                                 className: "fa-solid fa-xmark"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/BookingsRegistryModal.tsx",
-                                lineNumber: 69,
+                                lineNumber: 72,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/components/BookingsRegistryModal.tsx",
-                            lineNumber: 68,
+                            lineNumber: 71,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/BookingsRegistryModal.tsx",
-                    lineNumber: 66,
+                    lineNumber: 67,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "react-modal-body",
+                    style: {
+                        flex: 1,
+                        overflowY: 'auto',
+                        padding: '24px'
+                    },
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "bookings-tabs",
@@ -297,7 +345,7 @@ function BookingsRegistryModal({ isOpen, onClose }) {
                                     children: "Active"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/BookingsRegistryModal.tsx",
-                                    lineNumber: 75,
+                                    lineNumber: 78,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -306,13 +354,13 @@ function BookingsRegistryModal({ isOpen, onClose }) {
                                     children: "Past"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/BookingsRegistryModal.tsx",
-                                    lineNumber: 81,
+                                    lineNumber: 84,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/BookingsRegistryModal.tsx",
-                            lineNumber: 74,
+                            lineNumber: 77,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -331,7 +379,7 @@ function BookingsRegistryModal({ isOpen, onClose }) {
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/BookingsRegistryModal.tsx",
-                                                    lineNumber: 94,
+                                                    lineNumber: 97,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -339,13 +387,13 @@ function BookingsRegistryModal({ isOpen, onClose }) {
                                                     children: booking.status
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/BookingsRegistryModal.tsx",
-                                                    lineNumber: 95,
+                                                    lineNumber: 98,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/BookingsRegistryModal.tsx",
-                                            lineNumber: 93,
+                                            lineNumber: 96,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -353,7 +401,7 @@ function BookingsRegistryModal({ isOpen, onClose }) {
                                             children: booking.title
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/BookingsRegistryModal.tsx",
-                                            lineNumber: 97,
+                                            lineNumber: 100,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -361,7 +409,7 @@ function BookingsRegistryModal({ isOpen, onClose }) {
                                             children: booking.details
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/BookingsRegistryModal.tsx",
-                                            lineNumber: 98,
+                                            lineNumber: 101,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -374,7 +422,7 @@ function BookingsRegistryModal({ isOpen, onClose }) {
                                                             className: "fa-regular fa-clock"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/BookingsRegistryModal.tsx",
-                                                            lineNumber: 100,
+                                                            lineNumber: 103,
                                                             columnNumber: 52
                                                         }, this),
                                                         " ",
@@ -382,7 +430,7 @@ function BookingsRegistryModal({ isOpen, onClose }) {
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/BookingsRegistryModal.tsx",
-                                                    lineNumber: 100,
+                                                    lineNumber: 103,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -393,19 +441,19 @@ function BookingsRegistryModal({ isOpen, onClose }) {
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/BookingsRegistryModal.tsx",
-                                                    lineNumber: 101,
+                                                    lineNumber: 104,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/BookingsRegistryModal.tsx",
-                                            lineNumber: 99,
+                                            lineNumber: 102,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, booking.id, true, {
                                     fileName: "[project]/src/components/BookingsRegistryModal.tsx",
-                                    lineNumber: 92,
+                                    lineNumber: 95,
                                     columnNumber: 17
                                 }, this)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "no-bookings",
@@ -419,7 +467,7 @@ function BookingsRegistryModal({ isOpen, onClose }) {
                                         }
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/BookingsRegistryModal.tsx",
-                                        lineNumber: 107,
+                                        lineNumber: 110,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -430,24 +478,24 @@ function BookingsRegistryModal({ isOpen, onClose }) {
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/BookingsRegistryModal.tsx",
-                                        lineNumber: 108,
+                                        lineNumber: 111,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/BookingsRegistryModal.tsx",
-                                lineNumber: 106,
+                                lineNumber: 109,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/components/BookingsRegistryModal.tsx",
-                            lineNumber: 89,
+                            lineNumber: 92,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/BookingsRegistryModal.tsx",
-                    lineNumber: 73,
+                    lineNumber: 76,
                     columnNumber: 9
                 }, this)
             ]

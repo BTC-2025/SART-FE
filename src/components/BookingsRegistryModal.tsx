@@ -16,7 +16,7 @@ const MOCK_BOOKINGS: Booking[] = [
     id: 'bk-001',
     title: 'Tata Nexon EV Rental',
     type: 'rental',
-    dateTime: new Date(Date.now() + 172800000).toLocaleString(),
+    dateTime: 'Oct 02, 2026, 10:00 AM',
     details: 'Pickup: 10:00 AM • 3 Days Duration',
     status: 'Active',
     cost: 4500.00
@@ -25,7 +25,7 @@ const MOCK_BOOKINGS: Booking[] = [
     id: 'bk-002',
     title: 'Tire Diagnostics & Balance',
     type: 'mechanic',
-    dateTime: new Date(Date.now() - 259200000).toLocaleString(),
+    dateTime: 'Sept 22, 2026, 02:30 PM',
     details: 'Assigned: Rajesh Kumar • Completed',
     status: 'Completed',
     cost: 1200.00
@@ -34,7 +34,7 @@ const MOCK_BOOKINGS: Booking[] = [
     id: 'bk-003',
     title: 'Airport Taxi Booking',
     type: 'ride',
-    dateTime: new Date(Date.now() - 720000000).toLocaleString(),
+    dateTime: 'Sept 15, 2026, 08:45 AM',
     details: 'Terminal 1 • Completed',
     status: 'Completed',
     cost: 800.00
@@ -61,16 +61,19 @@ export default function BookingsRegistryModal({ isOpen, onClose }: { isOpen: boo
   );
 
   return (
-    <div className="react-modal-overlay">
-      <div className="react-modal-content slide-up">
-        <div className="react-modal-header">
-          <h2><i className="fa-solid fa-bag-shopping" style={{ color: 'var(--primary)' }}></i> My Bookings</h2>
-          <button className="react-modal-close" onClick={onClose}>
+    <div className="modal-overlay open" style={{ display: 'flex', zIndex: 1000, background: 'rgba(0,0,0,0.6)' }} onClick={onClose}>
+      <div className="modal-sheet centered-modal" style={{ maxWidth: '600px', width: '95%', height: '80vh', display: 'flex', flexDirection: 'column', backgroundColor: '#f9fafb', borderRadius: '24px', overflow: 'hidden' }} onClick={e => e.stopPropagation()}>
+        
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px', background: '#ffffff', borderBottom: '1px solid #e5e7eb' }}>
+          <div style={{ fontSize: '22px', fontWeight: '800', color: '#111827', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <i className="fa-solid fa-bag-shopping" style={{ color: 'var(--primary)' }}></i> My Bookings
+          </div>
+          <button onClick={onClose} style={{ background: '#f3f4f6', border: 'none', width: '36px', height: '36px', borderRadius: '50%', color: '#4b5563', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px' }}>
             <i className="fa-solid fa-xmark"></i>
           </button>
         </div>
         
-        <div className="react-modal-body">
+        <div style={{ flex: 1, overflowY: 'auto', padding: '24px' }}>
           <div className="bookings-tabs">
             <button 
               className={`booking-tab-btn ${activeTab === 'active' ? 'active' : ''}`}
