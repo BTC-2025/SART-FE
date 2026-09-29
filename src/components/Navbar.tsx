@@ -119,7 +119,7 @@ export default function Navbar() {
           <i className="fa-solid fa-magnifying-glass"></i>
         </div>
         
-        <div className="ctrl-btn" onClick={() => (window as any).openModal('modal-liked')}>
+        <div className={`ctrl-btn ${activeTab === 'favorites' ? 'active' : ''}`} onClick={() => setActiveTab('favorites')}>
           <i className="fa-solid fa-heart"></i>
         </div>
         

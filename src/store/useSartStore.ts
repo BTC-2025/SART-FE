@@ -127,14 +127,30 @@ export const useSartStore = create<SartStore>()(
 
       setActiveTab: (tab) => {
         set({ activeTab: tab });
-        // Also trigger the legacy Map resize if 'home' is selected
-        if (tab === 'home' && typeof window !== 'undefined') {
-          setTimeout(() => {
-            if ((window as any).leafletMap) {
-              (window as any).leafletMap.invalidateSize();
-              if ((window as any).recenterMap) (window as any).recenterMap();
-            }
-          }, 200);
+        
+        if (typeof window !== 'undefined') {
+          // Cosmetic URL update logic
+          let newUrl = '/';
+          const topLevelTabs = ['store', 'bookings', 'wallet', 'profile'];
+          
+          if (topLevelTabs.includes(tab)) {
+            newUrl = `/${tab}`;
+          } else if (tab !== 'home') {
+            // It's a sub-page of home (like ride, carrier, etc.)
+            newUrl = `/home/${tab}`;
+          }
+          
+          window.history.pushState({ tab }, '', newUrl);
+
+          // Also trigger the legacy Map resize if 'home' is selected
+          if (tab === 'home') {
+            setTimeout(() => {
+              if ((window as any).leafletMap) {
+                (window as any).leafletMap.invalidateSize();
+                if ((window as any).recenterMap) (window as any).recenterMap();
+              }
+            }, 200);
+          }
         }
       },
     }),

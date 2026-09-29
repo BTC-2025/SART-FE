@@ -18,7 +18,7 @@ export default function SubNavbar() {
         <button className="subnav-btn" onClick={() => setActiveTab('wallet')}>
           <i className="fa-solid fa-wallet" style={{ fontSize: '14px' }}></i> ₹15,000.00
         </button>
-        <div className="subnav-btn" onClick={() => alert('Help and Support')} style={{ padding: '2px 5px' }}>
+        <div className="subnav-btn" onClick={() => setActiveTab('support' as any)} style={{ padding: '2px 5px' }}>
           <i className="fa-solid fa-headset" style={{ fontSize: '14px' }}></i>
         </div>
         <div className="subnav-btn" onClick={() => setActiveTab('profile')} style={{ padding: '2px 5px' }}>

@@ -90,10 +90,21 @@ const AIR_RENTAL_FLEET = [
   }
 ];
 
+const RAIL_RENTAL_FLEET = [
+  {
+    title: 'Private Rail & Saloon Cars',
+    vehicles: [
+      { id: 'r-saloon', name: 'Private Saloon Car', icon: 'fa-train', color: '#8b5cf6', price: 45000 },
+      { id: 'r-tourist', name: 'Private Tourist Train', icon: 'fa-champagne-glasses', color: '#eab308', price: 250000 },
+    ]
+  }
+];
+
 const ALL_RENTALS = [
   ...ROAD_RENTAL_FLEET.map(c => c.vehicles).flat(),
   ...SEA_RENTAL_FLEET.map(c => c.vehicles).flat(),
-  ...AIR_RENTAL_FLEET.map(c => c.vehicles).flat()
+  ...AIR_RENTAL_FLEET.map(c => c.vehicles).flat(),
+  ...RAIL_RENTAL_FLEET.map(c => c.vehicles).flat()
 ];
 
 interface RentalBookingModalProps {
@@ -103,6 +114,7 @@ interface RentalBookingModalProps {
 
 export default function RentalBookingModal({ isOpen, onClose }: RentalBookingModalProps) {
   const [step, setStep] = useState<1 | 2>(1);
+  const [activeCategory, setActiveCategory] = useState<'ALL' | 'ROAD' | 'SEA' | 'AIR' | 'RAIL'>('ALL');
   const [selectedVehicle, setSelectedVehicle] = useState('r-premium-hatch');
   const [pickup, setPickup] = useState('Current Location');
   const [startDate, setStartDate] = useState('');
@@ -110,10 +122,37 @@ export default function RentalBookingModal({ isOpen, onClose }: RentalBookingMod
   const [returnDate, setReturnDate] = useState('');
   const [returnTime, setReturnTime] = useState('');
 
+  React.useEffect(() => {
+    const handleReset = () => {
+      setStep(1);
+    };
+    window.addEventListener('resetModalSteps', handleReset);
+    return () => window.removeEventListener('resetModalSteps', handleReset);
+  }, []);
+
   if (!isOpen) return null;
+
+  const updateUrl = (path: string) => {
+    if (typeof window !== 'undefined') {
+      window.history.pushState(null, '', path);
+    }
+  };
+
+  const handleSelectVehicle = (vehicle: any) => {
+    setSelectedVehicle(vehicle.id);
+    setStep(2);
+    const cleanName = vehicle.name.split('/')[0].trim();
+    updateUrl(`/home/rental/${encodeURIComponent(cleanName)} booking`);
+  };
+
+  const handleBackToFleet = () => {
+    setStep(1);
+    updateUrl('/home/rental');
+  };
 
   const handleClose = () => {
     setStep(1);
+    updateUrl('/');
     onClose();
   };
 
@@ -127,7 +166,8 @@ export default function RentalBookingModal({ isOpen, onClose }: RentalBookingMod
       vehiclePrice = found.price;
     }
 
-    let subtitle = `${vehicleName} • Self-Drive Rental`;
+    const isRoad = selectedVehicle.startsWith('r-') && ROAD_RENTAL_FLEET.some(c => c.vehicles.some(v => v.id === selectedVehicle));
+    let subtitle = `${vehicleName} • ${isRoad ? 'Self-Drive Rental' : 'Private Charter'}`;
     if (startDate && returnDate) {
       subtitle += ` • From ${startDate} to ${returnDate}`;
     }
@@ -140,49 +180,45 @@ export default function RentalBookingModal({ isOpen, onClose }: RentalBookingMod
 
   const selectedVehicleObj = ALL_RENTALS.find(v => v.id === selectedVehicle);
 
-  const renderGridSection = (title: string, icon: string, data: typeof ROAD_RENTAL_FLEET) => (
-    <div style={{ marginBottom: '32px' }}>
-      <h2 style={{ fontSize: '20px', fontWeight: '800', color: '#111827', margin: '24px 0 16px 0', paddingBottom: '8px', borderBottom: '2px solid #e5e7eb', display: 'flex', alignItems: 'center', gap: '8px' }}>
-        <i className={`fa-solid ${icon}`}></i> {title}
-      </h2>
-      {data.map((category, catIdx) => (
-        <div key={catIdx} style={{ marginBottom: '24px' }}>
-          <h3 style={{ fontSize: '14px', fontWeight: '700', color: '#4b5563', marginBottom: '16px' }}>
-            {category.title}
-          </h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '16px' }}>
-            {category.vehicles.map(v => (
-              <div 
-                key={v.id} 
-                onClick={() => { setSelectedVehicle(v.id); setStep(2); }}
-                style={{
-                  background: '#ffffff',
-                  border: '1px solid #e5e7eb',
-                  borderRadius: '16px',
-                  padding: '16px 12px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
-                  transition: 'all 0.2s ease',
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0, 0, 0, 0.1)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.05)'; }}
-              >
-                <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: v.color + '20', color: v.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', marginBottom: '12px' }}>
-                  <i className={`fa-solid ${v.icon}`}></i>
-                </div>
-                <div style={{ fontSize: '13px', fontWeight: '600', color: '#1f2937', textAlign: 'center', lineHeight: '1.2' }}>
-                  {v.name}
-                </div>
+  const renderGridSection = (title: string, icon: string, data: typeof ROAD_RENTAL_FLEET) => {
+    const allVehicles = data.map(c => c.vehicles).flat();
+    return (
+      <div style={{ marginBottom: '32px' }}>
+        <h2 style={{ fontSize: '20px', fontWeight: '800', color: '#111827', margin: '24px 0 16px 0', paddingBottom: '8px', borderBottom: '2px solid #e5e7eb', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <i className={`fa-solid ${icon}`}></i> {title}
+        </h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '16px' }}>
+            {allVehicles.map(v => (
+            <div 
+              key={v.id} 
+              onClick={() => handleSelectVehicle(v)}
+              style={{
+                background: '#ffffff',
+                border: '1px solid #e5e7eb',
+                borderRadius: '16px',
+                padding: '16px 12px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                cursor: 'pointer',
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                transition: 'all 0.2s ease',
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0, 0, 0, 0.1)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.05)'; }}
+            >
+              <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: v.color + '20', color: v.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', marginBottom: '12px' }}>
+                <i className={`fa-solid ${v.icon}`}></i>
               </div>
-            ))}
-          </div>
+              <div style={{ fontSize: '13px', fontWeight: '600', color: '#1f2937', textAlign: 'center', lineHeight: '1.2' }}>
+                {v.name}
+              </div>
+            </div>
+          ))}
         </div>
-      ))}
-    </div>
-  );
+      </div>
+    );
+  };
 
   return (
     <div className="modal-overlay open" style={{ display: 'flex', zIndex: 1000, background: 'rgba(0,0,0,0.6)' }} onClick={handleClose}>
@@ -190,7 +226,7 @@ export default function RentalBookingModal({ isOpen, onClose }: RentalBookingMod
         
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px', background: '#ffffff', borderBottom: '1px solid #e5e7eb' }}>
           <div style={{ fontSize: '22px', fontWeight: '800', color: '#111827', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <i className="fa-solid fa-key" style={{ color: '#0ea5e9' }}></i> Omni-Transit Rental Booking
+            <i className="fa-solid fa-key" style={{ color: '#0ea5e9' }}></i> Self-Drive & Rentals
           </div>
           <button onClick={handleClose} style={{ background: '#f3f4f6', border: 'none', width: '36px', height: '36px', borderRadius: '50%', color: '#4b5563', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px' }}>
             <i className="fa-solid fa-xmark"></i>
@@ -199,9 +235,38 @@ export default function RentalBookingModal({ isOpen, onClose }: RentalBookingMod
         
         {step === 1 && (
           <div style={{ flex: 1, overflowY: 'auto', padding: '24px' }}>
-            {renderGridSection('ROAD RENTALS', 'fa-car-side', ROAD_RENTAL_FLEET)}
-            {renderGridSection('SEA & MARINE RENTALS', 'fa-ship', SEA_RENTAL_FLEET)}
-            {renderGridSection('AIR & CHARTER RENTALS', 'fa-plane', AIR_RENTAL_FLEET)}
+            {/* Category Selector */}
+            <div style={{ display: 'flex', gap: '12px', marginBottom: '24px', overflowX: 'auto', paddingBottom: '8px' }}>
+              {[
+                { id: 'ALL', label: 'All Rentals', icon: 'fa-globe', color: '#f59e0b' },
+                { id: 'ROAD', label: 'Road', icon: 'fa-car', color: '#3b82f6' },
+                { id: 'SEA', label: 'Sea & Water', icon: 'fa-ship', color: '#0ea5e9' },
+                { id: 'AIR', label: 'Air Charters', icon: 'fa-plane', color: '#8b5cf6' },
+                { id: 'RAIL', label: 'Train & Rail', icon: 'fa-train', color: '#10b981' }
+              ].map(cat => (
+                <button
+                  key={cat.id}
+                  onClick={() => setActiveCategory(cat.id as any)}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px',
+                    borderRadius: '12px', border: 'none', cursor: 'pointer', fontSize: '15px', fontWeight: '700',
+                    background: activeCategory === cat.id ? cat.color : '#f3f4f6',
+                    color: activeCategory === cat.id ? '#ffffff' : '#4b5563',
+                    transition: 'all 0.2s ease',
+                    whiteSpace: 'nowrap'
+                  }}
+                >
+                  <i className={`fa-solid ${cat.icon}`}></i> {cat.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Render only active category */}
+            {activeCategory === 'ALL' && renderGridSection('ALL RENTAL OPTIONS', 'fa-globe', [{ title: 'All', vehicles: ALL_RENTALS }] as any)}
+            {activeCategory === 'ROAD' && renderGridSection('ROAD RENTALS', 'fa-car', ROAD_RENTAL_FLEET)}
+            {activeCategory === 'SEA' && renderGridSection('SEA / WATER RENTALS', 'fa-ship', SEA_RENTAL_FLEET)}
+            {activeCategory === 'AIR' && renderGridSection('AIR CHARTERS', 'fa-plane', AIR_RENTAL_FLEET)}
+            {activeCategory === 'RAIL' && renderGridSection('RAIL CHARTERS', 'fa-train', RAIL_RENTAL_FLEET)}
           </div>
         )}
 
@@ -209,10 +274,10 @@ export default function RentalBookingModal({ isOpen, onClose }: RentalBookingMod
           <div style={{ flex: 1, overflowY: 'auto', padding: '32px' }}>
             
             <button 
-              onClick={() => setStep(1)} 
+              onClick={handleBackToFleet} 
               style={{ background: 'transparent', border: 'none', color: '#6b7280', cursor: 'pointer', fontSize: '15px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '8px', padding: '0 0 24px 0' }}
             >
-              <i className="fa-solid fa-arrow-left"></i> Back to Fleet Options
+              <i className="fa-solid fa-arrow-left"></i> Back to Rental Options
             </button>
 
             {selectedVehicleObj && (
@@ -222,42 +287,41 @@ export default function RentalBookingModal({ isOpen, onClose }: RentalBookingMod
                 </div>
                 <div style={{ flex: 1 }}>
                   <h3 style={{ margin: 0, fontSize: '20px', fontWeight: '800', color: '#111827' }}>{selectedVehicleObj.name}</h3>
-                  <p style={{ margin: '4px 0 0 0', fontSize: '14px', color: '#6b7280' }}>Selected Rental Vehicle</p>
+                  <p style={{ margin: '4px 0 0 0', fontSize: '14px', color: '#6b7280' }}>
+                    {selectedVehicleObj.id.includes('saloon') || selectedVehicleObj.id.includes('tourist') || activeCategory === 'AIR' || activeCategory === 'SEA' ? 'Selected Charter' : 'Selected Rental'}
+                  </p>
                 </div>
-                <div style={{ fontSize: '16px', fontWeight: '700', color: '#111827', textAlign: 'right' }}>
-                  <div style={{ fontSize: '24px', fontWeight: '800' }}>₹{selectedVehicleObj.price.toLocaleString('en-IN')}</div>
-                  <div style={{ fontSize: '12px', color: '#6b7280' }}>per day / block</div>
+                <div style={{ fontSize: '24px', fontWeight: '800', color: '#111827' }}>
+                  ₹{selectedVehicleObj.price.toLocaleString('en-IN')}<span style={{fontSize: '12px', color: '#6b7280'}}>/day</span>
                 </div>
               </div>
             )}
 
             <div style={{ background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '16px', padding: '24px' }}>
-              <div style={{ marginBottom: '24px' }}>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#4b5563', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px' }}>Pickup & Dropoff Location</label>
-                <input type="text" style={{ width: '100%', padding: '14px', borderRadius: '10px', border: '1px solid #d1d5db', background: '#f9fafb', color: '#111827', fontSize: '15px' }} placeholder="Enter location (e.g., Airport Terminal 1, Marina Bay)" value={pickup} onChange={e => setPickup(e.target.value)} />
+              <div style={{ marginBottom: '20px' }}>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#4b5563', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px' }}>Pickup Location</label>
+                <input type="text" style={{ width: '100%', padding: '14px', borderRadius: '10px', border: '1px solid #d1d5db', background: '#f9fafb', color: '#111827', fontSize: '15px' }} placeholder="Enter pickup address" value={pickup} onChange={e => setPickup(e.target.value)} />
               </div>
               
-              <h4 style={{ fontSize: '14px', fontWeight: '700', color: '#111827', margin: '0 0 16px 0', borderBottom: '1px solid #e5e7eb', paddingBottom: '8px' }}>Rental Period</h4>
-              
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '12px', fontWeight: '600', color: '#6b7280', marginBottom: '6px' }}>Start Date</label>
-                  <input type="date" style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #d1d5db', background: '#f9fafb', color: '#111827', fontSize: '14px' }} value={startDate} onChange={e => setStartDate(e.target.value)} />
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#4b5563', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px' }}>Start Date</label>
+                  <input type="date" style={{ width: '100%', padding: '14px', borderRadius: '10px', border: '1px solid #d1d5db', background: '#f9fafb', color: '#111827', fontSize: '15px' }} value={startDate} onChange={e => setStartDate(e.target.value)} />
                 </div>
                 <div>
-                  <label style={{ display: 'block', fontSize: '12px', fontWeight: '600', color: '#6b7280', marginBottom: '6px' }}>Start Time</label>
-                  <input type="time" style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #d1d5db', background: '#f9fafb', color: '#111827', fontSize: '14px' }} value={startTime} onChange={e => setStartTime(e.target.value)} />
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#4b5563', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px' }}>Start Time</label>
+                  <input type="time" style={{ width: '100%', padding: '14px', borderRadius: '10px', border: '1px solid #d1d5db', background: '#f9fafb', color: '#111827', fontSize: '15px' }} value={startTime} onChange={e => setStartTime(e.target.value)} />
                 </div>
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '32px' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '12px', fontWeight: '600', color: '#6b7280', marginBottom: '6px' }}>Return Date</label>
-                  <input type="date" style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #d1d5db', background: '#f9fafb', color: '#111827', fontSize: '14px' }} value={returnDate} onChange={e => setReturnDate(e.target.value)} />
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#4b5563', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px' }}>Return Date</label>
+                  <input type="date" style={{ width: '100%', padding: '14px', borderRadius: '10px', border: '1px solid #d1d5db', background: '#f9fafb', color: '#111827', fontSize: '15px' }} value={returnDate} onChange={e => setReturnDate(e.target.value)} />
                 </div>
                 <div>
-                  <label style={{ display: 'block', fontSize: '12px', fontWeight: '600', color: '#6b7280', marginBottom: '6px' }}>Return Time</label>
-                  <input type="time" style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #d1d5db', background: '#f9fafb', color: '#111827', fontSize: '14px' }} value={returnTime} onChange={e => setReturnTime(e.target.value)} />
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#4b5563', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px' }}>Return Time</label>
+                  <input type="time" style={{ width: '100%', padding: '14px', borderRadius: '10px', border: '1px solid #d1d5db', background: '#f9fafb', color: '#111827', fontSize: '15px' }} value={returnTime} onChange={e => setReturnTime(e.target.value)} />
                 </div>
               </div>
 
@@ -267,7 +331,7 @@ export default function RentalBookingModal({ isOpen, onClose }: RentalBookingMod
                 onMouseEnter={e => e.currentTarget.style.background = '#0284c7'}
                 onMouseLeave={e => e.currentTarget.style.background = '#0ea5e9'}
               >
-                Confirm Rental Booking
+                Confirm Booking
               </button>
             </div>
           </div>

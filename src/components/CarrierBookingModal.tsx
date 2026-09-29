@@ -41,10 +41,23 @@ const AIR_CARRIERS = [
   }
 ];
 
+const RAIL_CARRIERS = [
+  {
+    title: 'Rail Freight & Bulk Transport',
+    vehicles: [
+      { id: 'c-freight', name: 'Standard Freight Train', icon: 'fa-train', color: '#8b5cf6', price: 150000 },
+      { id: 'c-tanker', name: 'Liquid Tanker Train', icon: 'fa-train-subway', color: '#0ea5e9', price: 200000 },
+      { id: 'c-intermodal', name: 'Intermodal Container Train', icon: 'fa-train-tram', color: '#10b981', price: 350000 },
+      { id: 'c-heavyhaul', name: 'Heavy-Haul Locomotive', icon: 'fa-train', color: '#f59e0b', price: 500000 },
+    ]
+  }
+];
+
 const ALL_CARRIERS = [
   ...ROAD_CARRIERS.map(c => c.vehicles).flat(),
   ...SEA_CARRIERS.map(c => c.vehicles).flat(),
-  ...AIR_CARRIERS.map(c => c.vehicles).flat()
+  ...AIR_CARRIERS.map(c => c.vehicles).flat(),
+  ...RAIL_CARRIERS.map(c => c.vehicles).flat()
 ];
 
 interface CarrierBookingModalProps {
@@ -54,16 +67,44 @@ interface CarrierBookingModalProps {
 
 export default function CarrierBookingModal({ isOpen, onClose }: CarrierBookingModalProps) {
   const [step, setStep] = useState<1 | 2>(1);
+  const [activeCategory, setActiveCategory] = useState<'ALL' | 'ROAD' | 'SEA' | 'AIR' | 'RAIL'>('ALL');
   const [selectedVehicle, setSelectedVehicle] = useState('c-minitruck');
   const [pickup, setPickup] = useState('Current Location');
   const [dropoff, setDropoff] = useState('');
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
 
+  React.useEffect(() => {
+    const handleReset = () => {
+      setStep(1);
+    };
+    window.addEventListener('resetModalSteps', handleReset);
+    return () => window.removeEventListener('resetModalSteps', handleReset);
+  }, []);
+
   if (!isOpen) return null;
+
+  const updateUrl = (path: string) => {
+    if (typeof window !== 'undefined') {
+      window.history.pushState(null, '', path);
+    }
+  };
+
+  const handleSelectVehicle = (vehicle: any) => {
+    setSelectedVehicle(vehicle.id);
+    setStep(2);
+    const cleanName = vehicle.name.split('/')[0].trim();
+    updateUrl(`/home/carrier/${encodeURIComponent(cleanName)} booking`);
+  };
+
+  const handleBackToFleet = () => {
+    setStep(1);
+    updateUrl('/home/carrier');
+  };
 
   const handleClose = () => {
     setStep(1);
+    updateUrl('/');
     onClose();
   };
 
@@ -90,49 +131,45 @@ export default function CarrierBookingModal({ isOpen, onClose }: CarrierBookingM
 
   const selectedVehicleObj = ALL_CARRIERS.find(v => v.id === selectedVehicle);
 
-  const renderGridSection = (title: string, icon: string, data: typeof ROAD_CARRIERS) => (
-    <div style={{ marginBottom: '32px' }}>
-      <h2 style={{ fontSize: '20px', fontWeight: '800', color: '#111827', margin: '24px 0 16px 0', paddingBottom: '8px', borderBottom: '2px solid #e5e7eb', display: 'flex', alignItems: 'center', gap: '8px' }}>
-        <i className={`fa-solid ${icon}`}></i> {title}
-      </h2>
-      {data.map((category, catIdx) => (
-        <div key={catIdx} style={{ marginBottom: '24px' }}>
-          <h3 style={{ fontSize: '14px', fontWeight: '700', color: '#4b5563', marginBottom: '16px' }}>
-            {category.title}
-          </h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '16px' }}>
-            {category.vehicles.map(v => (
-              <div 
-                key={v.id} 
-                onClick={() => { setSelectedVehicle(v.id); setStep(2); }}
-                style={{
-                  background: '#ffffff',
-                  border: '1px solid #e5e7eb',
-                  borderRadius: '16px',
-                  padding: '16px 12px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
-                  transition: 'all 0.2s ease',
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0, 0, 0, 0.1)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.05)'; }}
-              >
-                <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: v.color + '20', color: v.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', marginBottom: '12px' }}>
-                  <i className={`fa-solid ${v.icon}`}></i>
-                </div>
-                <div style={{ fontSize: '13px', fontWeight: '600', color: '#1f2937', textAlign: 'center', lineHeight: '1.2' }}>
-                  {v.name}
-                </div>
+  const renderGridSection = (title: string, icon: string, data: typeof ROAD_CARRIERS) => {
+    const allVehicles = data.map(c => c.vehicles).flat();
+    return (
+      <div style={{ marginBottom: '32px' }}>
+        <h2 style={{ fontSize: '20px', fontWeight: '800', color: '#111827', margin: '24px 0 16px 0', paddingBottom: '8px', borderBottom: '2px solid #e5e7eb', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <i className={`fa-solid ${icon}`}></i> {title}
+        </h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '16px' }}>
+            {allVehicles.map(v => (
+            <div 
+              key={v.id} 
+              onClick={() => handleSelectVehicle(v)}
+              style={{
+                background: '#ffffff',
+                border: '1px solid #e5e7eb',
+                borderRadius: '16px',
+                padding: '16px 12px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                cursor: 'pointer',
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                transition: 'all 0.2s ease',
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0, 0, 0, 0.1)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.05)'; }}
+            >
+              <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: v.color + '20', color: v.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', marginBottom: '12px' }}>
+                <i className={`fa-solid ${v.icon}`}></i>
               </div>
-            ))}
-          </div>
+              <div style={{ fontSize: '13px', fontWeight: '600', color: '#1f2937', textAlign: 'center', lineHeight: '1.2' }}>
+                {v.name}
+              </div>
+            </div>
+          ))}
         </div>
-      ))}
-    </div>
-  );
+      </div>
+    );
+  };
 
   return (
     <div className="modal-overlay open" style={{ display: 'flex', zIndex: 1000, background: 'rgba(0,0,0,0.6)' }} onClick={handleClose}>
@@ -149,9 +186,38 @@ export default function CarrierBookingModal({ isOpen, onClose }: CarrierBookingM
         
         {step === 1 && (
           <div style={{ flex: 1, overflowY: 'auto', padding: '24px' }}>
-            {renderGridSection('ROAD PARCEL CARRIERS', 'fa-truck', ROAD_CARRIERS)}
-            {renderGridSection('SEA PARCEL CARRIERS', 'fa-ship', SEA_CARRIERS)}
-            {renderGridSection('AIR PARCEL CARRIERS', 'fa-plane', AIR_CARRIERS)}
+            {/* Category Selector */}
+            <div style={{ display: 'flex', gap: '12px', marginBottom: '24px', overflowX: 'auto', paddingBottom: '8px' }}>
+              {[
+                { id: 'ALL', label: 'All Carriers', icon: 'fa-globe', color: '#f59e0b' },
+                { id: 'ROAD', label: 'Road', icon: 'fa-truck', color: '#3b82f6' },
+                { id: 'SEA', label: 'Sea & Water', icon: 'fa-ship', color: '#0ea5e9' },
+                { id: 'AIR', label: 'Air Freight', icon: 'fa-plane', color: '#8b5cf6' },
+                { id: 'RAIL', label: 'Train & Rail', icon: 'fa-train', color: '#10b981' }
+              ].map(cat => (
+                <button
+                  key={cat.id}
+                  onClick={() => setActiveCategory(cat.id as any)}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px',
+                    borderRadius: '12px', border: 'none', cursor: 'pointer', fontSize: '15px', fontWeight: '700',
+                    background: activeCategory === cat.id ? cat.color : '#f3f4f6',
+                    color: activeCategory === cat.id ? '#ffffff' : '#4b5563',
+                    transition: 'all 0.2s ease',
+                    whiteSpace: 'nowrap'
+                  }}
+                >
+                  <i className={`fa-solid ${cat.icon}`}></i> {cat.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Render only active category */}
+            {activeCategory === 'ALL' && renderGridSection('ALL CARRIER OPTIONS', 'fa-globe', [{ title: 'All', vehicles: ALL_CARRIERS }] as any)}
+            {activeCategory === 'ROAD' && renderGridSection('ROAD CARRIERS', 'fa-truck', ROAD_CARRIERS)}
+            {activeCategory === 'SEA' && renderGridSection('SEA / MARINE FREIGHT', 'fa-ship', SEA_CARRIERS)}
+            {activeCategory === 'AIR' && renderGridSection('AIR FREIGHT', 'fa-plane', AIR_CARRIERS)}
+            {activeCategory === 'RAIL' && renderGridSection('RAIL FREIGHT', 'fa-train', RAIL_CARRIERS)}
           </div>
         )}
 
@@ -159,10 +225,10 @@ export default function CarrierBookingModal({ isOpen, onClose }: CarrierBookingM
           <div style={{ flex: 1, overflowY: 'auto', padding: '32px' }}>
             
             <button 
-              onClick={() => setStep(1)} 
+              onClick={handleBackToFleet} 
               style={{ background: 'transparent', border: 'none', color: '#6b7280', cursor: 'pointer', fontSize: '15px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '8px', padding: '0 0 24px 0' }}
             >
-              <i className="fa-solid fa-arrow-left"></i> Back to Carriers
+              <i className="fa-solid fa-arrow-left"></i> Back to Carrier Options
             </button>
 
             {selectedVehicleObj && (
@@ -207,7 +273,7 @@ export default function CarrierBookingModal({ isOpen, onClose }: CarrierBookingM
                 onMouseEnter={e => e.currentTarget.style.background = '#0284c7'}
                 onMouseLeave={e => e.currentTarget.style.background = '#0ea5e9'}
               >
-                Confirm Cargo Booking
+                Confirm Booking
               </button>
             </div>
           </div>

@@ -12,18 +12,25 @@ import './HomeTab.css';
 export default function HomeTab() {
   const [currentSlide, setCurrentSlide] = useState(0);
 
+  const carouselSlides = [
+    { id: 1, img: '/slider1.jpg', title: 'FUTURE OF COMMUTE', subtitle: 'Experience autonomous luxury', action: 'ride', btn: 'Book a Ride' },
+    { id: 2, img: '/slider2.jpg', title: 'CYBERNETIC LOGISTICS', subtitle: 'Automated freight & cargo', action: 'carrier', btn: 'Hire Carrier' },
+    { id: 3, img: '/slider3.jpg', title: 'UNLEASH FREEDOM', subtitle: 'Premium rentals for every journey', action: 'rental', btn: 'Rent Vehicle' },
+    { id: 4, img: '/slider4.jpg', title: 'ELITE CHAUFFEURS', subtitle: 'Arrive in ultimate style', action: 'drivers', btn: 'Hire Driver' }
+  ];
+
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev === 0 ? 1 : 0));
+      setCurrentSlide((prev) => (prev === 3 ? 0 : prev + 1));
     }, 5000);
     return () => clearInterval(timer);
   }, []);
 
-  const { activeTab } = useSartStore();
+  const { activeTab, setActiveTab } = useSartStore();
 
   return (
     <section className={`tab-screen ${activeTab === 'home' ? 'active' : ''}`} id="tab-home">
-      
+
       {/* 🖼️ New Panorama Hero Section */}
       <div className="new-hero-container">
         {/* SubNavbar Overlay */}
@@ -31,21 +38,51 @@ export default function HomeTab() {
           <SubNavbar />
         </div>
 
-        {/* The Panorama Image */}
-        <div className="hero-image-wrapper">
-          <img src="/hero-new.jpg" alt="SART Universal Transport" className="hero-panorama-img" />
-          
-          {/* Invisible clickable overlays for the buttons in the image */}
-          <div className="hero-click-area area-carrier" onClick={() => setActiveTab('carrier')} title="Book Carrier"></div>
-          <div className="hero-click-area area-rides" onClick={() => setActiveTab('ride')} title="Book Ride"></div>
-          <div className="hero-click-area area-rental" onClick={() => setActiveTab('rental')} title="Rent Vehicle"></div>
-          <div className="hero-click-area area-communities" onClick={() => setActiveTab('community')} title="SART Communities"></div>
-          <div className="hero-click-area area-parking" onClick={() => setActiveTab('parking')} title="Find Parking"></div>
-          <div className="hero-click-area area-drivers" onClick={() => setActiveTab('drivers')} title="Hire Driver"></div>
+        {/* Modern Full-Width Carousel */}
+        <div className="modern-carousel">
+          {carouselSlides.map((slide, index) => (
+            <div key={slide.id} className={`carousel-slide ${index === currentSlide ? 'active' : ''}`} style={{ backgroundImage: `url(${slide.img})` }}>
+              <div className="carousel-overlay-gradient"></div>
+              <div className="carousel-content">
+                <h2 className="carousel-title">{slide.title}</h2>
+                <p className="carousel-subtitle">{slide.subtitle}</p>
+                <button className="carousel-cta" onClick={() => setActiveTab(slide.action as any)}>
+                  {slide.btn} <i className="fa-solid fa-arrow-right"></i>
+                </button>
+              </div>
+            </div>
+          ))}
+
+          <button className="carousel-nav prev" onClick={() => setCurrentSlide(p => p === 0 ? 3 : p - 1)}>
+            <i className="fa-solid fa-chevron-left"></i>
+          </button>
+          <button className="carousel-nav next" onClick={() => setCurrentSlide(p => p === 3 ? 0 : p + 1)}>
+            <i className="fa-solid fa-chevron-right"></i>
+          </button>
+
+          <div className="carousel-dots">
+            {[0, 1, 2, 3].map(i => (
+              <div key={i} className={`dot ${i === currentSlide ? 'active' : ''}`} onClick={() => setCurrentSlide(i)}></div>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Yellow Quick Booking Form (Below Truck) */}
+      {/* Quick Services Strip replacing the old image click areas */}
+      <div style={{ textAlign: 'center', padding: '3px 20px 0' }}>
+        <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#1e293b', margin: 0, letterSpacing: '1px' }}>Book a Service</h2>
+        <div style={{ width: '60px', height: '4px', background: '#f59e0b', margin: '12px auto 0', borderRadius: '2px' }}></div>
+      </div>
+      <div className="quick-services-strip">
+        <div className="service-card" onClick={() => setActiveTab('ride')}><i className="fa-solid fa-car-side"></i> <span>Rides</span></div>
+        <div className="service-card" onClick={() => setActiveTab('carrier')}><i className="fa-solid fa-truck-fast"></i> <span>Carrier</span></div>
+        <div className="service-card" onClick={() => setActiveTab('rental')}><i className="fa-solid fa-key"></i> <span>Rental</span></div>
+        <div className="service-card" onClick={() => setActiveTab('community')}><i className="fa-solid fa-users"></i> <span>Community</span></div>
+        <div className="service-card" onClick={() => setActiveTab('parking')}><i className="fa-solid fa-square-parking"></i> <span>Parking</span></div>
+        <div className="service-card" onClick={() => setActiveTab('drivers')}><i className="fa-solid fa-user-tie"></i> <span>Drivers</span></div>
+      </div>
+
+      {/* Yellow Quick Booking Form (Below Services) */}
       <QuickBookingForm />
 
       {/* Special Offers Carousel */}

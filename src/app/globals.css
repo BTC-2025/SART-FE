@@ -121,7 +121,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Premium Top Navigation Bar */
 .web-navbar {
   height: 70px;
-  background: #dae5ec;
+  background: #090d16;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
@@ -231,7 +231,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
   font-size: 14px;
   font-weight: 800;
-  color: var(--text-primary);
+  color: #ffffff;
 }
 .points-val {
   font-size: 10.5px;
@@ -245,12 +245,12 @@ h1, h2, h3, h4, h5, h6 {
   width: 40px;
   height: 40px;
   border-radius: 12px;
-  border: 1px solid var(--card-border);
-  background: var(--card-bg);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.05);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-primary);
+  color: #ffffff;
   cursor: pointer;
   transition: var(--transition);
   position: relative;
@@ -276,13 +276,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .location-badge {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--card-border);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
   padding: 8px 14px;
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
+  color: #ffffff;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1669,3 +1670,39 @@ h1, h2, h3, h4, h5, h6 {
 #tab-service-pages .modal-sheet > div:first-child {
   display: none !important; /* hide the modal header with close button */
 }
+
+/* FINAL DARK THEME OVERRIDES FOR NAVBAR */
+.web-navbar { background: #090d16 !important; color: #ffffff !important; }
+.wallet-badge { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(255,255,255,0.1) !important; }
+.wallet-badge i, .wallet-val, .ctrl-btn, .location-nav-btn { color: #ffffff !important; }
+.ctrl-btn { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(255,255,255,0.1) !important; }
+.location-nav-btn { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(255,255,255,0.1) !important; }
+
+/* === USER REQUESTED COLOR CHANGES === */
+.nav-links { background: #e2e8f0 !important; }
+.nav-link { color: #000000 !important; }
+.nav-link.active, .nav-link:hover { background: #cbd5e1 !important; color: #000000 !important; }
+.subnav-btn { background: #ffffff !important; color: #000000 !important; }
+.subnav-btn i { color: #000000 !important; }
+.location-nav-btn, .ctrl-btn, .wallet-badge, .bit-nav-btn { background: #ffffff !important; color: #000000 !important; border: none !important; }
+.location-nav-btn i, .ctrl-btn i, .wallet-badge i, .bit-nav-btn i { color: #000000 !important; }
+.wallet-val { color: #000000 !important; }
+.location-nav-btn:hover, .ctrl-btn:hover, .wallet-badge:hover, .bit-nav-btn:hover { background: #ffffff !important; color: #000000 !important; transform: none !important; box-shadow: none !important; }
+
+/* === USER REQUESTED NAV-LINK BUTTON COLORS === */
+.nav-link { background: #000000 !important; color: #ffffff !important; }
+.nav-link i { color: #ffffff !important; }
+.nav-link.active, .nav-link:hover { background: #1f2937 !important; color: #ffffff !important; }
+
+/* === REVISED CENTER NAV LINKS BASED ON CLARIFICATION === */
+.nav-link { background: transparent !important; color: #000000 !important; box-shadow: none !important; }
+.nav-link i { color: #000000 !important; }
+.nav-link.active { background: #000000 !important; color: #ffffff !important; }
+.nav-link.active i { color: #ffffff !important; }
+.nav-link:hover { background: transparent !important; color: #000000 !important; transform: none !important; box-shadow: none !important; }
+.nav-link.active:hover { background: #000000 !important; color: #ffffff !important; }
+
+/* === REVISED PROFILE NAV BTN === */
+.profile-nav-btn { background: #ffffff !important; color: #000000 !important; border: none !important; }
+.profile-nav-btn i { color: #000000 !important; }
+.profile-nav-btn:hover { background: #ffffff !important; color: #000000 !important; transform: none !important; box-shadow: none !important; }

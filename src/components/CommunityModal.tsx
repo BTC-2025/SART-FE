@@ -2,17 +2,165 @@
 
 import React, { useState } from 'react';
 
+const ROAD_COMMUNITY = [
+  {
+    title: 'Road Unions & Stands',
+    vehicles: [
+      { id: 'com-auto', name: 'Auto-Rickshaw Stand Union', icon: 'fa-taxi', color: '#f59e0b', price: 500 },
+      { id: 'com-taxi', name: 'City Taxi Drivers Union', icon: 'fa-car', color: '#3b82f6', price: 1000 },
+      { id: 'com-truck', name: 'Heavy Truckers Association', icon: 'fa-truck-front', color: '#8b5cf6', price: 2500 },
+      { id: 'com-bus', name: 'Private Bus Owners Club', icon: 'fa-bus', color: '#10b981', price: 5000 },
+    ]
+  }
+];
+
+const SEA_COMMUNITY = [
+  {
+    title: 'Marine Clubs & Port Unions',
+    vehicles: [
+      { id: 'com-fisher', name: 'Fishermen Coastal Union', icon: 'fa-fish', color: '#0ea5e9', price: 200 },
+      { id: 'com-yacht', name: 'Elite Yacht Owners Club', icon: 'fa-sailboat', color: '#db2777', price: 15000 },
+      { id: 'com-ferry', name: 'Ferry Captains Syndicate', icon: 'fa-ferry', color: '#4f46e5', price: 3000 },
+    ]
+  }
+];
+
+const AIR_COMMUNITY = [
+  {
+    title: 'Aviation Associations',
+    vehicles: [
+      { id: 'com-drone', name: 'Commercial Drone Pilots', icon: 'fa-helicopter-symbol', color: '#f97316', price: 800 },
+      { id: 'com-pilot', name: 'Charter Pilots Association', icon: 'fa-plane', color: '#3b82f6', price: 8000 },
+      { id: 'com-heli', name: 'Helicopter Operators Club', icon: 'fa-helicopter', color: '#10b981', price: 5000 },
+    ]
+  }
+];
+
+const RAIL_COMMUNITY = [
+  {
+    title: 'Rail Worker Unions',
+    vehicles: [
+      { id: 'com-train', name: 'Locomotive Engineers Union', icon: 'fa-train', color: '#8b5cf6', price: 2000 },
+      { id: 'com-metro', name: 'Urban Metro Workers', icon: 'fa-train-subway', color: '#ec4899', price: 1500 },
+    ]
+  }
+];
+
+const ALL_COMMUNITIES = [
+  ...ROAD_COMMUNITY.map(c => c.vehicles).flat(),
+  ...SEA_COMMUNITY.map(c => c.vehicles).flat(),
+  ...AIR_COMMUNITY.map(c => c.vehicles).flat(),
+  ...RAIL_COMMUNITY.map(c => c.vehicles).flat()
+];
+
 export default function CommunityModal({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) {
-  const [activeTab, setActiveTab] = useState<'private' | 'public'>('private');
+  const [activeMainTab, setActiveMainTab] = useState<'private' | 'public'>('private');
   
-  // State for Private Community interactions
+  // State for Public Unions
+  const [step, setStep] = useState<1 | 2>(1);
+  const [activeCategory, setActiveCategory] = useState<'ALL' | 'ROAD' | 'SEA' | 'AIR' | 'RAIL'>('ALL');
+  const [selectedVehicle, setSelectedVehicle] = useState('com-auto');
+  const [pickup, setPickup] = useState('My City / Region');
+  const [date, setDate] = useState('');
+
+  // Modals for Private
   const [showAllocateModal, setShowAllocateModal] = useState(false);
   const [showAddVehicleModal, setShowAddVehicleModal] = useState(false);
 
+  React.useEffect(() => {
+    const handleReset = () => {
+      setStep(1);
+    };
+    window.addEventListener('resetModalSteps', handleReset);
+    return () => window.removeEventListener('resetModalSteps', handleReset);
+  }, []);
+
   if (!isOpen) return null;
 
+  const updateUrl = (path: string) => {
+    if (typeof window !== 'undefined') {
+      window.history.pushState(null, '', path);
+    }
+  };
+
+  const handleSelectVehicle = (vehicle: any) => {
+    setSelectedVehicle(vehicle.id);
+    setStep(2);
+    const cleanName = vehicle.name.split('/')[0].trim();
+    updateUrl(`/home/community/${encodeURIComponent(cleanName)} join`);
+  };
+
+  const handleClose = () => {
+    setStep(1);
+    updateUrl('/');
+    onClose();
+  };
+
+  const handleJoinUnion = () => {
+    let vehicleName = 'Community';
+    let vehiclePrice = 500;
+    
+    const found = ALL_COMMUNITIES.find(v => v.id === selectedVehicle);
+    if (found) {
+      vehicleName = found.name;
+      vehiclePrice = found.price;
+    }
+
+    let subtitle = `Membership • ${vehicleName}`;
+    if (date) {
+      subtitle += ` • Starting: ${date}`;
+    }
+    
+    if ((window as any).executeGenericBooking) {
+      (window as any).executeGenericBooking('community', `Join Union: ${vehicleName} (${pickup})`, subtitle, vehiclePrice, { from: pickup, date });
+    }
+    handleClose();
+  };
+
+  const selectedVehicleObj = ALL_COMMUNITIES.find(v => v.id === selectedVehicle);
+
+  const renderGridSection = (title: string, icon: string, data: typeof ROAD_COMMUNITY) => {
+    const allVehicles = data.map(c => c.vehicles).flat();
+    return (
+      <div style={{ marginBottom: '32px' }}>
+        <h2 style={{ fontSize: '20px', fontWeight: '800', color: '#111827', margin: '24px 0 16px 0', paddingBottom: '8px', borderBottom: '2px solid #e5e7eb', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <i className={`fa-solid ${icon}`}></i> {title}
+        </h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '16px' }}>
+            {allVehicles.map(v => (
+            <div 
+              key={v.id} 
+              onClick={() => handleSelectVehicle(v)}
+              style={{
+                background: '#ffffff',
+                border: '1px solid #e5e7eb',
+                borderRadius: '16px',
+                padding: '16px 12px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                cursor: 'pointer',
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                transition: 'all 0.2s ease',
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0, 0, 0, 0.1)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.05)'; }}
+            >
+              <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: v.color + '20', color: v.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', marginBottom: '12px' }}>
+                <i className={`fa-solid ${v.icon}`}></i>
+              </div>
+              <div style={{ fontSize: '13px', fontWeight: '600', color: '#1f2937', textAlign: 'center', lineHeight: '1.2' }}>
+                {v.name}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
   return (
-    <div className="modal-overlay open" style={{ display: 'flex', zIndex: 1000, background: 'rgba(0,0,0,0.6)' }} onClick={onClose}>
+    <div className="modal-overlay open" style={{ display: 'flex', zIndex: 1000, background: 'rgba(0,0,0,0.6)' }} onClick={handleClose}>
       <div className="modal-sheet centered-modal" style={{ maxWidth: '1000px', width: '95%', height: '90vh', display: 'flex', flexDirection: 'column', backgroundColor: '#f9fafb', borderRadius: '24px', overflow: 'hidden' }} onClick={e => e.stopPropagation()}>
         
         {/* Header */}
@@ -20,7 +168,7 @@ export default function CommunityModal({ isOpen, onClose }: { isOpen: boolean, o
           <div style={{ fontSize: '22px', fontWeight: '800', color: '#111827', display: 'flex', alignItems: 'center', gap: '12px' }}>
             <i className="fa-solid fa-users" style={{ color: '#8b5cf6' }}></i> SART Communities
           </div>
-          <button onClick={onClose} style={{ background: '#f3f4f6', border: 'none', width: '36px', height: '36px', borderRadius: '50%', color: '#4b5563', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px' }}>
+          <button onClick={handleClose} style={{ background: '#f3f4f6', border: 'none', width: '36px', height: '36px', borderRadius: '50%', color: '#4b5563', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px' }}>
             <i className="fa-solid fa-xmark"></i>
           </button>
         </div>
@@ -28,15 +176,15 @@ export default function CommunityModal({ isOpen, onClose }: { isOpen: boolean, o
         {/* Tab Navigation */}
         <div style={{ display: 'flex', borderBottom: '1px solid #e5e7eb', background: '#ffffff', padding: '0 24px' }}>
           <button 
-            onClick={() => setActiveTab('private')}
+            onClick={() => setActiveMainTab('private')}
             style={{ 
               padding: '16px 24px', 
               border: 'none', 
               background: 'transparent', 
               fontSize: '16px', 
               fontWeight: '700', 
-              color: activeTab === 'private' ? '#8b5cf6' : '#6b7280',
-              borderBottom: activeTab === 'private' ? '3px solid #8b5cf6' : '3px solid transparent',
+              color: activeMainTab === 'private' ? '#8b5cf6' : '#6b7280',
+              borderBottom: activeMainTab === 'private' ? '3px solid #8b5cf6' : '3px solid transparent',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
@@ -46,15 +194,15 @@ export default function CommunityModal({ isOpen, onClose }: { isOpen: boolean, o
             <i className="fa-solid fa-building-user"></i> Private (Fleet Owners)
           </button>
           <button 
-            onClick={() => setActiveTab('public')}
+            onClick={() => { setActiveMainTab('public'); setStep(1); }}
             style={{ 
               padding: '16px 24px', 
               border: 'none', 
               background: 'transparent', 
               fontSize: '16px', 
               fontWeight: '700', 
-              color: activeTab === 'public' ? '#10b981' : '#6b7280',
-              borderBottom: activeTab === 'public' ? '3px solid #10b981' : '3px solid transparent',
+              color: activeMainTab === 'public' ? '#10b981' : '#6b7280',
+              borderBottom: activeMainTab === 'public' ? '3px solid #10b981' : '3px solid transparent',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
@@ -65,11 +213,10 @@ export default function CommunityModal({ isOpen, onClose }: { isOpen: boolean, o
           </button>
         </div>
         
-        {/* Main Content Area */}
         <div style={{ flex: 1, overflowY: 'auto', padding: '24px' }}>
           
           {/* ================= PRIVATE COMMUNITY ================= */}
-          {activeTab === 'private' && (
+          {activeMainTab === 'private' && (
             <div className="fade-in">
               <div style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
                 <div>
@@ -87,7 +234,7 @@ export default function CommunityModal({ isOpen, onClose }: { isOpen: boolean, o
               </div>
 
               {/* Private Dashboard Stats */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '32px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '32px' }}>
                 <div style={{ background: '#ffffff', padding: '20px', borderRadius: '16px', border: '1px solid #e5e7eb', display: 'flex', alignItems: 'center', gap: '16px' }}>
                   <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#f3e8ff', color: '#8b5cf6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px' }}><i className="fa-solid fa-truck"></i></div>
                   <div><div style={{ fontSize: '24px', fontWeight: '800', color: '#111827' }}>12</div><div style={{ fontSize: '13px', color: '#6b7280', fontWeight: '600' }}>Total Vehicles</div></div>
@@ -141,123 +288,97 @@ export default function CommunityModal({ isOpen, onClose }: { isOpen: boolean, o
           )}
 
           {/* ================= PUBLIC COMMUNITY ================= */}
-          {activeTab === 'public' && (
+          {activeMainTab === 'public' && step === 1 && (
             <div className="fade-in">
-              <div style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-                <div>
-                  <h2 style={{ margin: '0 0 8px 0', fontSize: '24px', fontWeight: '800', color: '#1f2937' }}>Unions & Vehicle Stands</h2>
-                  <p style={{ margin: 0, color: '#6b7280', fontSize: '15px' }}>Register as a driver, join local unions, add your vehicle, and connect with people directly.</p>
-                </div>
-                <div style={{ display: 'flex', gap: '12px' }}>
-                  <button style={{ background: '#ffffff', color: '#1f2937', border: '1px solid #d1d5db', padding: '10px 16px', borderRadius: '12px', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <i className="fa-solid fa-id-badge"></i> Register as Driver
-                  </button>
-                  <button style={{ background: '#10b981', color: '#ffffff', border: 'none', padding: '10px 16px', borderRadius: '12px', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <i className="fa-solid fa-handshake-angle"></i> Join a Union
-                  </button>
-                </div>
+              <div style={{ marginBottom: '24px' }}>
+                <h2 style={{ margin: '0 0 8px 0', fontSize: '24px', fontWeight: '800', color: '#1f2937' }}>Join Unions & Vehicle Stands</h2>
+                <p style={{ margin: 0, color: '#6b7280', fontSize: '15px' }}>Register as a driver, join local unions, add your vehicle, and connect with peers.</p>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+              {/* Category Selector */}
+              <div style={{ display: 'flex', gap: '12px', marginBottom: '24px', overflowX: 'auto', paddingBottom: '8px' }}>
+                {[
+                  { id: 'ALL', label: 'All Communities', icon: 'fa-globe', color: '#f59e0b' },
+                  { id: 'ROAD', label: 'Road', icon: 'fa-car', color: '#3b82f6' },
+                  { id: 'SEA', label: 'Sea & Water', icon: 'fa-ship', color: '#0ea5e9' },
+                  { id: 'AIR', label: 'Aviation', icon: 'fa-plane', color: '#8b5cf6' },
+                  { id: 'RAIL', label: 'Train & Rail', icon: 'fa-train', color: '#10b981' }
+                ].map(cat => (
+                  <button
+                    key={cat.id}
+                    onClick={() => setActiveCategory(cat.id as any)}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px',
+                      borderRadius: '12px', border: 'none', cursor: 'pointer', fontSize: '15px', fontWeight: '700',
+                      background: activeCategory === cat.id ? cat.color : '#f3f4f6',
+                      color: activeCategory === cat.id ? '#ffffff' : '#4b5563',
+                      transition: 'all 0.2s ease',
+                      whiteSpace: 'nowrap'
+                    }}
+                  >
+                    <i className={`fa-solid ${cat.icon}`}></i> {cat.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Render only active category */}
+              {activeCategory === 'ALL' && renderGridSection('ALL COMMUNITIES', 'fa-globe', [{ title: 'All', vehicles: ALL_COMMUNITIES }] as any)}
+              {activeCategory === 'ROAD' && renderGridSection('ROAD UNIONS', 'fa-car', ROAD_COMMUNITY)}
+              {activeCategory === 'SEA' && renderGridSection('MARINE CLUBS', 'fa-ship', SEA_COMMUNITY)}
+              {activeCategory === 'AIR' && renderGridSection('AVIATION CLUBS', 'fa-plane', AIR_COMMUNITY)}
+              {activeCategory === 'RAIL' && renderGridSection('RAIL UNIONS', 'fa-train', RAIL_COMMUNITY)}
+            </div>
+          )}
+
+          {activeMainTab === 'public' && step === 2 && (
+            <div className="fade-in" style={{ padding: '0 8px' }}>
+              <button 
+                onClick={() => setStep(1)} 
+                style={{ background: 'transparent', border: 'none', color: '#6b7280', cursor: 'pointer', fontSize: '15px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '8px', padding: '0 0 24px 0' }}
+              >
+                <i className="fa-solid fa-arrow-left"></i> Back to Communities
+              </button>
+
+              {selectedVehicleObj && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '20px', background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '16px', padding: '20px', marginBottom: '32px', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)' }}>
+                  <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: selectedVehicleObj.color + '20', color: selectedVehicleObj.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '28px' }}>
+                    <i className={`fa-solid ${selectedVehicleObj.icon}`}></i>
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <h3 style={{ margin: 0, fontSize: '20px', fontWeight: '800', color: '#111827' }}>{selectedVehicleObj.name}</h3>
+                    <p style={{ margin: '4px 0 0 0', fontSize: '14px', color: '#6b7280' }}>Selected Community / Union</p>
+                  </div>
+                  <div style={{ fontSize: '24px', fontWeight: '800', color: '#111827' }}>
+                    ₹{selectedVehicleObj.price.toLocaleString('en-IN')}<span style={{fontSize: '12px', color: '#6b7280'}}>/yr</span>
+                  </div>
+                </div>
+              )}
+
+              <div style={{ background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '16px', padding: '24px' }}>
+                <div style={{ marginBottom: '20px' }}>
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#4b5563', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px' }}>Your Region / City</label>
+                  <input type="text" style={{ width: '100%', padding: '14px', borderRadius: '10px', border: '1px solid #d1d5db', background: '#f9fafb', color: '#111827', fontSize: '15px' }} placeholder="Enter city for local union" value={pickup} onChange={e => setPickup(e.target.value)} />
+                </div>
                 
-                {/* Left Column: Popular Unions/Stands */}
-                <div>
-                  <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#374151', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <i className="fa-solid fa-map-location-dot" style={{ color: '#0ea5e9' }}></i> Local Stands & Unions (Chennai Area)
-                  </h3>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                    {[
-                      { name: 'Koyambedu Lorry Union', members: 1250, type: 'Heavy Transport', rating: 4.8 },
-                      { name: 'T-Nagar Auto Stand', members: 85, type: 'Passenger Transit', rating: 4.5 },
-                      { name: 'Chennai Port Container Hub', members: 340, type: 'Logistics / Sea', rating: 4.9 },
-                    ].map((union, idx) => (
-                      <div key={idx} style={{ background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '16px', padding: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
-                        <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-                          <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', color: '#4b5563' }}>
-                            <i className="fa-solid fa-users"></i>
-                          </div>
-                          <div>
-                            <div style={{ fontSize: '16px', fontWeight: '700', color: '#111827', marginBottom: '4px' }}>{union.name}</div>
-                            <div style={{ fontSize: '13px', color: '#6b7280' }}>{union.type} • {union.members} Members</div>
-                          </div>
-                        </div>
-                        <button style={{ background: '#ecfdf5', color: '#10b981', border: '1px solid #a7f3d0', padding: '6px 16px', borderRadius: '20px', fontWeight: '700', fontSize: '13px', cursor: 'pointer' }}>Connect</button>
-                      </div>
-                    ))}
-                  </div>
+                <div style={{ marginBottom: '32px' }}>
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#4b5563', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px' }}>Join Date</label>
+                  <input type="date" style={{ width: '100%', padding: '14px', borderRadius: '10px', border: '1px solid #d1d5db', background: '#f9fafb', color: '#111827', fontSize: '15px' }} value={date} onChange={e => setDate(e.target.value)} />
                 </div>
 
-                {/* Right Column: Driver Networking / Community Feed */}
-                <div>
-                  <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#374151', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <i className="fa-solid fa-comments" style={{ color: '#f59e0b' }}></i> Union Notice Board
-                  </h3>
-                  <div style={{ background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '16px', padding: '20px', height: '350px', overflowY: 'auto' }}>
-                    <div style={{ marginBottom: '20px', paddingBottom: '20px', borderBottom: '1px solid #f3f4f6' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                          <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#3b82f6', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px' }}>M</div>
-                          <div style={{ fontSize: '14px', fontWeight: '700', color: '#1f2937' }}>Muthu (Koyambedu Union)</div>
-                        </div>
-                        <span style={{ fontSize: '12px', color: '#9ca3af' }}>2 hrs ago</span>
-                      </div>
-                      <p style={{ margin: 0, fontSize: '14px', color: '#4b5563', lineHeight: '1.5' }}>
-                        Need 2 backup drivers for Bangalore route tonight. Any free members from our union? Standard union rates apply. Contact me directly!
-                      </p>
-                      <div style={{ marginTop: '12px', display: 'flex', gap: '16px' }}>
-                        <span style={{ fontSize: '13px', color: '#10b981', fontWeight: '600', cursor: 'pointer' }}><i className="fa-solid fa-reply"></i> Reply</span>
-                        <span style={{ fontSize: '13px', color: '#3b82f6', fontWeight: '600', cursor: 'pointer' }}><i className="fa-solid fa-phone"></i> Call Now</span>
-                      </div>
-                    </div>
-
-                    <div style={{ marginBottom: '20px', paddingBottom: '20px', borderBottom: '1px solid #f3f4f6' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                          <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#f59e0b', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px' }}>A</div>
-                          <div style={{ fontSize: '14px', fontWeight: '700', color: '#1f2937' }}>Union President (T-Nagar)</div>
-                        </div>
-                        <span style={{ fontSize: '12px', color: '#9ca3af' }}>5 hrs ago</span>
-                      </div>
-                      <p style={{ margin: 0, fontSize: '14px', color: '#4b5563', lineHeight: '1.5' }}>
-                        Important update: The local authorities have closed the main road near the station for the next 3 days due to metro work. All auto drivers are requested to use the alternate route via South Usman Road to avoid passenger delays.
-                      </p>
-                    </div>
-                  </div>
-                  <div style={{ marginTop: '16px', display: 'flex', gap: '8px' }}>
-                    <input type="text" placeholder="Post a message to your union..." style={{ flex: 1, padding: '12px 16px', borderRadius: '24px', border: '1px solid #d1d5db', outline: 'none' }} />
-                    <button style={{ width: '44px', height: '44px', borderRadius: '50%', background: '#10b981', color: '#fff', border: 'none', cursor: 'pointer' }}><i className="fa-solid fa-paper-plane"></i></button>
-                  </div>
-                </div>
-
+                <button 
+                  onClick={handleJoinUnion}
+                  style={{ width: '100%', padding: '16px', borderRadius: '12px', background: '#8b5cf6', color: '#ffffff', border: 'none', fontSize: '16px', fontWeight: '700', cursor: 'pointer', transition: 'background 0.2s' }}
+                  onMouseEnter={e => e.currentTarget.style.background = '#7c3aed'}
+                  onMouseLeave={e => e.currentTarget.style.background = '#8b5cf6'}
+                >
+                  Apply to Join
+                </button>
               </div>
             </div>
           )}
 
         </div>
       </div>
-      
-      {/* Simple overlay modals for Allocate/Add Vehicle */}
-      {showAllocateModal && (
-        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', zIndex: 1100, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={() => setShowAllocateModal(false)}>
-          <div style={{ background: '#fff', padding: '32px', borderRadius: '16px', width: '400px' }} onClick={e => e.stopPropagation()}>
-            <h3 style={{ margin: '0 0 16px 0' }}>Allocate Driver</h3>
-            <select style={{ width: '100%', padding: '12px', marginBottom: '16px', borderRadius: '8px', border: '1px solid #ccc' }}>
-              <option>Select Unassigned Vehicle</option>
-              <option>TN-04-KL-5566</option>
-            </select>
-            <select style={{ width: '100%', padding: '12px', marginBottom: '24px', borderRadius: '8px', border: '1px solid #ccc' }}>
-              <option>Select Available Driver</option>
-              <option>Mahesh D.</option>
-              <option>Abdul K.</option>
-            </select>
-            <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
-              <button onClick={() => setShowAllocateModal(false)} style={{ padding: '10px 16px', background: '#f3f4f6', border: 'none', borderRadius: '8px', cursor: 'pointer' }}>Cancel</button>
-              <button onClick={() => { alert('Driver Allocated Successfully!'); setShowAllocateModal(false); }} style={{ padding: '10px 16px', background: '#8b5cf6', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer' }}>Allocate</button>
-            </div>
-          </div>
-        </div>
-      )}
-      
     </div>
   );
 }

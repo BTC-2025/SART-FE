@@ -2,88 +2,71 @@
 
 import React, { useState } from 'react';
 
-const ROAD_DRIVERS = [
+const ROAD_PARKING = [
   {
-    title: 'Two & Three Wheelers',
+    title: 'Road Vehicle Parking',
     vehicles: [
-      { id: 'd-bike', name: 'Bike / Scooter Rider', icon: 'fa-motorcycle', color: '#10b981', price: 500 },
-      { id: 'd-auto', name: 'Auto-Rickshaw Driver', icon: 'fa-taxi', color: '#f59e0b', price: 700 },
-      { id: 'd-delivery', name: 'Delivery / Courier Rider', icon: 'fa-box', color: '#ec4899', price: 600 },
-    ]
-  },
-  {
-    title: 'Cars & Passenger Vehicles',
-    vehicles: [
-      { id: 'd-car', name: 'Personal Car Chauffeur', icon: 'fa-car-side', color: '#3b82f6', price: 1200 },
-      { id: 'd-suv', name: 'SUV / MUV Driver', icon: 'fa-car', color: '#6366f1', price: 1500 },
-      { id: 'd-luxury', name: 'Luxury Chauffeur (Uniformed)', icon: 'fa-user-tie', color: '#8b5cf6', price: 2500 },
-      { id: 'd-valet', name: 'Event Valet Driver', icon: 'fa-key', color: '#14b8a6', price: 1000 },
-    ]
-  },
-  {
-    title: 'Commercial & Heavy Vehicles',
-    vehicles: [
-      { id: 'd-minitruck', name: 'Mini-Truck / LCV Driver', icon: 'fa-truck-pickup', color: '#f97316', price: 1800 },
-      { id: 'd-truck', name: 'Heavy Truck Driver (HGV)', icon: 'fa-truck-front', color: '#ea580c', price: 3000 },
-      { id: 'd-trailer', name: 'Trailer / Multi-Axle Driver', icon: 'fa-truck-moving', color: '#ef4444', price: 4500 },
-      { id: 'd-bus', name: 'Commercial Bus Driver', icon: 'fa-bus', color: '#0ea5e9', price: 2800 },
-      { id: 'd-ambulance', name: 'Ambulance Driver', icon: 'fa-truck-medical', color: '#e11d48', price: 3500 },
-      { id: 'd-tractor', name: 'Tractor / Farm Driver', icon: 'fa-tractor', color: '#84cc16', price: 2000 },
+      { id: 'p-bike', name: 'Two-Wheeler Parking', icon: 'fa-motorcycle', color: '#10b981', price: 20 },
+      { id: 'p-car', name: 'Car Parking Space', icon: 'fa-car-side', color: '#3b82f6', price: 50 },
+      { id: 'p-suv', name: 'SUV / MPV Large Space', icon: 'fa-truck-pickup', color: '#8b5cf6', price: 80 },
+      { id: 'p-truck', name: 'Commercial Truck Yard', icon: 'fa-truck-front', color: '#f59e0b', price: 200 },
     ]
   }
 ];
 
-const SEA_DRIVERS = [
+const SEA_PARKING = [
   {
-    title: 'Marine Captains & Crew',
+    title: 'Marine Docking & Harbors',
     vehicles: [
-      { id: 'd-speedboat', name: 'Speedboat Pilot', icon: 'fa-ship', color: '#0ea5e9', price: 5000 },
-      { id: 'd-yacht', name: 'Private Yacht Captain', icon: 'fa-anchor', color: '#0284c7', price: 15000 },
-      { id: 'd-ferry', name: 'Ferry Master', icon: 'fa-ferry', color: '#4f46e5', price: 12000 },
+      { id: 'p-boat', name: 'Small Boat Mooring', icon: 'fa-sailboat', color: '#0ea5e9', price: 500 },
+      { id: 'p-yacht', name: 'Luxury Yacht Marina Slip', icon: 'fa-anchor', color: '#ec4899', price: 2500 },
+      { id: 'p-ship', name: 'Commercial Ship Berth', icon: 'fa-ship', color: '#4f46e5', price: 10000 },
     ]
   }
 ];
 
-const AIR_DRIVERS = [
+const AIR_PARKING = [
   {
-    title: 'Pilots & Flight Crew',
+    title: 'Aviation Hangars & Tie-Downs',
     vehicles: [
-      { id: 'd-heli', name: 'Helicopter Pilot', icon: 'fa-helicopter', color: '#10b981', price: 45000 },
-      { id: 'd-privatejet', name: 'Private Jet Captain', icon: 'fa-plane-up', color: '#8b5cf6', price: 85000 },
-      { id: 'd-drone', name: 'Commercial Drone Operator', icon: 'fa-helicopter-symbol', color: '#f59e0b', price: 8000 },
+      { id: 'p-heli', name: 'Helipad Landing/Parking', icon: 'fa-helicopter-symbol', color: '#10b981', price: 1500 },
+      { id: 'p-light', name: 'Light Aircraft Hangar', icon: 'fa-plane', color: '#8b5cf6', price: 3000 },
+      { id: 'p-jet', name: 'Private Jet Tie-Down', icon: 'fa-plane-up', color: '#f97316', price: 8000 },
     ]
   }
 ];
 
-const RAIL_DRIVERS = [
+const RAIL_PARKING = [
   {
-    title: 'Rail & Train Operators',
+    title: 'Rail Depots & Sidings',
     vehicles: [
-      { id: 'd-train', name: 'Locomotive Engineer', icon: 'fa-train', color: '#f97316', price: 15000 },
-      { id: 'd-tram', name: 'Tram Operator', icon: 'fa-train-tram', color: '#14b8a6', price: 8000 },
+      { id: 'p-train', name: 'Locomotive Depot Slot', icon: 'fa-train', color: '#f59e0b', price: 5000 },
+      { id: 'p-wagon', name: 'Freight Wagon Siding', icon: 'fa-train-subway', color: '#14b8a6', price: 2000 },
     ]
   }
 ];
 
-const ALL_DRIVERS = [
-  ...ROAD_DRIVERS.map(c => c.vehicles).flat(),
-  ...SEA_DRIVERS.map(c => c.vehicles).flat(),
-  ...AIR_DRIVERS.map(c => c.vehicles).flat(),
-  ...RAIL_DRIVERS.map(c => c.vehicles).flat()
+const ALL_PARKING = [
+  ...ROAD_PARKING.map(c => c.vehicles).flat(),
+  ...SEA_PARKING.map(c => c.vehicles).flat(),
+  ...AIR_PARKING.map(c => c.vehicles).flat(),
+  ...RAIL_PARKING.map(c => c.vehicles).flat()
 ];
 
-interface DriversBookingModalProps {
+interface ParkingBookingModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export default function DriversBookingModal({ isOpen, onClose }: DriversBookingModalProps) {
+export default function ParkingBookingModal({ isOpen, onClose }: ParkingBookingModalProps) {
   const [step, setStep] = useState<1 | 2>(1);
   const [activeCategory, setActiveCategory] = useState<'ALL' | 'ROAD' | 'SEA' | 'AIR' | 'RAIL'>('ALL');
-  const [selectedVehicle, setSelectedVehicle] = useState('d-car');
+  const [selectedVehicle, setSelectedVehicle] = useState('p-car');
   const [pickup, setPickup] = useState('Current Location');
-  const [date, setDate] = useState('');
-  const [time, setTime] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [startTime, setStartTime] = useState('');
+  const [returnDate, setReturnDate] = useState('');
+  const [returnTime, setReturnTime] = useState('');
 
   React.useEffect(() => {
     const handleReset = () => {
@@ -105,12 +88,12 @@ export default function DriversBookingModal({ isOpen, onClose }: DriversBookingM
     setSelectedVehicle(vehicle.id);
     setStep(2);
     const cleanName = vehicle.name.split('/')[0].trim();
-    updateUrl(`/home/drivers/${encodeURIComponent(cleanName)} booking`);
+    updateUrl(`/home/parking/${encodeURIComponent(cleanName)} booking`);
   };
 
   const handleBackToFleet = () => {
     setStep(1);
-    updateUrl('/home/drivers');
+    updateUrl('/home/parking');
   };
 
   const handleClose = () => {
@@ -120,29 +103,29 @@ export default function DriversBookingModal({ isOpen, onClose }: DriversBookingM
   };
 
   const handleBook = () => {
-    let vehicleName = 'Professional Driver';
-    let vehiclePrice = 1200;
+    let vehicleName = 'Parking Slot';
+    let vehiclePrice = 50;
     
-    const found = ALL_DRIVERS.find(v => v.id === selectedVehicle);
+    const found = ALL_PARKING.find(v => v.id === selectedVehicle);
     if (found) {
       vehicleName = found.name;
       vehiclePrice = found.price;
     }
 
-    let subtitle = `Hiring • ${vehicleName}`;
-    if (date || time) {
-      subtitle += ` • Scheduled: ${date} ${time}`.trim();
+    let subtitle = `${vehicleName} • Reserved`;
+    if (startDate && returnDate) {
+      subtitle += ` • From ${startDate} to ${returnDate}`;
     }
     
     if ((window as any).executeGenericBooking) {
-      (window as any).executeGenericBooking('drivers', `Hire: ${vehicleName} at ${pickup}`, subtitle, vehiclePrice, { from: pickup, date, time });
+      (window as any).executeGenericBooking('parking', `Parking: ${pickup}`, subtitle, vehiclePrice, { from: pickup, startDate, startTime, returnDate, returnTime });
     }
     handleClose();
   };
 
-  const selectedVehicleObj = ALL_DRIVERS.find(v => v.id === selectedVehicle);
+  const selectedVehicleObj = ALL_PARKING.find(v => v.id === selectedVehicle);
 
-  const renderGridSection = (title: string, icon: string, data: typeof ROAD_DRIVERS) => {
+  const renderGridSection = (title: string, icon: string, data: typeof ROAD_PARKING) => {
     const allVehicles = data.map(c => c.vehicles).flat();
     return (
       <div style={{ marginBottom: '32px' }}>
@@ -188,7 +171,7 @@ export default function DriversBookingModal({ isOpen, onClose }: DriversBookingM
         
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px', background: '#ffffff', borderBottom: '1px solid #e5e7eb' }}>
           <div style={{ fontSize: '22px', fontWeight: '800', color: '#111827', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <i className="fa-solid fa-user-tie" style={{ color: '#10b981' }}></i> Rent Professional Drivers
+            <i className="fa-solid fa-square-parking" style={{ color: '#f59e0b' }}></i> Reserve Parking & Docking
           </div>
           <button onClick={handleClose} style={{ background: '#f3f4f6', border: 'none', width: '36px', height: '36px', borderRadius: '50%', color: '#4b5563', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px' }}>
             <i className="fa-solid fa-xmark"></i>
@@ -197,14 +180,14 @@ export default function DriversBookingModal({ isOpen, onClose }: DriversBookingM
         
         {step === 1 && (
           <div style={{ flex: 1, overflowY: 'auto', padding: '24px' }}>
-            
+            {/* Category Selector */}
             <div style={{ display: 'flex', gap: '12px', marginBottom: '24px', overflowX: 'auto', paddingBottom: '8px' }}>
               {[
-                { id: 'ALL', label: 'All Staff', icon: 'fa-users', color: '#f59e0b' },
-                { id: 'ROAD', label: 'Road Drivers', icon: 'fa-car', color: '#3b82f6' },
-                { id: 'SEA', label: 'Sea & Water', icon: 'fa-ship', color: '#0ea5e9' },
-                { id: 'AIR', label: 'Air Pilots', icon: 'fa-plane', color: '#8b5cf6' },
-                { id: 'RAIL', label: 'Train & Rail', icon: 'fa-train', color: '#10b981' }
+                { id: 'ALL', label: 'All Slots', icon: 'fa-globe', color: '#6366f1' },
+                { id: 'ROAD', label: 'Road Parking', icon: 'fa-car', color: '#3b82f6' },
+                { id: 'SEA', label: 'Docks & Marinas', icon: 'fa-ship', color: '#0ea5e9' },
+                { id: 'AIR', label: 'Hangars', icon: 'fa-plane', color: '#8b5cf6' },
+                { id: 'RAIL', label: 'Train Depots', icon: 'fa-train', color: '#10b981' }
               ].map(cat => (
                 <button
                   key={cat.id}
@@ -223,11 +206,12 @@ export default function DriversBookingModal({ isOpen, onClose }: DriversBookingM
               ))}
             </div>
 
-            {activeCategory === 'ALL' && renderGridSection('ALL DRIVERS', 'fa-users', [{ title: 'All', vehicles: ALL_DRIVERS }] as any)}
-            {activeCategory === 'ROAD' && renderGridSection('ROAD DRIVERS', 'fa-car', ROAD_DRIVERS)}
-            {activeCategory === 'SEA' && renderGridSection('MARINE CAPTAINS', 'fa-ship', SEA_DRIVERS)}
-            {activeCategory === 'AIR' && renderGridSection('AIR PILOTS', 'fa-plane', AIR_DRIVERS)}
-            {activeCategory === 'RAIL' && renderGridSection('RAIL OPERATORS', 'fa-train', RAIL_DRIVERS)}
+            {/* Render only active category */}
+            {activeCategory === 'ALL' && renderGridSection('ALL PARKING OPTIONS', 'fa-globe', [{ title: 'All', vehicles: ALL_PARKING }] as any)}
+            {activeCategory === 'ROAD' && renderGridSection('ROAD PARKING', 'fa-car', ROAD_PARKING)}
+            {activeCategory === 'SEA' && renderGridSection('MARINE DOCKING', 'fa-ship', SEA_PARKING)}
+            {activeCategory === 'AIR' && renderGridSection('AVIATION HANGARS', 'fa-plane', AIR_PARKING)}
+            {activeCategory === 'RAIL' && renderGridSection('RAIL DEPOTS', 'fa-train', RAIL_PARKING)}
           </div>
         )}
 
@@ -238,7 +222,7 @@ export default function DriversBookingModal({ isOpen, onClose }: DriversBookingM
               onClick={handleBackToFleet} 
               style={{ background: 'transparent', border: 'none', color: '#6b7280', cursor: 'pointer', fontSize: '15px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '8px', padding: '0 0 24px 0' }}
             >
-              <i className="fa-solid fa-arrow-left"></i> Back to Options
+              <i className="fa-solid fa-arrow-left"></i> Back to Parking Types
             </button>
 
             {selectedVehicleObj && (
@@ -248,38 +232,49 @@ export default function DriversBookingModal({ isOpen, onClose }: DriversBookingM
                 </div>
                 <div style={{ flex: 1 }}>
                   <h3 style={{ margin: 0, fontSize: '20px', fontWeight: '800', color: '#111827' }}>{selectedVehicleObj.name}</h3>
-                  <p style={{ margin: '4px 0 0 0', fontSize: '14px', color: '#6b7280' }}>Selected Staff</p>
+                  <p style={{ margin: '4px 0 0 0', fontSize: '14px', color: '#6b7280' }}>Selected Parking Slot</p>
                 </div>
                 <div style={{ fontSize: '24px', fontWeight: '800', color: '#111827' }}>
-                  ₹{selectedVehicleObj.price.toLocaleString('en-IN')}<span style={{fontSize: '12px', color: '#6b7280'}}>/day</span>
+                  ₹{selectedVehicleObj.price.toLocaleString('en-IN')}<span style={{fontSize: '12px', color: '#6b7280'}}>/hr</span>
                 </div>
               </div>
             )}
 
             <div style={{ background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '16px', padding: '24px' }}>
               <div style={{ marginBottom: '20px' }}>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#4b5563', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px' }}>Reporting Location</label>
-                <input type="text" style={{ width: '100%', padding: '14px', borderRadius: '10px', border: '1px solid #d1d5db', background: '#f9fafb', color: '#111827', fontSize: '15px' }} placeholder="Enter pickup address" value={pickup} onChange={e => setPickup(e.target.value)} />
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#4b5563', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px' }}>Parking Location / Facility</label>
+                <input type="text" style={{ width: '100%', padding: '14px', borderRadius: '10px', border: '1px solid #d1d5db', background: '#f9fafb', color: '#111827', fontSize: '15px' }} placeholder="Enter location or scan facility QR" value={pickup} onChange={e => setPickup(e.target.value)} />
               </div>
               
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '32px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#4b5563', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px' }}>Date</label>
-                  <input type="date" style={{ width: '100%', padding: '14px', borderRadius: '10px', border: '1px solid #d1d5db', background: '#f9fafb', color: '#111827', fontSize: '15px' }} value={date} onChange={e => setDate(e.target.value)} />
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#4b5563', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px' }}>Check-in Date</label>
+                  <input type="date" style={{ width: '100%', padding: '14px', borderRadius: '10px', border: '1px solid #d1d5db', background: '#f9fafb', color: '#111827', fontSize: '15px' }} value={startDate} onChange={e => setStartDate(e.target.value)} />
                 </div>
                 <div>
-                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#4b5563', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px' }}>Time</label>
-                  <input type="time" style={{ width: '100%', padding: '14px', borderRadius: '10px', border: '1px solid #d1d5db', background: '#f9fafb', color: '#111827', fontSize: '15px' }} value={time} onChange={e => setTime(e.target.value)} />
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#4b5563', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px' }}>Check-in Time</label>
+                  <input type="time" style={{ width: '100%', padding: '14px', borderRadius: '10px', border: '1px solid #d1d5db', background: '#f9fafb', color: '#111827', fontSize: '15px' }} value={startTime} onChange={e => setStartTime(e.target.value)} />
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '32px' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#4b5563', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px' }}>Check-out Date</label>
+                  <input type="date" style={{ width: '100%', padding: '14px', borderRadius: '10px', border: '1px solid #d1d5db', background: '#f9fafb', color: '#111827', fontSize: '15px' }} value={returnDate} onChange={e => setReturnDate(e.target.value)} />
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#4b5563', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px' }}>Check-out Time</label>
+                  <input type="time" style={{ width: '100%', padding: '14px', borderRadius: '10px', border: '1px solid #d1d5db', background: '#f9fafb', color: '#111827', fontSize: '15px' }} value={returnTime} onChange={e => setReturnTime(e.target.value)} />
                 </div>
               </div>
 
               <button 
                 onClick={handleBook}
-                style={{ width: '100%', padding: '16px', borderRadius: '12px', background: '#10b981', color: '#ffffff', border: 'none', fontSize: '16px', fontWeight: '700', cursor: 'pointer', transition: 'background 0.2s' }}
-                onMouseEnter={e => e.currentTarget.style.background = '#059669'}
-                onMouseLeave={e => e.currentTarget.style.background = '#10b981'}
+                style={{ width: '100%', padding: '16px', borderRadius: '12px', background: '#f59e0b', color: '#ffffff', border: 'none', fontSize: '16px', fontWeight: '700', cursor: 'pointer', transition: 'background 0.2s' }}
+                onMouseEnter={e => e.currentTarget.style.background = '#d97706'}
+                onMouseLeave={e => e.currentTarget.style.background = '#f59e0b'}
               >
-                Confirm Booking
+                Confirm Parking
               </button>
             </div>
           </div>
