@@ -1648,3 +1648,24 @@ h1, h2, h3, h4, h5, h6 {
   z-index: 999;
   transition: var(--transition);
 }
+
+/* Override Modals to behave as pages inside #tab-service-pages */
+#tab-service-pages .modal-overlay {
+  position: static !important;
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+#tab-service-pages .modal-sheet {
+  max-width: 100% !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 80vh;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+#tab-service-pages .modal-sheet > div:first-child {
+  display: none !important; /* hide the modal header with close button */
+}

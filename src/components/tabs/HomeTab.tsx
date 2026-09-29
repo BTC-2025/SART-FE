@@ -36,12 +36,12 @@ export default function HomeTab() {
           <img src="/hero-new.jpg" alt="SART Universal Transport" className="hero-panorama-img" />
           
           {/* Invisible clickable overlays for the buttons in the image */}
-          <div className="hero-click-area area-carrier" onClick={() => { if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('openReactModal', { detail: 'modal-carrier' })) }} title="Book Carrier"></div>
-          <div className="hero-click-area area-rides" onClick={() => { if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('openReactModal', { detail: 'modal-ride' })) }} title="Book Ride"></div>
-          <div className="hero-click-area area-rental" onClick={() => { if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('openReactModal', { detail: 'modal-rental' })) }} title="Rent Vehicle"></div>
-          <div className="hero-click-area area-communities" onClick={() => { if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('openReactModal', { detail: 'modal-community' })) }} title="SART Communities"></div>
-          <div className="hero-click-area area-parking" onClick={() => { if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('openReactModal', { detail: 'modal-parking' })) }} title="Find Parking"></div>
-          <div className="hero-click-area area-drivers" onClick={() => { if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('openReactModal', { detail: 'modal-drivers' })) }} title="Hire Driver"></div>
+          <div className="hero-click-area area-carrier" onClick={() => setActiveTab('carrier')} title="Book Carrier"></div>
+          <div className="hero-click-area area-rides" onClick={() => setActiveTab('ride')} title="Book Ride"></div>
+          <div className="hero-click-area area-rental" onClick={() => setActiveTab('rental')} title="Rent Vehicle"></div>
+          <div className="hero-click-area area-communities" onClick={() => setActiveTab('community')} title="SART Communities"></div>
+          <div className="hero-click-area area-parking" onClick={() => setActiveTab('parking')} title="Find Parking"></div>
+          <div className="hero-click-area area-drivers" onClick={() => setActiveTab('drivers')} title="Hire Driver"></div>
         </div>
       </div>
 

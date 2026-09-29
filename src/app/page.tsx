@@ -19,33 +19,16 @@ import CommunityModal from '@/components/CommunityModal';
 import MechanicModal from '@/components/MechanicModal';
 
 export default function Home() {
-  const [isRideModalOpen, setIsRideModalOpen] = useState(false);
-  const [isCarrierModalOpen, setIsCarrierModalOpen] = useState(false);
-  const [isRentalModalOpen, setIsRentalModalOpen] = useState(false);
+  const { activeTab, setActiveTab } = useSartStore();
   const [isCityModalOpen, setIsCityModalOpen] = useState(false);
   const [isBookingsModalOpen, setIsBookingsModalOpen] = useState(false);
-  const [isDriversModalOpen, setIsDriversModalOpen] = useState(false);
-  const [isCommunityModalOpen, setIsCommunityModalOpen] = useState(false);
-  const [isMechanicModalOpen, setIsMechanicModalOpen] = useState(false);
 
   useEffect(() => {
     const handleOpenModal = (e: any) => {
-      if (e.detail === 'modal-ride') {
-        setIsRideModalOpen(true);
-      } else if (e.detail === 'modal-carrier') {
-        setIsCarrierModalOpen(true);
-      } else if (e.detail === 'modal-rental') {
-        setIsRentalModalOpen(true);
-      } else if (e.detail === 'modal-city-selector') {
+      if (e.detail === 'modal-city-selector') {
         setIsCityModalOpen(true);
       } else if (e.detail === 'modal-bookings-registry') {
         setIsBookingsModalOpen(true);
-      } else if (e.detail === 'modal-drivers') {
-        setIsDriversModalOpen(true);
-      } else if (e.detail === 'modal-community') {
-        setIsCommunityModalOpen(true);
-      } else if (e.detail === 'modal-mechanic') {
-        setIsMechanicModalOpen(true);
       }
     };
     
@@ -67,19 +50,31 @@ export default function Home() {
         <WalletTab />
         <ProfileTab />
         
+        {/* Service Sub-Pages (Rendered as Tabs) */}
+        <div className={`tab-screen ${['ride', 'carrier', 'rental', 'drivers', 'community', 'mechanic', 'parking'].includes(activeTab) ? 'active' : ''}`} id="tab-service-pages">
+          <RideBookingModal isOpen={activeTab === 'ride'} onClose={() => setActiveTab('home')} />
+          <CarrierBookingModal isOpen={activeTab === 'carrier'} onClose={() => setActiveTab('home')} />
+          <RentalBookingModal isOpen={activeTab === 'rental'} onClose={() => setActiveTab('home')} />
+          <DriversBookingModal isOpen={activeTab === 'drivers'} onClose={() => setActiveTab('home')} />
+          <CommunityModal isOpen={activeTab === 'community'} onClose={() => setActiveTab('home')} />
+          <MechanicModal isOpen={activeTab === 'mechanic'} onClose={() => setActiveTab('home')} />
+          {/* Parking doesn't have a modal yet, so we could show a placeholder if needed */}
+          {activeTab === 'parking' && (
+             <div style={{ padding: '40px', textAlign: 'center', background: '#fff', borderRadius: '16px', margin: '20px' }}>
+               <h2>Parking Services</h2>
+               <p>Coming Soon</p>
+               <button onClick={() => setActiveTab('home')} style={{ marginTop: '20px', padding: '10px 20px', background: '#0ea5e9', color: '#fff', borderRadius: '8px', border: 'none', cursor: 'pointer' }}>Back to Home</button>
+             </div>
+          )}
+        </div>
+
         {/* Legacy Universal Modals */}
         <UniversalModals />
       </main>
 
       <Script src="/app.js" strategy="lazyOnload" />
-      <RideBookingModal isOpen={isRideModalOpen} onClose={() => setIsRideModalOpen(false)} />
-      <CarrierBookingModal isOpen={isCarrierModalOpen} onClose={() => setIsCarrierModalOpen(false)} />
-      <RentalBookingModal isOpen={isRentalModalOpen} onClose={() => setIsRentalModalOpen(false)} />
       <CitySelectorModal isOpen={isCityModalOpen} onClose={() => setIsCityModalOpen(false)} />
       <BookingsRegistryModal isOpen={isBookingsModalOpen} onClose={() => setIsBookingsModalOpen(false)} />
-      <DriversBookingModal isOpen={isDriversModalOpen} onClose={() => setIsDriversModalOpen(false)} />
-      <CommunityModal isOpen={isCommunityModalOpen} onClose={() => setIsCommunityModalOpen(false)} />
-      <MechanicModal isOpen={isMechanicModalOpen} onClose={() => setIsMechanicModalOpen(false)} />
     </div>
   );
 }
