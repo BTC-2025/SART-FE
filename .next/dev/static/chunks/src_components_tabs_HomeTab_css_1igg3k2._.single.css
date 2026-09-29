@@ -1,67 +1,80 @@
 /* [project]/src/components/tabs/HomeTab.css [app-client] (css) */
-.truck-hero-container {
-  aspect-ratio: 1024 / 384;
-  background-image: url("/truck-bg.jpg");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  border-radius: 0;
+.new-hero-container {
+  background-color: #000;
   width: 100vw;
   margin-top: -32px;
   margin-bottom: 32px;
   position: relative;
   left: 50%;
-  overflow: hidden;
   transform: translateX(-50%);
   box-shadow: 0 15px 35px #0006;
 }
 
-.truck-subnav-overlay {
+.hero-subnav-overlay {
   z-index: 100;
-  padding: 4px 8px;
   position: absolute;
   top: 8px;
   right: 24px;
 }
 
-.truck-cargo-overlay {
-  border-radius: 0;
-  width: 61%;
-  height: 51.7%;
-  position: absolute;
-  top: 10.5%;
-  left: 11.8%;
-  overflow: hidden;
-}
-
-.truck-wheels-overlay {
-  pointer-events: none;
+.hero-image-wrapper {
   width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-.hero-sliding-banner {
-  background: #000;
-  width: 100%;
-  height: 100%;
   position: relative;
 }
 
-.hero-slider-track {
+.hero-panorama-img {
   width: 100%;
-  height: 100%;
-  transition: transform 1.2s cubic-bezier(.25, 1, .5, 1);
-  display: flex;
+  height: auto;
+  display: block;
 }
 
-.hero-slide-item {
-  background-position: center;
-  background-size: cover;
-  min-width: 100%;
-  height: 100%;
+.hero-click-area {
+  cursor: pointer;
+  z-index: 10;
+  border-radius: 20px;
+  position: absolute;
+}
+
+.area-carrier {
+  width: 12%;
+  height: 9%;
+  top: 42%;
+  left: 15%;
+}
+
+.area-rides {
+  width: 12%;
+  height: 9%;
+  top: 70%;
+  left: 13.5%;
+}
+
+.area-rental {
+  width: 12%;
+  height: 9%;
+  top: 64%;
+  left: 33%;
+}
+
+.area-communities {
+  width: 14%;
+  height: 9%;
+  top: 86%;
+  left: 47%;
+}
+
+.area-parking {
+  width: 12%;
+  height: 9%;
+  top: 58%;
+  left: 75%;
+}
+
+.area-drivers {
+  width: 12%;
+  height: 9%;
+  top: 84%;
+  left: 81%;
 }
 
 .road-overlay-text {

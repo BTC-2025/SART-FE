@@ -2,8 +2,10 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import './ProfileTab.css'; 
+import { useSartStore } from '@/store/useSartStore';
 
 export default function ProfileTab() {
+  const { activeTab } = useSartStore();
   const [mounted, setMounted] = useState(false);
   
   useEffect(() => {
@@ -12,9 +14,10 @@ export default function ProfileTab() {
 
   if (!mounted) return null;
 
+
   return (
     <div dangerouslySetInnerHTML={{ __html: `      <!-- 5. PROFILE TAB (Premium Redesign) -->
-      <section class="tab-screen" id="tab-profile">
+      <section class="tab-screen ${activeTab === 'profile' ? 'active' : ''}" id="tab-profile">
         <div class="profile-container">
           
           <div class="profile-card">

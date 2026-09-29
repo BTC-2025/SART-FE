@@ -5,7 +5,7 @@ import './Navbar.css';
 import { useSartStore } from '../store/useSartStore';
 
 export default function Navbar() {
-  const { wallet } = useSartStore();
+  const { wallet, activeTab, setActiveTab } = useSartStore();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -63,13 +63,13 @@ export default function Navbar() {
       </div>
       
       <nav className="nav-links">
-        <div className="nav-link active" id="nav-btn-home" onClick={() => (window as any).switchTab('home')}>
+        <div className={`nav-link ${activeTab === 'home' ? 'active' : ''}`} id="nav-btn-home" onClick={() => setActiveTab('home')}>
           <span>Home</span>
         </div>
-        <div className="nav-link" id="nav-btn-store" onClick={() => (window as any).switchTab('store')}>
+        <div className={`nav-link ${activeTab === 'store' ? 'active' : ''}`} id="nav-btn-store" onClick={() => setActiveTab('store')}>
           <span>Store</span>
         </div>
-        <div className="nav-link" id="nav-btn-booking" onClick={() => (window as any).switchTab('booking')}>
+        <div className={`nav-link ${activeTab === 'booking' ? 'active' : ''}`} id="nav-btn-booking" onClick={() => setActiveTab('booking')}>
           <span>Booking</span>
         </div>
       </nav>

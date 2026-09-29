@@ -41,7 +41,8 @@ const DEFAULT_STATE: AppState = {
     { id: 'notif-3', title: 'Toll Refund Processed', desc: '₹120 refund credited for NH-44 Fastag anomaly.', read: true, date: '3 days ago' }
   ],
   location: "Indiranagar, Bengaluru",
-  activeBookingId: null
+  activeBookingId: null,
+  activeTab: 'home'
 };
 
 interface SartStore extends AppState {
@@ -55,6 +56,7 @@ interface SartStore extends AppState {
   toggleWishlist: (itemId: string) => void;
   setLocation: (loc: string) => void;
   setActiveBookingId: (id: string | null) => void;
+  setActiveTab: (tab: string) => void;
 }
 
 export const useSartStore = create<SartStore>()(
@@ -122,6 +124,19 @@ export const useSartStore = create<SartStore>()(
       setLocation: (loc) => set({ location: loc }),
       
       setActiveBookingId: (id) => set({ activeBookingId: id }),
+
+      setActiveTab: (tab) => {
+        set({ activeTab: tab });
+        // Also trigger the legacy Map resize if 'home' is selected
+        if (tab === 'home' && typeof window !== 'undefined') {
+          setTimeout(() => {
+            if ((window as any).leafletMap) {
+              (window as any).leafletMap.invalidateSize();
+              if ((window as any).recenterMap) (window as any).recenterMap();
+            }
+          }, 200);
+        }
+      },
     }),
     {
       name: 'sart-storage-v2', // unique name

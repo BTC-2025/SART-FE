@@ -52,4 +52,5 @@ export interface AppState {
   notifications: NotificationItem[];
   location: string;
   activeBookingId: string | null;
+  activeTab: string;
 }

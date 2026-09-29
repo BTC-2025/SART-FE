@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './BookingsTab.css';
+import { useSartStore } from '@/store/useSartStore';
 
 interface Booking {
   id: string;
@@ -48,8 +49,10 @@ export default function BookingsTab() {
     activeTab === 'active' ? b.status === 'Active' : b.status === 'Completed'
   );
 
+  const { activeTab: globalActiveTab } = useSartStore();
+
   return (
-    <section className="tab-screen" id="tab-booking">
+    <section className={`tab-screen ${globalActiveTab === 'booking' ? 'active' : ''}`} id="tab-booking">
       <div className="bookings-tab-container">
         <div className="bookings-tab-header">
           <h2><i className="fa-solid fa-calendar-check" style={{ color: 'var(--primary)', marginRight: '12px' }}></i> My Bookings</h2>

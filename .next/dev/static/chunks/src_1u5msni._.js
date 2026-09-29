@@ -5015,7 +5015,7 @@ var _s = __turbopack_context__.k.signature();
 ;
 function Navbar() {
     _s();
-    const { wallet } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$useSartStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSartStore"])();
+    const { wallet, activeTab, setActiveTab } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$useSartStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSartStore"])();
     const [isProfileOpen, setIsProfileOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [isSearchExpanded, setIsSearchExpanded] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [searchQuery, setSearchQuery] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('');
@@ -5265,9 +5265,9 @@ function Navbar() {
                 className: "nav-links",
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "nav-link active",
+                        className: `nav-link ${activeTab === 'home' ? 'active' : ''}`,
                         id: "nav-btn-home",
-                        onClick: ()=>window.switchTab('home'),
+                        onClick: ()=>setActiveTab('home'),
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                             children: "Home"
                         }, void 0, false, {
@@ -5281,9 +5281,9 @@ function Navbar() {
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "nav-link",
+                        className: `nav-link ${activeTab === 'store' ? 'active' : ''}`,
                         id: "nav-btn-store",
-                        onClick: ()=>window.switchTab('store'),
+                        onClick: ()=>setActiveTab('store'),
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                             children: "Store"
                         }, void 0, false, {
@@ -5297,9 +5297,9 @@ function Navbar() {
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "nav-link",
+                        className: `nav-link ${activeTab === 'booking' ? 'active' : ''}`,
                         id: "nav-btn-booking",
-                        onClick: ()=>window.switchTab('booking'),
+                        onClick: ()=>setActiveTab('booking'),
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                             children: "Booking"
                         }, void 0, false, {
@@ -5885,7 +5885,7 @@ function Navbar() {
         columnNumber: 5
     }, this);
 }
-_s(Navbar, "5KN5TeSc8rFN1xmUxFIZg+HnzEM=", false, function() {
+_s(Navbar, "55gQSE7ftODijxE7nAoXLFSz/Lg=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$useSartStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSartStore"]
     ];
@@ -8901,17 +8901,14 @@ __turbopack_context__.s([
     ()=>SubNavbar
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$useSartStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/store/useSartStore.ts [app-client] (ecmascript)");
+;
+var _s = __turbopack_context__.k.signature();
 'use client';
 ;
 function SubNavbar() {
-    const openModal = (id)=>{
-        console.log('Opening modal:', id);
-    // Connect to Zustand later
-    };
-    const switchTab = (tab)=>{
-        console.log('Switching to tab:', tab);
-    // Connect to Zustand later
-    };
+    _s();
+    const { setActiveTab } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$useSartStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSartStore"])();
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "web-subnavbar",
         children: [
@@ -8919,7 +8916,7 @@ function SubNavbar() {
                 className: "subnav-links"
             }, void 0, false, {
                 fileName: "[project]/src/components/SubNavbar.tsx",
-                lineNumber: 18,
+                lineNumber: 11,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8941,19 +8938,19 @@ function SubNavbar() {
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/src/components/SubNavbar.tsx",
-                                lineNumber: 23,
+                                lineNumber: 16,
                                 columnNumber: 11
                             }, this),
                             " VENDOR"
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/SubNavbar.tsx",
-                        lineNumber: 22,
+                        lineNumber: 15,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                         className: "subnav-btn",
-                        onClick: ()=>window.switchTab('wallet'),
+                        onClick: ()=>setActiveTab('wallet'),
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("i", {
                                 className: "fa-solid fa-wallet",
@@ -8962,14 +8959,14 @@ function SubNavbar() {
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/src/components/SubNavbar.tsx",
-                                lineNumber: 26,
+                                lineNumber: 19,
                                 columnNumber: 11
                             }, this),
                             " ₹15,000.00"
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/SubNavbar.tsx",
-                        lineNumber: 25,
+                        lineNumber: 18,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8985,17 +8982,17 @@ function SubNavbar() {
                             }
                         }, void 0, false, {
                             fileName: "[project]/src/components/SubNavbar.tsx",
-                            lineNumber: 29,
+                            lineNumber: 22,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/SubNavbar.tsx",
-                        lineNumber: 28,
+                        lineNumber: 21,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "subnav-btn",
-                        onClick: ()=>window.switchTab('profile'),
+                        onClick: ()=>setActiveTab('profile'),
                         style: {
                             padding: '2px 5px'
                         },
@@ -9006,27 +9003,32 @@ function SubNavbar() {
                             }
                         }, void 0, false, {
                             fileName: "[project]/src/components/SubNavbar.tsx",
-                            lineNumber: 32,
+                            lineNumber: 25,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/SubNavbar.tsx",
-                        lineNumber: 31,
+                        lineNumber: 24,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/SubNavbar.tsx",
-                lineNumber: 21,
+                lineNumber: 14,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/SubNavbar.tsx",
-        lineNumber: 17,
+        lineNumber: 10,
         columnNumber: 5
     }, this);
 }
+_s(SubNavbar, "w16/ckYHcF4ZeZtAJXGAyLBhJTA=", false, function() {
+    return [
+        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$useSartStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSartStore"]
+    ];
+});
 _c = SubNavbar;
 var _c;
 __turbopack_context__.k.register(_c, "SubNavbar");
@@ -10608,8 +10610,10 @@ __turbopack_context__.s([
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$useSartStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/store/useSartStore.ts [app-client] (ecmascript)");
 ;
 var _s = __turbopack_context__.k.signature();
+;
 ;
 ;
 const MOCK_BOOKINGS = [
@@ -10645,8 +10649,9 @@ function BookingsTab() {
     _s();
     const [activeTab, setActiveTab] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('active');
     const filteredBookings = MOCK_BOOKINGS.filter((b)=>activeTab === 'active' ? b.status === 'Active' : b.status === 'Completed');
+    const { activeTab: globalActiveTab } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$useSartStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSartStore"])();
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
-        className: "tab-screen",
+        className: `tab-screen ${globalActiveTab === 'booking' ? 'active' : ''}`,
         id: "tab-booking",
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
             className: "bookings-tab-container",
@@ -10664,27 +10669,27 @@ function BookingsTab() {
                                     }
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/tabs/BookingsTab.tsx",
-                                    lineNumber: 55,
+                                    lineNumber: 58,
                                     columnNumber: 15
                                 }, this),
                                 " My Bookings"
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/tabs/BookingsTab.tsx",
-                            lineNumber: 55,
+                            lineNumber: 58,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                             children: "View and manage all your past and upcoming SART transport bookings."
                         }, void 0, false, {
                             fileName: "[project]/src/components/tabs/BookingsTab.tsx",
-                            lineNumber: 56,
+                            lineNumber: 59,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/tabs/BookingsTab.tsx",
-                    lineNumber: 54,
+                    lineNumber: 57,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -10696,7 +10701,7 @@ function BookingsTab() {
                             children: "Active Bookings"
                         }, void 0, false, {
                             fileName: "[project]/src/components/tabs/BookingsTab.tsx",
-                            lineNumber: 60,
+                            lineNumber: 63,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -10705,13 +10710,13 @@ function BookingsTab() {
                             children: "Past Bookings"
                         }, void 0, false, {
                             fileName: "[project]/src/components/tabs/BookingsTab.tsx",
-                            lineNumber: 66,
+                            lineNumber: 69,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/tabs/BookingsTab.tsx",
-                    lineNumber: 59,
+                    lineNumber: 62,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -10730,7 +10735,7 @@ function BookingsTab() {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/tabs/BookingsTab.tsx",
-                                            lineNumber: 79,
+                                            lineNumber: 82,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -10738,13 +10743,13 @@ function BookingsTab() {
                                             children: booking.status
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/tabs/BookingsTab.tsx",
-                                            lineNumber: 80,
+                                            lineNumber: 83,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/tabs/BookingsTab.tsx",
-                                    lineNumber: 78,
+                                    lineNumber: 81,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -10752,7 +10757,7 @@ function BookingsTab() {
                                     children: booking.title
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/tabs/BookingsTab.tsx",
-                                    lineNumber: 82,
+                                    lineNumber: 85,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -10760,7 +10765,7 @@ function BookingsTab() {
                                     children: booking.details
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/tabs/BookingsTab.tsx",
-                                    lineNumber: 83,
+                                    lineNumber: 86,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -10773,7 +10778,7 @@ function BookingsTab() {
                                                     className: "fa-regular fa-clock"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/tabs/BookingsTab.tsx",
-                                                    lineNumber: 85,
+                                                    lineNumber: 88,
                                                     columnNumber: 50
                                                 }, this),
                                                 " ",
@@ -10781,7 +10786,7 @@ function BookingsTab() {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/tabs/BookingsTab.tsx",
-                                            lineNumber: 85,
+                                            lineNumber: 88,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -10792,19 +10797,19 @@ function BookingsTab() {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/tabs/BookingsTab.tsx",
-                                            lineNumber: 86,
+                                            lineNumber: 89,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/tabs/BookingsTab.tsx",
-                                    lineNumber: 84,
+                                    lineNumber: 87,
                                     columnNumber: 17
                                 }, this)
                             ]
                         }, booking.id, true, {
                             fileName: "[project]/src/components/tabs/BookingsTab.tsx",
-                            lineNumber: 77,
+                            lineNumber: 80,
                             columnNumber: 15
                         }, this)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "no-bookings",
@@ -10818,7 +10823,7 @@ function BookingsTab() {
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/src/components/tabs/BookingsTab.tsx",
-                                lineNumber: 92,
+                                lineNumber: 95,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -10829,7 +10834,7 @@ function BookingsTab() {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/tabs/BookingsTab.tsx",
-                                lineNumber: 93,
+                                lineNumber: 96,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -10838,33 +10843,37 @@ function BookingsTab() {
                                 children: "Book a Service Now"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/tabs/BookingsTab.tsx",
-                                lineNumber: 94,
+                                lineNumber: 97,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/tabs/BookingsTab.tsx",
-                        lineNumber: 91,
+                        lineNumber: 94,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/components/tabs/BookingsTab.tsx",
-                    lineNumber: 74,
+                    lineNumber: 77,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/components/tabs/BookingsTab.tsx",
-            lineNumber: 53,
+            lineNumber: 56,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/components/tabs/BookingsTab.tsx",
-        lineNumber: 52,
+        lineNumber: 55,
         columnNumber: 5
     }, this);
 }
-_s(BookingsTab, "iYqlFwflSALLlwgbaMf8KcZ7Dos=");
+_s(BookingsTab, "fkES+VcKyRCQ8UHE/6WWRcW9dcc=", false, function() {
+    return [
+        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$useSartStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSartStore"]
+    ];
+});
 _c = BookingsTab;
 var _c;
 __turbopack_context__.k.register(_c, "BookingsTab");
@@ -10881,6 +10890,7 @@ __turbopack_context__.s([
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$useSartStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/store/useSartStore.ts [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$SubNavbar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/SubNavbar.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ServicesGrid$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ServicesGrid.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$QuickBookingForm$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/QuickBookingForm.tsx [app-client] (ecmascript)");
@@ -10890,6 +10900,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$OffersS
 ;
 var _s = __turbopack_context__.k.signature();
 'use client';
+;
 ;
 ;
 ;
@@ -10915,8 +10926,9 @@ function HomeTab() {
             })["HomeTab.useEffect"];
         }
     }["HomeTab.useEffect"], []);
+    const { activeTab } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$useSartStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSartStore"])();
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
-        className: "tab-screen active",
+        className: `tab-screen ${activeTab === 'home' ? 'active' : ''}`,
         id: "tab-home",
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -10926,12 +10938,12 @@ function HomeTab() {
                         className: "truck-subnav-overlay",
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$SubNavbar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                             fileName: "[project]/src/components/tabs/HomeTab.tsx",
-                            lineNumber: 30,
+                            lineNumber: 33,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/tabs/HomeTab.tsx",
-                        lineNumber: 29,
+                        lineNumber: 32,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -10951,7 +10963,7 @@ function HomeTab() {
                                         }
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/tabs/HomeTab.tsx",
-                                        lineNumber: 40,
+                                        lineNumber: 43,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -10961,51 +10973,51 @@ function HomeTab() {
                                         }
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/tabs/HomeTab.tsx",
-                                        lineNumber: 41,
+                                        lineNumber: 44,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/tabs/HomeTab.tsx",
-                                lineNumber: 36,
+                                lineNumber: 39,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/components/tabs/HomeTab.tsx",
-                            lineNumber: 35,
+                            lineNumber: 38,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/tabs/HomeTab.tsx",
-                        lineNumber: 34,
+                        lineNumber: 37,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "truck-wheels-overlay",
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ServicesGrid$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                             fileName: "[project]/src/components/tabs/HomeTab.tsx",
-                            lineNumber: 48,
+                            lineNumber: 51,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/tabs/HomeTab.tsx",
-                        lineNumber: 47,
+                        lineNumber: 50,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/tabs/HomeTab.tsx",
-                lineNumber: 26,
+                lineNumber: 29,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$QuickBookingForm$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                 fileName: "[project]/src/components/tabs/HomeTab.tsx",
-                lineNumber: 54,
+                lineNumber: 57,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$OffersSlider$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                 fileName: "[project]/src/components/tabs/HomeTab.tsx",
-                lineNumber: 57,
+                lineNumber: 60,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11017,28 +11029,32 @@ function HomeTab() {
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$MapEngine$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                         fileName: "[project]/src/components/tabs/HomeTab.tsx",
-                        lineNumber: 60,
+                        lineNumber: 63,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$NewsFeed$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                         fileName: "[project]/src/components/tabs/HomeTab.tsx",
-                        lineNumber: 61,
+                        lineNumber: 64,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/tabs/HomeTab.tsx",
-                lineNumber: 59,
+                lineNumber: 62,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/tabs/HomeTab.tsx",
-        lineNumber: 23,
+        lineNumber: 26,
         columnNumber: 5
     }, this);
 }
-_s(HomeTab, "/jm+XmndjAYlDCFyCnfFEXJOloU=");
+_s(HomeTab, "DrgdGJvXvybJPi/eNeQis16R8MM=", false, function() {
+    return [
+        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$useSartStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSartStore"]
+    ];
+});
 _c = HomeTab;
 var _c;
 __turbopack_context__.k.register(_c, "HomeTab");
@@ -11055,13 +11071,16 @@ __turbopack_context__.s([
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$useSartStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/store/useSartStore.ts [app-client] (ecmascript)");
 ;
 var _s = __turbopack_context__.k.signature();
 'use client';
 ;
 ;
+;
 function ProfileTab() {
     _s();
+    const { activeTab } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$useSartStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSartStore"])();
     const [mounted, setMounted] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "ProfileTab.useEffect": ()=>{
@@ -11072,7 +11091,7 @@ function ProfileTab() {
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         dangerouslySetInnerHTML: {
             __html: `      <!-- 5. PROFILE TAB (Premium Redesign) -->
-      <section class="tab-screen" id="tab-profile">
+      <section class="tab-screen ${activeTab === 'profile' ? 'active' : ''}" id="tab-profile">
         <div class="profile-container">
           
           <div class="profile-card">
@@ -11206,11 +11225,15 @@ function ProfileTab() {
         }
     }, void 0, false, {
         fileName: "[project]/src/components/tabs/ProfileTab.tsx",
-        lineNumber: 16,
+        lineNumber: 19,
         columnNumber: 5
     }, this);
 }
-_s(ProfileTab, "LrrVfNW3d1raFE0BNzCTILYmIfo=");
+_s(ProfileTab, "Nj6VtXdxTGK5pTfoA96a+qfZi4o=", false, function() {
+    return [
+        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$useSartStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSartStore"]
+    ];
+});
 _c = ProfileTab;
 var _c;
 __turbopack_context__.k.register(_c, "ProfileTab");
@@ -11227,138 +11250,783 @@ __turbopack_context__.s([
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$useSartStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/store/useSartStore.ts [app-client] (ecmascript)");
 ;
 var _s = __turbopack_context__.k.signature();
 'use client';
 ;
 ;
+;
 function StoreTab() {
     _s();
+    const { activeTab } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$useSartStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSartStore"])();
     const [mounted, setMounted] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [cart, setCart] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "StoreTab.useEffect": ()=>{
+            // Load state from localStorage if exists
+            const saved = localStorage.getItem('sart_web_state');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    if (parsed.cart) {
+                        setCart(parsed.cart || []);
+                    }
+                } catch (e) {}
+            }
             setMounted(true);
         }
     }["StoreTab.useEffect"], []);
-    if (!mounted) return null;
-    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        dangerouslySetInnerHTML: {
-            __html: `      <!-- 3. PREMIUM SART STORE TAB -->
-      <section class="tab-screen" id="tab-store">
-        <div class="store-container">
-          
-          <div class="store-hero">
-            <div class="store-hero-text">
-              <h1>SART Smart Store</h1>
-              <p>Enhance your commute with certified telemetry upgrades, advanced diagnostics, and premium vehicle accessories.</p>
-            </div>
-            <div class="store-hero-image">🔋</div>
-          </div>
-          
-          <div class="store-grid-layout">
-            <!-- Left Products Section -->
-            <div class="store-products-section">
-              <div>
-                <h3 class="store-category-title">Popular Accessories</h3>
-                <div class="store-products-grid">
-                  <!-- Card 1 -->
-                  <div class="store-product-card">
-                    <span class="product-badge">Top Seller</span>
-                    <div class="product-image-container">⚡</div>
-                    <div class="product-info">
-                      <h3>Smart Fast Charger Pro</h3>
-                      <p>Ultra-compact 7.2kW AC home charger with auto battery cut-off and mobile app telemetry link.</p>
-                    </div>
-                    <div class="product-footer">
-                      <span class="product-price">₹18,500</span>
-                      <button class="product-buy-btn" onclick="addStoreItemToCart('Smart Fast Charger Pro', 18500)">Add to Cart</button>
-                    </div>
-                  </div>
-                  <!-- Card 2 -->
-                  <div class="store-product-card">
-                    <span class="product-badge">New</span>
-                    <div class="product-image-container">🧭</div>
-                    <div class="product-info">
-                      <h3>GPS Tracker Pro</h3>
-                      <p>Anti-theft satellite-linked tracker featuring real-time geofence alerts and remote engine lock.</p>
-                    </div>
-                    <div class="product-footer">
-                      <span class="product-price">₹4,200</span>
-                      <button class="product-buy-btn" onclick="addStoreItemToCart('GPS Tracker Pro', 4200)">Add to Cart</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div>
-                <h3 class="store-category-title">Safety & Comfort</h3>
-                <div class="store-products-grid">
-                  <!-- Card 3 -->
-                  <div class="store-product-card">
-                    <span class="product-badge">Safety</span>
-                    <div class="product-image-container">🛞</div>
-                    <div class="product-info">
-                      <h3>Smart Tire Pressure Gauge</h3>
-                      <p>Bluetooth tire valve caps displaying precise PSI diagnostics directly on SART AI dashboard.</p>
-                    </div>
-                    <div class="product-footer">
-                      <span class="product-price">₹2,800</span>
-                      <button class="product-buy-btn" onclick="addStoreItemToCart('Smart Tire Pressure Gauge', 2800)">Add to Cart</button>
-                    </div>
-                  </div>
-                  <!-- Card 4 -->
-                  <div class="store-product-card">
-                    <span class="product-badge">Upgrade</span>
-                    <div class="product-image-container">🛋️</div>
-                    <div class="product-info">
-                      <h3>Chauffeur Comfort Cushion</h3>
-                      <p>Ergonomic memory foam cushion with orthopedic support, tailor-made for long distance trips.</p>
-                    </div>
-                    <div class="product-footer">
-                      <span class="product-price">₹1,950</span>
-                      <button class="product-buy-btn" onclick="addStoreItemToCart('Chauffeur Comfort Cushion', 1950)">Add to Cart</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Right Cart Panel -->
-            <div class="store-cart-panel">
-              <div class="cart-header">
-                <h3>Shopping Cart</h3>
-                <i class="fa-solid fa-cart-shopping" style="color: var(--primary);"></i>
-              </div>
-              <div class="cart-items-list" id="store-cart-items">
-                <!-- Cart items list dynamically populated -->
-                <div style="text-align: center; color: var(--text-secondary); padding: 30px; font-size:12px;">Your cart is empty.</div>
-              </div>
-              <div class="cart-totals">
-                <div class="cart-total-row">
-                  <span>Subtotal</span>
-                  <span id="store-cart-subtotal">₹0.00</span>
-                </div>
-                <div class="cart-total-row" style="font-weight: 800; border-top: 1px solid var(--dark-border); padding-top: 10px; margin-top: 5px;">
-                  <span>Grand Total</span>
-                  <span id="store-cart-total" style="color: var(--primary);">₹0.00</span>
-                </div>
-              </div>
-              <button class="checkout-btn" onclick="checkoutStoreCart()">Pay via SART Wallet</button>
-            </div>
-          </div>
-          
-        </div>
-      </section>
-      
-`
+    // Save to localStorage whenever state changes
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "StoreTab.useEffect": ()=>{
+            if (!mounted) return;
+            const saved = localStorage.getItem('sart_web_state');
+            let parsed = {};
+            if (saved) {
+                try {
+                    parsed = JSON.parse(saved);
+                } catch (e) {}
+            }
+            parsed = {
+                ...parsed,
+                cart
+            };
+            localStorage.setItem('sart_web_state', JSON.stringify(parsed));
         }
+    }["StoreTab.useEffect"], [
+        cart,
+        mounted
+    ]);
+    const addToCart = (name, price)=>{
+        setCart((prev)=>{
+            const existing = prev.find((item)=>item.name === name);
+            if (existing) {
+                return prev.map((item)=>item.name === name ? {
+                        ...item,
+                        qty: item.qty + 1
+                    } : item);
+            }
+            return [
+                ...prev,
+                {
+                    name,
+                    price,
+                    qty: 1
+                }
+            ];
+        });
+    };
+    const removeFromCart = (name)=>{
+        setCart((prev)=>prev.filter((item)=>item.name !== name));
+    };
+    const subtotal = cart.reduce((sum, item)=>sum + item.price * item.qty, 0);
+    const checkoutStoreCart = ()=>{
+        if (cart.length === 0) {
+            alert("Cart is empty!");
+            return;
+        }
+        // Check wallet balance
+        const saved = localStorage.getItem('sart_web_state');
+        let parsed = {};
+        if (saved) {
+            try {
+                parsed = JSON.parse(saved);
+            } catch (e) {}
+        }
+        if (!parsed.wallet) {
+            alert("Wallet not initialized.");
+            return;
+        }
+        if (parsed.wallet.balance < subtotal) {
+            alert(`Insufficient Wallet Balance! You need ₹${subtotal.toFixed(2)}`);
+            return;
+        }
+        // Deduct balance, clear cart
+        parsed.wallet.balance -= subtotal;
+        parsed.wallet.transactions.unshift({
+            id: `tx-${Date.now()}`,
+            title: 'Store Checkout: ' + cart.length + ' Items',
+            amount: subtotal,
+            date: new Date().toLocaleString(),
+            isCredit: false,
+            category: 'Store'
+        });
+        setCart([]);
+        parsed.cart = [];
+        localStorage.setItem('sart_web_state', JSON.stringify(parsed));
+        // Dispatch a custom event in case wallet page needs to re-render
+        window.dispatchEvent(new Event('storage'));
+        alert(`Checkout successful! ₹${subtotal.toFixed(2)} deducted from your wallet.`);
+    };
+    if (!mounted) return null;
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
+        className: `tab-screen ${activeTab === 'store' ? 'active' : ''}`,
+        id: "tab-store",
+        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            className: "store-container",
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "store-hero",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "store-hero-text",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
+                                    children: "SART Smart Store"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                    lineNumber: 110,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    children: "Enhance your commute with certified telemetry upgrades, advanced diagnostics, and premium vehicle accessories."
+                                }, void 0, false, {
+                                    fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                    lineNumber: 111,
+                                    columnNumber: 13
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                            lineNumber: 109,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "store-hero-image",
+                            children: "🔋"
+                        }, void 0, false, {
+                            fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                            lineNumber: 113,
+                            columnNumber: 11
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                    lineNumber: 108,
+                    columnNumber: 9
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "store-grid-layout",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "store-products-section",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                            className: "store-category-title",
+                                            children: "Popular Accessories"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                            lineNumber: 120,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "store-products-grid",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    className: "store-product-card",
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                            className: "product-badge",
+                                                            children: "Top Seller"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                            lineNumber: 124,
+                                                            columnNumber: 19
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            className: "product-image-container",
+                                                            children: "⚡"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                            lineNumber: 125,
+                                                            columnNumber: 19
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            className: "product-info",
+                                                            children: [
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                                                    children: "Smart Fast Charger Pro"
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                                    lineNumber: 127,
+                                                                    columnNumber: 21
+                                                                }, this),
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                                    children: "Ultra-compact 7.2kW AC home charger with auto battery cut-off and mobile app telemetry link."
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                                    lineNumber: 128,
+                                                                    columnNumber: 21
+                                                                }, this)
+                                                            ]
+                                                        }, void 0, true, {
+                                                            fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                            lineNumber: 126,
+                                                            columnNumber: 19
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            className: "product-footer",
+                                                            children: [
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                    className: "product-price",
+                                                                    children: "₹18,500"
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                                    lineNumber: 131,
+                                                                    columnNumber: 21
+                                                                }, this),
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                                    className: "product-buy-btn",
+                                                                    onClick: ()=>addToCart('Smart Fast Charger Pro', 18500),
+                                                                    children: "Add to Cart"
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                                    lineNumber: 132,
+                                                                    columnNumber: 21
+                                                                }, this)
+                                                            ]
+                                                        }, void 0, true, {
+                                                            fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                            lineNumber: 130,
+                                                            columnNumber: 19
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                    lineNumber: 123,
+                                                    columnNumber: 17
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    className: "store-product-card",
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                            className: "product-badge",
+                                                            children: "New"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                            lineNumber: 137,
+                                                            columnNumber: 19
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            className: "product-image-container",
+                                                            children: "🧭"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                            lineNumber: 138,
+                                                            columnNumber: 19
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            className: "product-info",
+                                                            children: [
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                                                    children: "GPS Tracker Pro"
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                                    lineNumber: 140,
+                                                                    columnNumber: 21
+                                                                }, this),
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                                    children: "Anti-theft satellite-linked tracker featuring real-time geofence alerts and remote engine lock."
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                                    lineNumber: 141,
+                                                                    columnNumber: 21
+                                                                }, this)
+                                                            ]
+                                                        }, void 0, true, {
+                                                            fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                            lineNumber: 139,
+                                                            columnNumber: 19
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            className: "product-footer",
+                                                            children: [
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                    className: "product-price",
+                                                                    children: "₹4,200"
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                                    lineNumber: 144,
+                                                                    columnNumber: 21
+                                                                }, this),
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                                    className: "product-buy-btn",
+                                                                    onClick: ()=>addToCart('GPS Tracker Pro', 4200),
+                                                                    children: "Add to Cart"
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                                    lineNumber: 145,
+                                                                    columnNumber: 21
+                                                                }, this)
+                                                            ]
+                                                        }, void 0, true, {
+                                                            fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                            lineNumber: 143,
+                                                            columnNumber: 19
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                    lineNumber: 136,
+                                                    columnNumber: 17
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                            lineNumber: 121,
+                                            columnNumber: 15
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                    lineNumber: 119,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                            className: "store-category-title",
+                                            children: "Safety & Comfort"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                            lineNumber: 152,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "store-products-grid",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    className: "store-product-card",
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                            className: "product-badge",
+                                                            children: "Safety"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                            lineNumber: 156,
+                                                            columnNumber: 19
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            className: "product-image-container",
+                                                            children: "🛞"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                            lineNumber: 157,
+                                                            columnNumber: 19
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            className: "product-info",
+                                                            children: [
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                                                    children: "Smart Tire Pressure Gauge"
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                                    lineNumber: 159,
+                                                                    columnNumber: 21
+                                                                }, this),
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                                    children: "Bluetooth tire valve caps displaying precise PSI diagnostics directly on SART AI dashboard."
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                                    lineNumber: 160,
+                                                                    columnNumber: 21
+                                                                }, this)
+                                                            ]
+                                                        }, void 0, true, {
+                                                            fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                            lineNumber: 158,
+                                                            columnNumber: 19
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            className: "product-footer",
+                                                            children: [
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                    className: "product-price",
+                                                                    children: "₹2,800"
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                                    lineNumber: 163,
+                                                                    columnNumber: 21
+                                                                }, this),
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                                    className: "product-buy-btn",
+                                                                    onClick: ()=>addToCart('Smart Tire Pressure Gauge', 2800),
+                                                                    children: "Add to Cart"
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                                    lineNumber: 164,
+                                                                    columnNumber: 21
+                                                                }, this)
+                                                            ]
+                                                        }, void 0, true, {
+                                                            fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                            lineNumber: 162,
+                                                            columnNumber: 19
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                    lineNumber: 155,
+                                                    columnNumber: 17
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    className: "store-product-card",
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                            className: "product-badge",
+                                                            children: "Upgrade"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                            lineNumber: 169,
+                                                            columnNumber: 19
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            className: "product-image-container",
+                                                            children: "🛋️"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                            lineNumber: 170,
+                                                            columnNumber: 19
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            className: "product-info",
+                                                            children: [
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                                                    children: "Chauffeur Comfort Cushion"
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                                    lineNumber: 172,
+                                                                    columnNumber: 21
+                                                                }, this),
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                                    children: "Ergonomic memory foam cushion with orthopedic support, tailor-made for long distance trips."
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                                    lineNumber: 173,
+                                                                    columnNumber: 21
+                                                                }, this)
+                                                            ]
+                                                        }, void 0, true, {
+                                                            fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                            lineNumber: 171,
+                                                            columnNumber: 19
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            className: "product-footer",
+                                                            children: [
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                    className: "product-price",
+                                                                    children: "₹1,950"
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                                    lineNumber: 176,
+                                                                    columnNumber: 21
+                                                                }, this),
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                                    className: "product-buy-btn",
+                                                                    onClick: ()=>addToCart('Chauffeur Comfort Cushion', 1950),
+                                                                    children: "Add to Cart"
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                                    lineNumber: 177,
+                                                                    columnNumber: 21
+                                                                }, this)
+                                                            ]
+                                                        }, void 0, true, {
+                                                            fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                            lineNumber: 175,
+                                                            columnNumber: 19
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                    lineNumber: 168,
+                                                    columnNumber: 17
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                            lineNumber: 153,
+                                            columnNumber: 15
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                    lineNumber: 151,
+                                    columnNumber: 13
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                            lineNumber: 118,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "store-cart-panel",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "cart-header",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                            children: "Shopping Cart"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                            lineNumber: 187,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("i", {
+                                            className: "fa-solid fa-cart-shopping",
+                                            style: {
+                                                color: 'var(--primary)'
+                                            }
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                            lineNumber: 188,
+                                            columnNumber: 15
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                    lineNumber: 186,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "cart-items-list",
+                                    children: cart.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        style: {
+                                            textAlign: 'center',
+                                            color: 'var(--text-secondary)',
+                                            padding: '30px',
+                                            fontSize: '12px'
+                                        },
+                                        children: "Your cart is empty."
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                        lineNumber: 192,
+                                        columnNumber: 17
+                                    }, this) : cart.map((item)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            style: {
+                                                display: 'flex',
+                                                justifyContent: 'space-between',
+                                                alignItems: 'center',
+                                                marginBottom: '12px',
+                                                paddingBottom: '12px',
+                                                borderBottom: '1px solid #e2e8f0'
+                                            },
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            style: {
+                                                                fontSize: '14px',
+                                                                fontWeight: '700',
+                                                                color: '#1e293b'
+                                                            },
+                                                            children: item.name
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                            lineNumber: 197,
+                                                            columnNumber: 23
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            style: {
+                                                                fontSize: '12px',
+                                                                color: '#64748b'
+                                                            },
+                                                            children: [
+                                                                "₹",
+                                                                item.price,
+                                                                " x ",
+                                                                item.qty
+                                                            ]
+                                                        }, void 0, true, {
+                                                            fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                            lineNumber: 198,
+                                                            columnNumber: 23
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                    lineNumber: 196,
+                                                    columnNumber: 21
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    style: {
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        gap: '8px'
+                                                    },
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                            style: {
+                                                                fontSize: '14px',
+                                                                fontWeight: '800',
+                                                                color: '#1e293b'
+                                                            },
+                                                            children: [
+                                                                "₹",
+                                                                item.price * item.qty
+                                                            ]
+                                                        }, void 0, true, {
+                                                            fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                            lineNumber: 201,
+                                                            columnNumber: 23
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                            onClick: ()=>removeFromCart(item.name),
+                                                            style: {
+                                                                background: 'none',
+                                                                border: 'none',
+                                                                color: '#ef4444',
+                                                                cursor: 'pointer',
+                                                                padding: '4px'
+                                                            },
+                                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("i", {
+                                                                className: "fa-solid fa-trash"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                                lineNumber: 202,
+                                                                columnNumber: 173
+                                                            }, this)
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                            lineNumber: 202,
+                                                            columnNumber: 23
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                    lineNumber: 200,
+                                                    columnNumber: 21
+                                                }, this)
+                                            ]
+                                        }, item.name, true, {
+                                            fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                            lineNumber: 195,
+                                            columnNumber: 19
+                                        }, this))
+                                }, void 0, false, {
+                                    fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                    lineNumber: 190,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "cart-totals",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "cart-total-row",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                    children: "Subtotal"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                    lineNumber: 210,
+                                                    columnNumber: 17
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                    children: [
+                                                        "₹",
+                                                        subtotal.toLocaleString('en-IN', {
+                                                            minimumFractionDigits: 2,
+                                                            maximumFractionDigits: 2
+                                                        })
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                    lineNumber: 211,
+                                                    columnNumber: 17
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                            lineNumber: 209,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "cart-total-row",
+                                            style: {
+                                                fontWeight: 800,
+                                                borderTop: '1px solid var(--dark-border)',
+                                                paddingTop: '10px',
+                                                marginTop: '5px'
+                                            },
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                    children: "Grand Total"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                    lineNumber: 214,
+                                                    columnNumber: 17
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                    style: {
+                                                        color: 'var(--primary)'
+                                                    },
+                                                    children: [
+                                                        "₹",
+                                                        subtotal.toLocaleString('en-IN', {
+                                                            minimumFractionDigits: 2,
+                                                            maximumFractionDigits: 2
+                                                        })
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                                    lineNumber: 215,
+                                                    columnNumber: 17
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                            lineNumber: 213,
+                                            columnNumber: 15
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                    lineNumber: 208,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                    className: "checkout-btn",
+                                    onClick: checkoutStoreCart,
+                                    children: "Pay via SART Wallet"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                                    lineNumber: 218,
+                                    columnNumber: 13
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                            lineNumber: 185,
+                            columnNumber: 11
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/src/components/tabs/StoreTab.tsx",
+                    lineNumber: 116,
+                    columnNumber: 9
+                }, this)
+            ]
+        }, void 0, true, {
+            fileName: "[project]/src/components/tabs/StoreTab.tsx",
+            lineNumber: 106,
+            columnNumber: 7
+        }, this)
     }, void 0, false, {
         fileName: "[project]/src/components/tabs/StoreTab.tsx",
-        lineNumber: 16,
+        lineNumber: 105,
         columnNumber: 5
     }, this);
 }
-_s(StoreTab, "LrrVfNW3d1raFE0BNzCTILYmIfo=");
+_s(StoreTab, "WlGJ+5Sfe32mNxHd9V6KN0tkfX8=", false, function() {
+    return [
+        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$useSartStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSartStore"]
+    ];
+});
 _c = StoreTab;
 var _c;
 __turbopack_context__.k.register(_c, "StoreTab");
@@ -11375,111 +12043,790 @@ __turbopack_context__.s([
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$useSartStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/store/useSartStore.ts [app-client] (ecmascript)");
 ;
 var _s = __turbopack_context__.k.signature();
 'use client';
 ;
 ;
+;
 function WalletTab() {
     _s();
+    const { activeTab } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$useSartStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSartStore"])();
     const [mounted, setMounted] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    // Wallet State
+    const [balance, setBalance] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(15000.00);
+    const [points, setPoints] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(2450);
+    const [cashback, setCashback] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(350.00);
+    const [transactions, setTransactions] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
+    // Form State
+    const [depositAmount, setDepositAmount] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(5000);
+    const [depositSource, setDepositSource] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('Visa (last 4: 4242)');
+    const [transferRecipient, setTransferRecipient] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('rajesh.kumar@upi');
+    const [transferAmount, setTransferAmount] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(1000);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "WalletTab.useEffect": ()=>{
+            // Load state from localStorage if exists
+            const saved = localStorage.getItem('sart_web_state');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    if (parsed.wallet) {
+                        setBalance(parsed.wallet.balance || 0);
+                        setPoints(parsed.wallet.points || 0);
+                        setCashback(parsed.wallet.cashback || 0);
+                        setTransactions(parsed.wallet.transactions || []);
+                    }
+                } catch (e) {}
+            } else {
+                // Default transactions if no save state
+                setTransactions([
+                    {
+                        id: 'tx-001',
+                        title: 'Airport Taxi Booking',
+                        amount: 800.00,
+                        date: 'Sept 25, 2026, 10:00 AM',
+                        isCredit: false,
+                        category: 'Ride'
+                    },
+                    {
+                        id: 'tx-002',
+                        title: 'Tire Air Replacement Kit',
+                        amount: 3500.00,
+                        date: 'Sept 20, 2026, 03:30 PM',
+                        isCredit: false,
+                        category: 'Store'
+                    },
+                    {
+                        id: 'tx-003',
+                        title: 'Visa Top-up Loaded',
+                        amount: 10000.00,
+                        date: 'Sept 15, 2026, 09:15 AM',
+                        isCredit: true,
+                        category: 'Deposit'
+                    }
+                ]);
+            }
             setMounted(true);
         }
     }["WalletTab.useEffect"], []);
-    if (!mounted) return null;
-    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        dangerouslySetInnerHTML: {
-            __html: `      <!-- 4. SUPER WALLET TAB -->
-      <section class="tab-screen" id="tab-wallet">
-        <div class="wallet-page-layout">
-          
-          <div class="wallet-dashboard-col">
-            <div class="dashboard-card wallet-card-wide">
-              <div class="wallet-page-header">
-                <h2>Super Wallet Dashboard</h2>
-                <span class="gold-tier-badge">GOLD ELITE MEMBER</span>
-              </div>
-              
-              <div class="wallet-page-metrics">
-                <div class="wallet-metric-box">
-                  <span class="lbl">Available Balance</span>
-                  <h1 class="val" id="wallet-pg-balance">₹15,000.00</h1>
-                  <span class="subtext">Secure escrow holding</span>
-                </div>
-                <div class="wallet-metric-box">
-                  <span class="lbl">Loyalty Points</span>
-                  <h1 class="val" style="color:var(--secondary);" id="wallet-pg-points">2,450 pts</h1>
-                  <span class="subtext">Claim details under profile</span>
-                </div>
-                <div class="wallet-metric-box">
-                  <span class="lbl">Accumulated Cashback</span>
-                  <h1 class="val" style="color:var(--success);" id="wallet-pg-cashback">₹350.00</h1>
-                  <button class="claim-btn" onclick="claimCashbackMoney()">Claim to Balance</button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Wallet Forms row -->
-            <div class="wallet-forms-row">
-              <div class="dashboard-card" style="flex: 1;">
-                <h3><i class="fa-solid fa-plus" style="color:var(--success);"></i> Load Funds</h3>
-                <p style="font-size:11px; color:var(--text-secondary); margin-bottom:12px;">Add instant digital currency to your wallet balance.</p>
-                
-                <div class="form-group">
-                  <label>Amount to Deposit (INR)</label>
-                  <input type="number" class="input-field" id="wallet-pg-deposit-amount" value="5000">
-                </div>
-                <div class="form-group">
-                  <label>Payment Source Card</label>
-                  <select class="input-field select-field" id="wallet-pg-deposit-source">
-                    <option value="Visa (last 4: 4242)">Visa •••• 4242</option>
-                    <option value="Mastercard (last 4: 8839)">Mastercard •••• 8839</option>
-                  </select>
-                </div>
-                <button class="action-btn" onclick="executeWalletPageDeposit()">Process Deposit</button>
-              </div>
-
-              <div class="dashboard-card" style="flex: 1;">
-                <h3><i class="fa-solid fa-paper-plane" style="color:var(--primary);"></i> Send Money (UPI)</h3>
-                <p style="font-size:11px; color:var(--text-secondary); margin-bottom:12px;">Transfer funds immediately to any UPI ID or account number.</p>
-                
-                <div class="form-group">
-                  <label>Recipient Address</label>
-                  <input type="text" class="input-field" id="wallet-pg-transfer-recipient" placeholder="upi-id@bank or account no" value="rajesh.kumar@upi">
-                </div>
-                <div class="form-group">
-                  <label>Amount to Send (INR)</label>
-                  <input type="number" class="input-field" id="wallet-pg-transfer-amount" value="1000">
-                </div>
-                <button class="action-btn" onclick="executeWalletPageTransfer()">Transfer Funds</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="wallet-history-col">
-            <div class="dashboard-card" style="height: 100%; display: flex; flex-direction: column;">
-              <h3>Recent Transaction Registry</h3>
-              <p style="font-size:11px; color:var(--text-secondary); margin-bottom:14px;">Audit log of recent wallet charges and top-ups.</p>
-              <div class="transactions-full-list" id="wallet-pg-transactions-list" style="flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:10px;">
-                <!-- Dynamically loaded -->
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </section>
-      
-`
+    // Save to localStorage whenever state changes
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "WalletTab.useEffect": ()=>{
+            if (!mounted) return;
+            const saved = localStorage.getItem('sart_web_state');
+            let parsed = {};
+            if (saved) {
+                try {
+                    parsed = JSON.parse(saved);
+                } catch (e) {}
+            }
+            parsed = {
+                ...parsed,
+                wallet: {
+                    balance,
+                    points,
+                    cashback,
+                    transactions
+                }
+            };
+            localStorage.setItem('sart_web_state', JSON.stringify(parsed));
         }
+    }["WalletTab.useEffect"], [
+        balance,
+        points,
+        cashback,
+        transactions,
+        mounted
+    ]);
+    const claimCashbackMoney = ()=>{
+        if (cashback <= 0) {
+            alert("No cashback available to claim.");
+            return;
+        }
+        setBalance((prev)=>prev + cashback);
+        const tx = {
+            id: 'tx-' + Math.random().toString(36).substring(2, 9),
+            title: 'Cashback Claimed',
+            amount: cashback,
+            date: new Date().toLocaleString(),
+            isCredit: true,
+            category: 'System'
+        };
+        setTransactions((prev)=>[
+                tx,
+                ...prev
+            ]);
+        setCashback(0);
+        alert("Cashback claimed successfully!");
+    };
+    const executeWalletPageDeposit = ()=>{
+        if (depositAmount <= 0) {
+            alert("Please enter a valid deposit amount.");
+            return;
+        }
+        setBalance((prev)=>prev + depositAmount);
+        const tx = {
+            id: 'tx-' + Math.random().toString(36).substring(2, 9),
+            title: 'Funds Deposited via ' + depositSource.split(' ')[0],
+            amount: depositAmount,
+            date: new Date().toLocaleString(),
+            isCredit: true,
+            category: 'Deposit'
+        };
+        setTransactions((prev)=>[
+                tx,
+                ...prev
+            ]);
+        setDepositAmount(0);
+        alert(`Successfully deposited ₹${depositAmount.toFixed(2)}`);
+    };
+    const executeWalletPageTransfer = ()=>{
+        if (transferAmount <= 0) {
+            alert("Please enter a valid transfer amount.");
+            return;
+        }
+        if (balance < transferAmount) {
+            alert("Insufficient wallet balance for this transfer!");
+            return;
+        }
+        setBalance((prev)=>prev - transferAmount);
+        const tx = {
+            id: 'tx-' + Math.random().toString(36).substring(2, 9),
+            title: 'Transfer to ' + transferRecipient,
+            amount: transferAmount,
+            date: new Date().toLocaleString(),
+            isCredit: false,
+            category: 'Transfer'
+        };
+        setTransactions((prev)=>[
+                tx,
+                ...prev
+            ]);
+        setTransferAmount(0);
+        alert(`Successfully transferred ₹${transferAmount.toFixed(2)} to ${transferRecipient}`);
+    };
+    if (!mounted) return null;
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
+        className: `tab-screen ${activeTab === 'wallet' ? 'active' : ''}`,
+        id: "tab-wallet",
+        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            className: "wallet-page-layout",
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "wallet-dashboard-col",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "dashboard-card wallet-card-wide",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "wallet-page-header",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                                            children: "Super Wallet Dashboard"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                            lineNumber: 135,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            className: "gold-tier-badge",
+                                            children: "GOLD ELITE MEMBER"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                            lineNumber: 136,
+                                            columnNumber: 15
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                    lineNumber: 134,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "wallet-page-metrics",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "wallet-metric-box",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                    className: "lbl",
+                                                    children: "Available Balance"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                                    lineNumber: 141,
+                                                    columnNumber: 17
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
+                                                    className: "val",
+                                                    children: [
+                                                        "₹",
+                                                        balance.toLocaleString('en-IN', {
+                                                            minimumFractionDigits: 2,
+                                                            maximumFractionDigits: 2
+                                                        })
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                                    lineNumber: 142,
+                                                    columnNumber: 17
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                    className: "subtext",
+                                                    children: "Secure escrow holding"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                                    lineNumber: 143,
+                                                    columnNumber: 17
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                            lineNumber: 140,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "wallet-metric-box",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                    className: "lbl",
+                                                    children: "Loyalty Points"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                                    lineNumber: 146,
+                                                    columnNumber: 17
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
+                                                    className: "val",
+                                                    style: {
+                                                        color: 'var(--secondary)'
+                                                    },
+                                                    children: [
+                                                        points.toLocaleString('en-IN'),
+                                                        " pts"
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                                    lineNumber: 147,
+                                                    columnNumber: 17
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                    className: "subtext",
+                                                    children: "Claim details under profile"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                                    lineNumber: 148,
+                                                    columnNumber: 17
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                            lineNumber: 145,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "wallet-metric-box",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                    className: "lbl",
+                                                    children: "Accumulated Cashback"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                                    lineNumber: 151,
+                                                    columnNumber: 17
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
+                                                    className: "val",
+                                                    style: {
+                                                        color: 'var(--success)'
+                                                    },
+                                                    children: [
+                                                        "₹",
+                                                        cashback.toLocaleString('en-IN', {
+                                                            minimumFractionDigits: 2,
+                                                            maximumFractionDigits: 2
+                                                        })
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                                    lineNumber: 152,
+                                                    columnNumber: 17
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                    className: "claim-btn",
+                                                    onClick: claimCashbackMoney,
+                                                    children: "Claim to Balance"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                                    lineNumber: 153,
+                                                    columnNumber: 17
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                            lineNumber: 150,
+                                            columnNumber: 15
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                    lineNumber: 139,
+                                    columnNumber: 13
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                            lineNumber: 133,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "wallet-forms-row",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "dashboard-card",
+                                    style: {
+                                        flex: 1
+                                    },
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("i", {
+                                                    className: "fa-solid fa-plus",
+                                                    style: {
+                                                        color: 'var(--success)'
+                                                    }
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                                    lineNumber: 161,
+                                                    columnNumber: 19
+                                                }, this),
+                                                " Load Funds"
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                            lineNumber: 161,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                            style: {
+                                                fontSize: '11px',
+                                                color: 'var(--text-secondary)',
+                                                marginBottom: '12px'
+                                            },
+                                            children: "Add instant digital currency to your wallet balance."
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                            lineNumber: 162,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "form-group",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                    children: "Amount to Deposit (INR)"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                                    lineNumber: 165,
+                                                    columnNumber: 17
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                    type: "number",
+                                                    className: "input-field",
+                                                    value: depositAmount || '',
+                                                    onChange: (e)=>setDepositAmount(Number(e.target.value))
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                                    lineNumber: 166,
+                                                    columnNumber: 17
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                            lineNumber: 164,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "form-group",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                    children: "Payment Source Card"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                                    lineNumber: 174,
+                                                    columnNumber: 17
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
+                                                    className: "input-field select-field",
+                                                    value: depositSource,
+                                                    onChange: (e)=>setDepositSource(e.target.value),
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                            value: "Visa (last 4: 4242)",
+                                                            children: "Visa •••• 4242"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                                            lineNumber: 180,
+                                                            columnNumber: 19
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                            value: "Mastercard (last 4: 8839)",
+                                                            children: "Mastercard •••• 8839"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                                            lineNumber: 181,
+                                                            columnNumber: 19
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                                    lineNumber: 175,
+                                                    columnNumber: 17
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                            lineNumber: 173,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                            className: "action-btn",
+                                            onClick: executeWalletPageDeposit,
+                                            children: "Process Deposit"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                            lineNumber: 184,
+                                            columnNumber: 15
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                    lineNumber: 160,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "dashboard-card",
+                                    style: {
+                                        flex: 1
+                                    },
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("i", {
+                                                    className: "fa-solid fa-paper-plane",
+                                                    style: {
+                                                        color: 'var(--primary)'
+                                                    }
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                                    lineNumber: 188,
+                                                    columnNumber: 19
+                                                }, this),
+                                                " Send Money (UPI)"
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                            lineNumber: 188,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                            style: {
+                                                fontSize: '11px',
+                                                color: 'var(--text-secondary)',
+                                                marginBottom: '12px'
+                                            },
+                                            children: "Transfer funds immediately to any UPI ID or account number."
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                            lineNumber: 189,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "form-group",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                    children: "Recipient Address"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                                    lineNumber: 192,
+                                                    columnNumber: 17
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                    type: "text",
+                                                    className: "input-field",
+                                                    placeholder: "upi-id@bank or account no",
+                                                    value: transferRecipient,
+                                                    onChange: (e)=>setTransferRecipient(e.target.value)
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                                    lineNumber: 193,
+                                                    columnNumber: 17
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                            lineNumber: 191,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "form-group",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                    children: "Amount to Send (INR)"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                                    lineNumber: 202,
+                                                    columnNumber: 17
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                    type: "number",
+                                                    className: "input-field",
+                                                    value: transferAmount || '',
+                                                    onChange: (e)=>setTransferAmount(Number(e.target.value))
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                                    lineNumber: 203,
+                                                    columnNumber: 17
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                            lineNumber: 201,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                            className: "action-btn",
+                                            onClick: executeWalletPageTransfer,
+                                            children: "Transfer Funds"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                            lineNumber: 210,
+                                            columnNumber: 15
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                    lineNumber: 187,
+                                    columnNumber: 13
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                            lineNumber: 159,
+                            columnNumber: 11
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                    lineNumber: 132,
+                    columnNumber: 9
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "wallet-history-col",
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "dashboard-card",
+                        style: {
+                            height: '100%',
+                            display: 'flex',
+                            flexDirection: 'column'
+                        },
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                children: "Recent Transaction Registry"
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                lineNumber: 217,
+                                columnNumber: 13
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                style: {
+                                    fontSize: '11px',
+                                    color: 'var(--text-secondary)',
+                                    marginBottom: '14px'
+                                },
+                                children: "Audit log of recent wallet charges and top-ups."
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                lineNumber: 218,
+                                columnNumber: 13
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "transactions-full-list",
+                                style: {
+                                    flex: 1,
+                                    overflowY: 'auto',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: '10px'
+                                },
+                                children: transactions.length > 0 ? transactions.map((tx)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        style: {
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'space-between',
+                                            padding: '12px',
+                                            background: '#f8fafc',
+                                            borderRadius: '12px',
+                                            border: '1px solid #e2e8f0'
+                                        },
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                style: {
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    gap: '12px'
+                                                },
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        style: {
+                                                            width: '40px',
+                                                            height: '40px',
+                                                            borderRadius: '50%',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            fontSize: '16px',
+                                                            background: tx.isCredit ? '#dcfce7' : '#f1f5f9',
+                                                            color: tx.isCredit ? '#10b981' : '#64748b'
+                                                        },
+                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("i", {
+                                                            className: `fa-solid ${tx.isCredit ? 'fa-arrow-down' : 'fa-arrow-up'}`
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                                            lineNumber: 225,
+                                                            columnNumber: 25
+                                                        }, this)
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                                        lineNumber: 224,
+                                                        columnNumber: 23
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                style: {
+                                                                    fontSize: '14px',
+                                                                    fontWeight: '700',
+                                                                    color: '#1e293b'
+                                                                },
+                                                                children: tx.title
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                                                lineNumber: 228,
+                                                                columnNumber: 25
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                style: {
+                                                                    fontSize: '12px',
+                                                                    color: '#64748b'
+                                                                },
+                                                                children: [
+                                                                    tx.date,
+                                                                    " • ",
+                                                                    tx.category
+                                                                ]
+                                                            }, void 0, true, {
+                                                                fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                                                lineNumber: 229,
+                                                                columnNumber: 25
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                                        lineNumber: 227,
+                                                        columnNumber: 23
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                                lineNumber: 223,
+                                                columnNumber: 21
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                style: {
+                                                    fontSize: '16px',
+                                                    fontWeight: '800',
+                                                    color: tx.isCredit ? '#10b981' : '#1e293b'
+                                                },
+                                                children: [
+                                                    tx.isCredit ? '+' : '-',
+                                                    "₹",
+                                                    tx.amount.toFixed(2)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                                lineNumber: 232,
+                                                columnNumber: 21
+                                            }, this)
+                                        ]
+                                    }, tx.id, true, {
+                                        fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                        lineNumber: 222,
+                                        columnNumber: 19
+                                    }, this)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    style: {
+                                        textAlign: 'center',
+                                        padding: '40px 0',
+                                        color: '#94a3b8',
+                                        fontSize: '14px'
+                                    },
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("i", {
+                                            className: "fa-solid fa-receipt",
+                                            style: {
+                                                fontSize: '32px',
+                                                marginBottom: '12px',
+                                                opacity: 0.5
+                                            }
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                            lineNumber: 239,
+                                            columnNumber: 19
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
+                                            fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                            lineNumber: 239,
+                                            columnNumber: 123
+                                        }, this),
+                                        "No recent transactions."
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                    lineNumber: 238,
+                                    columnNumber: 17
+                                }, this)
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                                lineNumber: 219,
+                                columnNumber: 13
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                        lineNumber: 216,
+                        columnNumber: 11
+                    }, this)
+                }, void 0, false, {
+                    fileName: "[project]/src/components/tabs/WalletTab.tsx",
+                    lineNumber: 215,
+                    columnNumber: 9
+                }, this)
+            ]
+        }, void 0, true, {
+            fileName: "[project]/src/components/tabs/WalletTab.tsx",
+            lineNumber: 130,
+            columnNumber: 7
+        }, this)
     }, void 0, false, {
         fileName: "[project]/src/components/tabs/WalletTab.tsx",
-        lineNumber: 16,
+        lineNumber: 129,
         columnNumber: 5
     }, this);
 }
-_s(WalletTab, "LrrVfNW3d1raFE0BNzCTILYmIfo=");
+_s(WalletTab, "0ey1Uz4ZoBDDwUh1Ingdlo6r1Zk=", false, function() {
+    return [
+        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$useSartStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSartStore"]
+    ];
+});
 _c = WalletTab;
 var _c;
 __turbopack_context__.k.register(_c, "WalletTab");
@@ -11576,7 +12923,8 @@ const DEFAULT_STATE = {
         }
     ],
     location: "Indiranagar, Bengaluru",
-    activeBookingId: null
+    activeBookingId: null,
+    activeTab: 'home'
 };
 const useSartStore = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zustand$2f$esm$2f$react$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["create"])()((0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zustand$2f$esm$2f$middleware$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["persist"])((set)=>({
         ...DEFAULT_STATE,
@@ -11642,7 +12990,21 @@ const useSartStore = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_mo
             }),
         setActiveBookingId: (id)=>set({
                 activeBookingId: id
-            })
+            }),
+        setActiveTab: (tab)=>{
+            set({
+                activeTab: tab
+            });
+            // Also trigger the legacy Map resize if 'home' is selected
+            if (tab === 'home' && ("TURBOPACK compile-time value", "object") !== 'undefined') {
+                setTimeout(()=>{
+                    if (window.leafletMap) {
+                        window.leafletMap.invalidateSize();
+                        if (window.recenterMap) window.recenterMap();
+                    }
+                }, 200);
+            }
+        }
     }), {
     name: 'sart-storage-v2',
     partialize: (state)=>({

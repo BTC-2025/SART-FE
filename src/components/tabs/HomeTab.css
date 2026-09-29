@@ -1,78 +1,88 @@
 /* ============================================================================
-   TRUCK HERO CONTAINER
+   NEW PANORAMA HERO CONTAINER
    ============================================================================ */
-.truck-hero-container {
+.new-hero-container {
   position: relative;
   width: 100vw;
   left: 50%;
   transform: translateX(-50%);
   margin-top: -32px;
-  /* Pull up more to close top gap */
-  aspect-ratio: 1024 / 384;
-  /* Matches truck-bg.jpg dimensions */
-  background-image: url('/truck-bg.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  border-radius: 0;
-  overflow: hidden;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
   margin-bottom: 32px;
+  background-color: #000;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
 }
 
-/* SubNavbar Overlay (Top Right) */
-.truck-subnav-overlay {
+.hero-subnav-overlay {
   position: absolute;
   top: 8px;
   right: 24px;
   z-index: 100;
-  padding: 4px 8px;
 }
 
-/* Cargo Box Overlay (The Carousel Area) */
-.truck-cargo-overlay {
-  position: absolute;
-  top: 10.5%;
-  left: 11.8%;
-  width: 61%;
-  height: 51.7%;
-  border-radius: 0px;
-  overflow: hidden;
-}
-
-/* Wheels Overlay (The Services Grid) */
-.truck-wheels-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  /* Let clicks pass through except on the wheels */
-}
-
-/* ============================================================================
-   SINGLE SLIDING BANNER (Inside Cargo Overlay)
-   ============================================================================ */
-.hero-sliding-banner {
-  height: 100%;
-  width: 100%;
+.hero-image-wrapper {
   position: relative;
-  background: #000;
-}
-
-.hero-slider-track {
-  display: flex;
-  height: 100%;
   width: 100%;
-  transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+  /* No fixed height, let image dictate */
 }
 
-.hero-slide-item {
-  min-width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-position: center;
+.hero-panorama-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Invisible clickable areas mapped over the image */
+.hero-click-area {
+  position: absolute;
+  cursor: pointer;
+  z-index: 10;
+  border-radius: 20px;
+}
+.hero-click-area:hover {
+  /* No visible effect as requested by user */
+}
+
+/* Enlarged exact coordinates to cover the entire button */
+.area-carrier {
+  top: 42%;
+  left: 15%;
+  width: 12%;
+  height: 9%;
+}
+
+.area-rides {
+  top: 70%;
+  left: 13.5%;
+  width: 12%;
+  height: 9%;
+}
+
+.area-rental {
+  top: 64%;
+  left: 33%;
+  width: 12%;
+  height: 9%;
+}
+
+.area-communities {
+  top: 86%;
+  left: 47%;
+  width: 14%;
+  height: 9%;
+}
+
+.area-parking {
+  top: 58%;
+  left: 75%;
+  width: 12%;
+  height: 9%;
+}
+
+.area-drivers {
+  top: 84%;
+  left: 81%;
+  width: 12%;
+  height: 9%;
 }
 
 
