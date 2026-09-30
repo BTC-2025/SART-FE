@@ -1013,7 +1013,7 @@ function updateUI() {
             <div style="font-size:9px; color:var(--text-secondary); margin-top:2px;">${tx.date}</div>
           </div>
           <span style="font-weight:850; color: ${tx.isCredit ? 'var(--success)' : 'var(--error)'};">
-            ${tx.isCredit ? '+' : '-'}₹${tx.amount.toFixed(0)}
+            ${tx.isCredit ? '+' : '-'}₹{(Number(tx.amount) || 0).toFixed(0)}
           </span>
         </div>
       `;

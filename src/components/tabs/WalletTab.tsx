@@ -230,7 +230,7 @@ export default function WalletTab() {
                       </div>
                     </div>
                     <div style={{ fontSize: '16px', fontWeight: '800', color: tx.isCredit ? '#10b981' : '#1e293b' }}>
-                      {tx.isCredit ? '+' : '-'}₹{tx.amount.toFixed(2)}
+                      {tx.isCredit ? '+' : '-'}₹{(Number(tx.amount) || 0).toFixed(2)}
                     </div>
                   </div>
                 ))

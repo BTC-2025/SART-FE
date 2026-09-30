@@ -86,7 +86,7 @@ export default function BookingsTab() {
                 <p className="booking-details">{booking.details}</p>
                 <div className="booking-card-footer">
                   <span className="booking-date"><i className="fa-regular fa-clock"></i> {booking.dateTime}</span>
-                  <span className="booking-cost">₹{booking.cost.toFixed(2)}</span>
+                  <span className="booking-cost">₹{(Number(booking.cost) || 0).toFixed(2)}</span>
                 </div>
               </div>
             ))
