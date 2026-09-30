@@ -50,8 +50,11 @@ export default function Home() {
         setActiveTab('home');
       } else if (path.startsWith('/home/')) {
         const parts = path.split('/');
-        const tab = parts[2]; // e.g., 'ride', 'carrier'
+        let tab = parts[2]; // e.g., 'ride', 'carrier'
         
+        // Handle plural vs singular mismatches
+        if (tab === 'rides') tab = 'ride';
+
         if (['ride', 'carrier', 'rental', 'drivers', 'community', 'mechanic', 'parking'].includes(tab)) {
           setActiveTab(tab as any);
           
