@@ -131,7 +131,7 @@ export const useSartStore = create<SartStore>()(
         if (typeof window !== 'undefined') {
           // Cosmetic URL update logic
           let newUrl = '/';
-          const topLevelTabs = ['store', 'bookings', 'wallet', 'profile'];
+          const topLevelTabs = ['store', 'booking', 'wallet', 'profile'];
           
           if (topLevelTabs.includes(tab)) {
             newUrl = `/${tab}`;
@@ -140,7 +140,9 @@ export const useSartStore = create<SartStore>()(
             newUrl = `/home/${tab}`;
           }
           
-          window.history.pushState({ tab }, '', newUrl);
+          if (window.location.pathname !== newUrl) {
+            window.history.pushState({ tab }, '', newUrl);
+          }
 
           // Also trigger the legacy Map resize if 'home' is selected
           if (tab === 'home') {

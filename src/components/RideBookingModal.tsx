@@ -1,6 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
+
+const LiveTrackerMap = dynamic(
+  () => import('./LeafletMapClient'),
+  { ssr: false }
+);
 
 // Step 1: Master Categories
 const MASTER_CATEGORIES = [
@@ -19,26 +25,42 @@ const MASTER_CATEGORIES = [
 // Base rates per KM for dynamic pricing
 const VEHICLE_DATABASE: Record<string, any[]> = {
   'bike': [
-    { id: 'pedal', name: 'Pedal Bicycle', icon: 'fa-bicycle', color: '#14b8a6', ratePerKm: 5, capacity: 1, luggage: 0, models: 'Standard Pedal Bike' },
-    { id: 'moto', name: 'Bike / Moto', icon: 'fa-motorcycle', color: '#ff6b6b', ratePerKm: 12, capacity: 1, luggage: 1, models: 'Splendor, Activa, Jupiter' },
-    { id: 'escooter', name: 'Electric Scooter', icon: 'fa-bolt', color: '#10b981', ratePerKm: 8, capacity: 1, luggage: 0, models: 'Ather, Ola S1, TVS iQube' }
+    { id: 'pedal', name: 'Pedal Bicycle', icon: 'fa-bicycle', color: '#14b8a6', ratePerKm: 5, capacity: 1, luggage: 0, time: '2 mins' },
+    { id: 'moto', name: 'Bike / Moto', icon: 'fa-motorcycle', color: '#ff6b6b', ratePerKm: 12, capacity: 1, luggage: 1, time: '5 mins' },
+    { id: 'escooter', name: 'Electric Scooter', icon: 'fa-bolt', color: '#10b981', ratePerKm: 8, capacity: 1, luggage: 0, time: '3 mins' }
   ],
   'auto': [
-    { id: 'auto-std', name: 'Standard Auto', icon: 'fa-taxi', color: '#f59e0b', ratePerKm: 18, capacity: 3, luggage: 2, models: 'Bajaj RE, TVS King' },
-    { id: 'e-rickshaw', name: 'E-Rickshaw', icon: 'fa-leaf', color: '#34d399', ratePerKm: 15, capacity: 4, luggage: 2, models: 'Mahindra Treo, Piaggio Ape Electrik' }
+    { id: 'auto-std', name: 'Standard Auto', icon: 'fa-taxi', color: '#f59e0b', ratePerKm: 18, capacity: 3, luggage: 2, time: '4 mins' },
+    { id: 'e-rickshaw', name: 'E-Rickshaw', icon: 'fa-leaf', color: '#34d399', ratePerKm: 15, capacity: 4, luggage: 2, time: '1 min' }
   ],
   'car': [
-    { id: 'mini', name: 'Mini Hatchback', icon: 'fa-car-side', color: '#3b82f6', ratePerKm: 22, capacity: 4, luggage: 2, models: 'Swift, Grand i10, WagonR' },
-    { id: 'sedan', name: 'Premium Sedan', icon: 'fa-car', color: '#2563eb', ratePerKm: 28, capacity: 4, luggage: 3, models: 'Maruti Dzire, Honda Amaze, Ford Aspire' },
-    { id: 'exec', name: 'Executive Luxury', icon: 'fa-gem', color: '#8b5cf6', ratePerKm: 55, capacity: 4, luggage: 3, models: 'Honda City, Hyundai Verna, VW Virtus' }
+    { id: 'mini', name: 'Mini Hatchback', icon: 'fa-car-side', color: '#3b82f6', ratePerKm: 22, capacity: 4, luggage: 2, time: '6 mins' },
+    { id: 'sedan', name: 'Premium Sedan', icon: 'fa-car', color: '#2563eb', ratePerKm: 28, capacity: 4, luggage: 3, time: '8 mins' },
+    { id: 'exec', name: 'Executive Luxury', icon: 'fa-gem', color: '#8b5cf6', ratePerKm: 55, capacity: 4, luggage: 3, time: '12 mins' }
   ],
   'suv': [
-    { id: 'suv-std', name: 'Standard SUV', icon: 'fa-truck-pickup', color: '#ec4899', ratePerKm: 35, capacity: 6, luggage: 4, models: 'Ertiga, XL6, Carens' },
-    { id: 'suv-prem', name: 'Premium SUV XL', icon: 'fa-crown', color: '#eab308', ratePerKm: 45, capacity: 7, luggage: 5, models: 'Innova Crysta, XUV700, Safari' }
+    { id: 'suv-std', name: 'Standard SUV', icon: 'fa-truck-pickup', color: '#ec4899', ratePerKm: 35, capacity: 6, luggage: 4, time: '10 mins' },
+    { id: 'suv-prem', name: 'Premium SUV XL', icon: 'fa-crown', color: '#eab308', ratePerKm: 45, capacity: 7, luggage: 5, time: '15 mins' }
   ],
   'bus': [
-    { id: 'minivan', name: 'Traveller', icon: 'fa-shuttle-van', color: '#14b8a6', ratePerKm: 60, capacity: 12, luggage: 8, models: 'Force Traveller 12 Seater' },
-    { id: 'bus-std', name: 'Standard Bus', icon: 'fa-bus', color: '#8b5cf6', ratePerKm: 120, capacity: 40, luggage: 20, models: '40 Seater AC Coach' }
+    { id: 'minivan', name: 'Traveller', icon: 'fa-shuttle-van', color: '#14b8a6', ratePerKm: 60, capacity: 12, luggage: 8, time: '30 mins' },
+    { id: 'bus-std', name: 'Standard Bus', icon: 'fa-bus', color: '#8b5cf6', ratePerKm: 120, capacity: 40, luggage: 20, time: '45 mins' }
+  ],
+  'boat': [
+    { id: 'speedboat', name: 'Speedboat', icon: 'fa-ship', color: '#0ea5e9', ratePerKm: 150, capacity: 6, luggage: 2, time: '10 mins' },
+    { id: 'ferry', name: 'Ferry Pass', icon: 'fa-ferry', color: '#0284c7', ratePerKm: 25, capacity: 50, luggage: 10, time: 'Scheduled' }
+  ],
+  'yacht': [
+    { id: 'yacht-small', name: 'Small Yacht', icon: 'fa-anchor', color: '#0369a1', ratePerKm: 500, capacity: 15, luggage: 10, time: 'Charter' }
+  ],
+  'flight': [
+    { id: 'lightjet', name: 'Light Private Jet', icon: 'fa-plane', color: '#8b5cf6', ratePerKm: 2500, capacity: 6, luggage: 6, time: 'Charter' }
+  ],
+  'heli': [
+    { id: 'heli-std', name: 'Charter Helicopter', icon: 'fa-helicopter', color: '#10b981', ratePerKm: 1200, capacity: 4, luggage: 2, time: 'Charter' }
+  ],
+  'train': [
+    { id: 'express', name: 'Express Train Ticket', icon: 'fa-train', color: '#eab308', ratePerKm: 15, capacity: 1, luggage: 2, time: 'Scheduled' }
   ]
 };
 
@@ -47,39 +69,66 @@ export default function RideBookingModal({ isOpen, onClose }: { isOpen: boolean,
   const [activeCategory, setActiveCategory] = useState<'ALL' | 'ROAD' | 'SEA' | 'AIR' | 'RAIL'>('ALL');
   
   // Search Form State
-  const [tripType, setTripType] = useState('Outstation One Way');
+  const [tripType, setTripType] = useState('One Way');
+  const [scheduleType, setScheduleType] = useState('Now');
   const [pickup, setPickup] = useState('Chennai Central');
-  const [dropoff, setDropoff] = useState('Chennai International Airport (MAA)');
-  const [pickupDate, setPickupDate] = useState('30 Sep 26');
-  const [pickupTime, setPickupTime] = useState('10:00 AM');
+  const [stops, setStops] = useState<string[]>([]);
+  const [dropoff, setDropoff] = useState('Chennai International Airport');
+  const [pickupDate, setPickupDate] = useState('');
+  const [pickupTime, setPickupTime] = useState('');
   
   // Data State
   const [relatedVehicles, setRelatedVehicles] = useState<any[]>([]);
   const [selectedMasterId, setSelectedMasterId] = useState<string>('');
+  const [selectedVehicleId, setSelectedVehicleId] = useState<string>('');
   
-  // Dummy Distance Calculation
-  const estimatedDistance = 15; // km
-  const estimatedTime = 41; // mins
+  // Payment & Offers
+  const [paymentType, setPaymentType] = useState('Cash');
+  const [offerApplied, setOfferApplied] = useState(false);
+  const [showOffers, setShowOffers] = useState(false);
+  
+  // Dynamic Distance (base + stops)
+  const estimatedDistance = 15 + (stops.length * 5); // km
 
   React.useEffect(() => {
     const handleReset = () => setStep(1);
-    window.addEventListener('resetModalSteps', handleReset);
-
-    // Deep link handling
-    if (isOpen && typeof window !== 'undefined') {
+    
+    const handleUrlState = () => {
       const path = window.location.pathname;
-      if (path.includes('/rides/') && path.split('/rides/')[1]) {
+      if (path.startsWith('/home/rides/')) {
         const masterId = decodeURIComponent(path.split('/rides/')[1]).toLowerCase();
-        const foundMaster = MASTER_CATEGORIES.find(m => m.name.toLowerCase().includes(masterId) || m.id === masterId);
-        
-        if (foundMaster) {
-          setSelectedMasterId(foundMaster.id);
-          setRelatedVehicles(VEHICLE_DATABASE[foundMaster.id] || VEHICLE_DATABASE['car']);
-          setStep(2);
+        if (masterId) {
+          const foundMaster = MASTER_CATEGORIES.find(m => m.name.toLowerCase().includes(masterId) || m.id === masterId);
+          if (foundMaster) {
+            setSelectedMasterId(foundMaster.id);
+            const vehicles = VEHICLE_DATABASE[foundMaster.id] || VEHICLE_DATABASE['car'];
+            setRelatedVehicles(vehicles);
+            if (vehicles.length > 0 && !selectedVehicleId) setSelectedVehicleId(vehicles[0].id);
+            setStep(2);
+            return;
+          }
         }
       }
+      if (path === '/home/ride') {
+        setStep(1);
+      }
+      if (path === '/' || path === '/home') {
+        const { useSartStore } = require('@/store/useSartStore');
+        useSartStore.getState().setActiveTab('home');
+      }
+    };
+
+    window.addEventListener('resetModalSteps', handleReset);
+    window.addEventListener('popstate', handleUrlState);
+
+    if (isOpen) {
+      handleUrlState();
     }
-    return () => window.removeEventListener('resetModalSteps', handleReset);
+
+    return () => {
+      window.removeEventListener('resetModalSteps', handleReset);
+      window.removeEventListener('popstate', handleUrlState);
+    };
   }, [isOpen]);
 
   if (!isOpen) return null;
@@ -90,7 +139,12 @@ export default function RideBookingModal({ isOpen, onClose }: { isOpen: boolean,
 
   const handleSelectMasterCategory = (master: any) => {
     setSelectedMasterId(master.id);
-    setRelatedVehicles(VEHICLE_DATABASE[master.id] || VEHICLE_DATABASE['car']);
+    const vehicles = VEHICLE_DATABASE[master.id] || VEHICLE_DATABASE['car'];
+    setRelatedVehicles(vehicles);
+    if (vehicles.length > 0) setSelectedVehicleId(vehicles[0].id);
+    setPickup('');
+    setDropoff('');
+    setStops([]);
     setStep(2);
     updateUrl(`/home/rides/${encodeURIComponent(master.id)}`);
   };
@@ -106,8 +160,15 @@ export default function RideBookingModal({ isOpen, onClose }: { isOpen: boolean,
     onClose();
   };
 
-  const handleFinalBook = (v: any, finalPrice: number) => {
-    const subtitle = `${v.name} • ${tripType} • ${pickupDate} ${pickupTime}`;
+  const handleFinalBook = () => {
+    const v = relatedVehicles.find(v => v.id === selectedVehicleId);
+    if (!v) return;
+    
+    let finalPrice = Math.max(v.basePrice || 0, (v.ratePerKm || 10) * estimatedDistance);
+    if (offerApplied) finalPrice = Math.floor(finalPrice * 0.8); // 20% off
+
+    const timeStr = scheduleType === 'Now' ? 'Now' : `${pickupDate} ${pickupTime}`;
+    const subtitle = `${v.name} • ${tripType} • ${timeStr} • Paid via ${paymentType}`;
     if ((window as any).executeGenericBooking) {
       (window as any).executeGenericBooking('ride', `Ride: ${pickup} to ${dropoff}`, subtitle, finalPrice, { from: pickup, to: dropoff, date: pickupDate, time: pickupTime });
     }
@@ -118,9 +179,34 @@ export default function RideBookingModal({ isOpen, onClose }: { isOpen: boolean,
     ? MASTER_CATEGORIES 
     : MASTER_CATEGORIES.filter(m => m.type === activeCategory);
 
+  const selectedMaster = MASTER_CATEGORIES.find(m => m.id === selectedMasterId) || MASTER_CATEGORIES[0];
+  const mode = selectedMaster?.type || 'ROAD';
+
+  let pickupLabel = 'Pickup Location';
+  let dropoffLabel = 'Drop Location';
+  let stopLabel = 'Add Stop';
+
+  if (mode === 'AIR') {
+    pickupLabel = 'Departure Airport / Helipad';
+    dropoffLabel = 'Arrival Airport / Helipad';
+    stopLabel = 'Add Layover';
+  } else if (mode === 'SEA') {
+    pickupLabel = 'Departure Port / Pier';
+    dropoffLabel = 'Arrival Port / Pier';
+    stopLabel = 'Add Port of Call';
+  } else if (mode === 'RAIL') {
+    pickupLabel = 'Departure Station';
+    dropoffLabel = 'Arrival Station';
+    stopLabel = 'Add Station Stop';
+  }
+
+  const selectedVehicle = relatedVehicles.find(v => v.id === selectedVehicleId) || relatedVehicles[0];
+  let currentFinalPrice = selectedVehicle ? Math.max(selectedVehicle.basePrice || 0, (selectedVehicle.ratePerKm || 10) * estimatedDistance) : 0;
+  if (offerApplied) currentFinalPrice = Math.floor(currentFinalPrice * 0.8);
+
   return (
     <div className="modal-overlay open" style={{ display: 'flex', zIndex: 1000, background: 'rgba(0,0,0,0.6)' }} onClick={handleClose}>
-      <div className="modal-sheet centered-modal" style={{ maxWidth: step === 2 ? '1300px' : '900px', width: '95%', height: step === 2 ? '95vh' : '80vh', display: 'flex', flexDirection: 'column', backgroundColor: '#f3f4f6', borderRadius: step === 2 ? '16px' : '24px', overflow: 'hidden', transition: 'max-width 0.3s ease, height 0.3s ease' }} onClick={e => e.stopPropagation()}>
+      <div className="modal-sheet centered-modal" style={{ maxWidth: step === 2 ? '1200px' : '900px', width: '95%', height: step === 2 ? '90vh' : '80vh', display: 'flex', flexDirection: 'column', backgroundColor: '#f9fafb', borderRadius: step === 2 ? '16px' : '24px', overflow: 'hidden', transition: 'max-width 0.3s ease, height 0.3s ease' }} onClick={e => e.stopPropagation()}>
         
         <div className="hack-absorber" style={{ display: 'none' }}></div>
 
@@ -131,9 +217,6 @@ export default function RideBookingModal({ isOpen, onClose }: { isOpen: boolean,
               <div style={{ fontSize: '22px', fontWeight: '800', color: '#111827', display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <i className="fa-solid fa-car-side" style={{ color: '#3b82f6' }}></i> Ride Booking
               </div>
-              <button onClick={handleClose} style={{ background: '#f3f4f6', border: 'none', width: '36px', height: '36px', borderRadius: '50%', color: '#4b5563', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <i className="fa-solid fa-xmark"></i>
-              </button>
             </div>
             
             <div style={{ flex: 1, overflowY: 'auto', padding: '24px', background: '#ffffff' }}>
@@ -187,258 +270,214 @@ export default function RideBookingModal({ isOpen, onClose }: { isOpen: boolean,
           </>
         )}
 
-        {/* ================= STEP 2: DASHBOARD (MAKEMYTRIP STYLE) ================= */}
+        {/* ================= STEP 2: DASHBOARD (UBER/RAPIDO STYLE) ================= */}
         {step === 2 && (
-          <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
+          <div style={{ display: 'flex', flex: 1, minHeight: 0, overflow: 'hidden' }}>
             
-            {/* Top Search Bar (Dark Theme) */}
-            <div style={{ display: 'flex', alignItems: 'center', background: '#222222', padding: '12px 20px', gap: '12px', flexShrink: 0 }}>
-              <button onClick={handleBackToFleet} style={{ background: 'transparent', border: 'none', color: '#ffffff', cursor: 'pointer', fontSize: '18px', marginRight: '8px' }}>
-                <i className="fa-solid fa-arrow-left"></i>
-              </button>
-
-              {/* Trip Type */}
-              <div style={{ background: '#333333', borderRadius: '6px', padding: '6px 12px', display: 'flex', flexDirection: 'column', flex: '0 0 auto' }}>
-                <span style={{ fontSize: '10px', color: '#a3a3a3', textTransform: 'uppercase', marginBottom: '2px' }}>Trip Type</span>
-                <select value={tripType} onChange={e => setTripType(e.target.value)} style={{ background: 'transparent', border: 'none', color: '#ffffff', fontSize: '14px', fontWeight: '600', outline: 'none', cursor: 'pointer', padding: 0 }}>
-                  <option value="Outstation One Way" style={{color:'#000'}}>Outstation One Way</option>
-                  <option value="Round Trip" style={{color:'#000'}}>Round Trip</option>
-                  <option value="Hourly Rental" style={{color:'#000'}}>Hourly Rental</option>
-                </select>
+            {/* Left Sidebar (Booking Flow) */}
+            <div style={{ width: '420px', background: '#ffffff', display: 'flex', flexDirection: 'column', borderRight: '1px solid #e5e7eb', zIndex: 10, boxShadow: '4px 0 16px rgba(0,0,0,0.05)', overflowY: 'auto' }}>
+              
+              {/* Header */}
+              <div style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '16px', borderBottom: '1px solid #f3f4f6', position: 'sticky', top: 0, background: '#fff', zIndex: 20 }}>
+                <button onClick={handleBackToFleet} style={{ background: '#f3f4f6', border: 'none', width: '36px', height: '36px', borderRadius: '50%', color: '#111827', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <i className="fa-solid fa-arrow-left"></i>
+                </button>
+                <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '800', color: '#111827' }}>Book your Ride</h2>
               </div>
 
-              {/* Locations Group */}
-              <div style={{ display: 'flex', alignItems: 'center', background: '#333333', borderRadius: '6px', flex: 1, position: 'relative' }}>
-                <div style={{ flex: 1, padding: '6px 16px', position: 'relative' }}>
-                  <span style={{ fontSize: '10px', color: '#a3a3a3', textTransform: 'uppercase', marginBottom: '2px', display: 'block' }}>From</span>
-                  <input type="text" value={pickup} onChange={e => setPickup(e.target.value)} style={{ background: 'transparent', border: 'none', color: '#ffffff', fontSize: '14px', fontWeight: '600', width: '100%', outline: 'none' }} />
+              {/* 1. Search Form */}
+              <div style={{ padding: '20px', background: '#ffffff', borderBottom: '8px solid #f9fafb' }}>
+                <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
+                  <select value={tripType} onChange={e => setTripType(e.target.value)} style={{ flex: 1, padding: '8px 12px', borderRadius: '8px', border: '1px solid #e5e7eb', background: '#f9fafb', fontSize: '13px', fontWeight: '700', color: '#111827', outline: 'none' }}>
+                    <option>One Way</option>
+                    <option>Round Trip</option>
+                    <option>Rental</option>
+                  </select>
+                  <select style={{ flex: 1, padding: '8px 12px', borderRadius: '8px', border: '1px solid #e5e7eb', background: '#f9fafb', fontSize: '13px', fontWeight: '700', color: '#111827', outline: 'none' }}>
+                    <option>For Me</option>
+                    <option>For Someone Else</option>
+                  </select>
                 </div>
                 
-                {/* Swap Button */}
-                <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <div style={{ width: '1px', height: '30px', background: '#555555' }}></div>
-                  <button onClick={() => { const temp = pickup; setPickup(dropoff); setDropoff(temp); }} style={{ position: 'absolute', background: '#444444', border: '1px solid #555', color: '#fff', width: '24px', height: '24px', borderRadius: '50%', cursor: 'pointer', zIndex: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <i className="fa-solid fa-right-left" style={{ fontSize: '10px' }}></i>
-                  </button>
+                <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+                  <select value={scheduleType} onChange={e => setScheduleType(e.target.value)} style={{ padding: '8px 12px', borderRadius: '8px', border: '1px solid #e5e7eb', background: '#f9fafb', fontSize: '13px', fontWeight: '700', color: '#111827', outline: 'none' }}>
+                    <option value="Now">Leave Now</option>
+                    <option value="Schedule">Schedule</option>
+                  </select>
+                  {scheduleType === 'Schedule' && (
+                    <>
+                      <input type="date" value={pickupDate} onChange={e => setPickupDate(e.target.value)} style={{ flex: 1, padding: '8px 12px', borderRadius: '8px', border: '1px solid #e5e7eb', background: '#ffffff', fontSize: '13px', fontWeight: '600' }} />
+                      <input type="time" value={pickupTime} onChange={e => setPickupTime(e.target.value)} style={{ width: '90px', padding: '8px 12px', borderRadius: '8px', border: '1px solid #e5e7eb', background: '#ffffff', fontSize: '13px', fontWeight: '600' }} />
+                    </>
+                  )}
                 </div>
 
-                <div style={{ flex: 1, padding: '6px 16px', display: 'flex', alignItems: 'center' }}>
-                  <div style={{ flex: 1 }}>
-                    <span style={{ fontSize: '10px', color: '#a3a3a3', textTransform: 'uppercase', marginBottom: '2px', display: 'block' }}>To</span>
-                    <input type="text" value={dropoff} onChange={e => setDropoff(e.target.value)} style={{ background: 'transparent', border: 'none', color: '#ffffff', fontSize: '14px', fontWeight: '600', width: '100%', outline: 'none' }} />
-                  </div>
-                  {/* Add Stop inside the TO block, aligned to the right */}
-                  <button style={{ background: '#222', border: '1px solid #555', color: '#fff', fontSize: '10px', fontWeight: '600', padding: '4px 10px', borderRadius: '12px', cursor: 'pointer', whiteSpace: 'nowrap', marginLeft: '12px' }}>
-                    <i className="fa-solid fa-plus" style={{ color: '#e11d48' }}></i> Add Stop
-                  </button>
-                </div>
-              </div>
-
-              {/* Date & Time */}
-              <div style={{ background: '#333333', borderRadius: '6px', padding: '6px 12px', display: 'flex', flexDirection: 'column' }}>
-                <span style={{ fontSize: '10px', color: '#a3a3a3', textTransform: 'uppercase', marginBottom: '2px' }}>Pickup Date</span>
-                <input type="text" value={pickupDate} onChange={e => setPickupDate(e.target.value)} style={{ background: 'transparent', border: 'none', color: '#ffffff', fontSize: '14px', fontWeight: '600', width: '90px', outline: 'none' }} />
-              </div>
-              <div style={{ background: '#333333', borderRadius: '6px', padding: '6px 12px', display: 'flex', flexDirection: 'column' }}>
-                <span style={{ fontSize: '10px', color: '#a3a3a3', textTransform: 'uppercase', marginBottom: '2px' }}>Pickup Time</span>
-                <input type="text" value={pickupTime} onChange={e => setPickupTime(e.target.value)} style={{ background: 'transparent', border: 'none', color: '#ffffff', fontSize: '14px', fontWeight: '600', width: '70px', outline: 'none' }} />
-              </div>
-
-              <button style={{ background: '#e11d48', color: '#ffffff', border: 'none', padding: '12px 24px', borderRadius: '24px', fontSize: '14px', fontWeight: '700', cursor: 'pointer', marginLeft: '8px', flexShrink: 0 }}>
-                Update Search
-              </button>
-              
-              <button onClick={handleClose} style={{ background: 'transparent', border: 'none', color: '#a3a3a3', cursor: 'pointer', fontSize: '20px', marginLeft: '8px', flexShrink: 0 }}>
-                <i className="fa-solid fa-xmark"></i>
-              </button>
-            </div>
-
-            {/* Main Content Area */}
-            <div style={{ display: 'flex', flex: 1, overflow: 'hidden', minHeight: 0 }}>
-              
-              {/* Left Sidebar (Map & Route Info) */}
-              <div style={{ width: '320px', background: '#ffffff', padding: '20px', overflowY: 'auto', borderRight: '1px solid #e5e7eb' }}>
-                
-                {/* Banner */}
-                <div style={{ background: '#ecfdf5', border: '1px solid #a7f3d0', borderRadius: '8px', padding: '12px', marginBottom: '20px' }}>
-                  <div style={{ fontSize: '11px', fontWeight: '800', color: '#059669', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
-                    <i className="fa-regular fa-circle-check"></i> STATE PERMIT INCLUDED
-                  </div>
-                  <div style={{ fontSize: '12px', color: '#065f46', lineHeight: '1.4' }}>
-                    Toll, permit and inter-city travel charges are included in the fare.
-                  </div>
-                </div>
-
-                {/* Map Card */}
-                <div style={{ border: '1px solid #e5e7eb', borderRadius: '12px', overflow: 'hidden', background: '#ffffff', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
-                  <div style={{ padding: '16px', borderBottom: '1px solid #e5e7eb', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '16px', fontWeight: '800', color: '#111827' }}>
-                    <i className="fa-solid fa-location-dot"></i> Your Route
+                <div style={{ position: 'relative', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '12px', background: '#ffffff' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+                    <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', marginRight: '12px', flexShrink: 0 }}></div>
+                    <input type="text" placeholder={pickupLabel} value={pickup} onChange={e => setPickup(e.target.value)} style={{ border: 'none', background: 'transparent', flex: 1, fontSize: '15px', fontWeight: '600', color: '#111827', outline: 'none' }} />
                   </div>
                   
-                  {/* Fake Map Background */}
-                  <div style={{ height: '220px', background: '#f3f4f6', backgroundImage: 'url("https://www.transparenttextures.com/patterns/cubes.png")', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    
-                    {/* Fake Route SVG */}
-                    <div style={{ position: 'absolute', width: '80%', height: '80%' }}>
-                      <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%', strokeDasharray: '4 4', strokeWidth: '2', stroke: '#3b82f6', fill: 'none' }}>
-                        <path d="M 20 80 Q 50 20 80 20" />
-                      </svg>
-                      <div style={{ position: 'absolute', bottom: '10%', left: '15%', width: '12px', height: '12px', borderRadius: '50%', background: '#10b981', border: '2px solid #fff' }}></div>
-                      <div style={{ position: 'absolute', top: '15%', right: '15%', width: '12px', height: '12px', borderRadius: '50%', background: '#ef4444', border: '2px solid #fff' }}></div>
-                      
-                      <div style={{ position: 'absolute', bottom: '-5%', left: '0%', fontSize: '11px', fontWeight: '700', color: '#111827', background: 'rgba(255,255,255,0.8)', padding: '2px 6px', borderRadius: '4px' }}>{pickup.split(' ')[0]}</div>
-                      <div style={{ position: 'absolute', top: '0%', right: '0%', fontSize: '11px', fontWeight: '700', color: '#111827', background: 'rgba(255,255,255,0.8)', padding: '2px 6px', borderRadius: '4px' }}>{dropoff.split(' ')[0]}</div>
+                  {stops.map((stop, i) => (
+                    <div key={i} style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+                      <div style={{ borderLeft: '1px solid #d1d5db', marginLeft: '3px', height: '20px', width: '20px', flexShrink: 0, position: 'relative' }}>
+                        <div style={{ position: 'absolute', left: '-5px', top: '50%', width: '8px', height: '8px', borderRadius: '50%', background: '#f59e0b' }}></div>
+                      </div>
+                      <input type="text" placeholder={`Stop ${i + 1}`} value={stop} onChange={e => { const newStops = [...stops]; newStops[i] = e.target.value; setStops(newStops); }} style={{ border: 'none', background: 'transparent', flex: 1, fontSize: '15px', fontWeight: '600', color: '#111827', outline: 'none', paddingLeft: '8px' }} />
+                      <button onClick={() => setStops(stops.filter((_, idx) => idx !== i))} style={{ background: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer' }}><i className="fa-solid fa-xmark"></i></button>
                     </div>
-                  </div>
+                  ))}
 
-                  {/* Route Stats */}
-                  <div style={{ display: 'flex', padding: '16px 0', borderTop: '1px solid #e5e7eb' }}>
-                    <div style={{ flex: 1, textAlign: 'center', borderRight: '1px solid #e5e7eb' }}>
-                      <div style={{ fontSize: '16px', fontWeight: '800', color: '#111827' }}>{estimatedDistance} kms</div>
-                      <div style={{ fontSize: '11px', color: '#6b7280' }}>Distance</div>
+                  {stops.length < 3 && (
+                    <div style={{ borderLeft: '1px dashed #d1d5db', marginLeft: '3px', paddingLeft: '16px', marginBottom: '8px' }}>
+                      <button onClick={() => setStops([...stops, ''])} style={{ background: 'transparent', border: 'none', color: '#3b82f6', fontSize: '12px', fontWeight: '700', cursor: 'pointer', padding: '4px 0', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <i className="fa-solid fa-plus" style={{ fontSize: '10px' }}></i> {stopLabel}
+                      </button>
                     </div>
-                    <div style={{ flex: 1, textAlign: 'center', borderRight: '1px solid #e5e7eb' }}>
-                      <div style={{ fontSize: '16px', fontWeight: '800', color: '#111827' }}>{estimatedTime} mins</div>
-                      <div style={{ fontSize: '11px', color: '#6b7280' }}>Est. Time</div>
-                    </div>
-                    <div style={{ flex: 1, textAlign: 'center' }}>
-                      <div style={{ fontSize: '16px', fontWeight: '800', color: '#111827' }}>₹ 950</div>
-                      <div style={{ fontSize: '11px', color: '#6b7280' }}>Toll (Est.)</div>
-                    </div>
+                  )}
+                  
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <div style={{ width: '8px', height: '8px', background: '#ef4444', marginRight: '12px', flexShrink: 0 }}></div>
+                    <input type="text" placeholder={dropoffLabel} value={dropoff} onChange={e => setDropoff(e.target.value)} style={{ border: 'none', background: 'transparent', flex: 1, fontSize: '15px', fontWeight: '600', color: '#111827', outline: 'none' }} />
                   </div>
+                  
+                  <button onClick={() => { const t = pickup; setPickup(dropoff); setDropoff(t); }} style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', background: '#f3f4f6', border: 'none', width: '32px', height: '32px', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <i className="fa-solid fa-arrow-down-up-across-line" style={{ color: '#4b5563', fontSize: '12px' }}></i>
+                  </button>
                 </div>
-
+                
+                <button style={{ width: '100%', marginTop: '16px', background: '#111827', color: '#fff', padding: '14px', borderRadius: '12px', fontSize: '15px', fontWeight: '700', border: 'none', cursor: 'pointer' }}>
+                  Search Rides
+                </button>
               </div>
 
-              {/* Right Sidebar (Vehicle List) */}
-              <div style={{ flex: 1, padding: '32px 40px', overflowY: 'auto', background: '#f9fafb' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                  <div>
-                    <h2 style={{ margin: '0 0 4px 0', fontSize: '28px', fontWeight: '800', color: '#111827' }}>Choose your ride</h2>
-                    <p style={{ margin: 0, color: '#6b7280', fontSize: '14px' }}>{relatedVehicles.length} rides available</p>
-                  </div>
-                  <button style={{ background: '#111827', color: '#ffffff', border: 'none', padding: '10px 16px', borderRadius: '8px', fontSize: '14px', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <i className="fa-solid fa-share-nodes"></i> Share
-                  </button>
-                </div>
-
-                {/* Permit Info */}
-                <div style={{ background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '16px', marginBottom: '16px', display: 'flex', gap: '12px' }}>
-                  <i className="fa-regular fa-circle-check" style={{ color: '#10b981', marginTop: '2px' }}></i>
-                  <div>
-                    <div style={{ fontSize: '14px', fontWeight: '700', color: '#111827', marginBottom: '4px' }}>Permit Details</div>
-                    <div style={{ fontSize: '13px', color: '#4b5563' }}>Toll, permit and inter-city travel charges are included in the fare.</div>
-                  </div>
-                </div>
-
-                {/* Offers Banner */}
-                <div style={{ background: '#fffbeb', border: '1px dashed #f59e0b', borderRadius: '12px', padding: '16px', marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <div style={{ width: '40px', height: '40px', background: '#f59e0b', color: '#fff', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px' }}>
-                      <i className="fa-solid fa-tags"></i>
-                    </div>
-                    <div>
-                      <div style={{ fontSize: '14px', fontWeight: '800', color: '#b45309', marginBottom: '2px' }}>Apply Promos & Offers</div>
-                      <div style={{ fontSize: '12px', color: '#92400e' }}>Get up to ₹500 off on your first ride!</div>
-                    </div>
-                  </div>
-                  <button style={{ background: 'transparent', border: '1px solid #f59e0b', color: '#b45309', padding: '6px 16px', borderRadius: '8px', fontSize: '12px', fontWeight: '700', cursor: 'pointer' }}>
-                    View Offers
-                  </button>
-                </div>
-
-                {/* Vehicle Cards */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                  {relatedVehicles.map(v => {
-                    // Dynamic Price Calculation Fix
-                    const finalPrice = Math.max(v.basePrice || 0, (v.ratePerKm || 10) * estimatedDistance);
-
+              {/* 2. Vehicle List */}
+              <div style={{ flex: 1, padding: '20px' }}>
+                <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', fontWeight: '800', color: '#111827' }}>Available Rides</h3>
+                
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  {relatedVehicles.map((v) => {
+                    const price = Math.max(v.basePrice || 0, (v.ratePerKm || 10) * estimatedDistance);
+                    const isSelected = selectedVehicleId === v.id;
+                    
                     return (
-                    <div key={v.id} style={{ background: '#ffffff', border: '1px solid #fecdd3', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 4px 16px rgba(0,0,0,0.03)' }}>
-                      
-                      {/* Top Half: Basic Info & Price Action */}
-                      <div style={{ display: 'flex', padding: '24px', borderBottom: '1px solid #f3f4f6' }}>
-                        {/* Image/Icon */}
-                        <div style={{ width: '140px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                          <i className={`fa-solid ${v.icon}`} style={{ fontSize: '56px', color: '#374151', marginBottom: '8px' }}></i>
-                          <div style={{ fontSize: '12px', color: '#6b7280', textAlign: 'center' }}>Vehicle category icon</div>
+                      <div 
+                        key={v.id} 
+                        onClick={() => setSelectedVehicleId(v.id)}
+                        style={{ 
+                          display: 'flex', alignItems: 'center', padding: '16px', borderRadius: '16px', 
+                          border: isSelected ? '2px solid #000' : '2px solid transparent',
+                          background: isSelected ? '#f3f4f6' : '#ffffff',
+                          boxShadow: isSelected ? 'none' : '0 2px 8px rgba(0,0,0,0.04)',
+                          cursor: 'pointer', transition: 'all 0.2s'
+                        }}
+                      >
+                        {/* Vehicle Icon */}
+                        <div style={{ width: '60px', height: '50px', background: v.color + '15', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: v.color, fontSize: '24px', marginRight: '16px' }}>
+                          <i className={`fa-solid ${v.icon}`}></i>
                         </div>
-
-                        {/* Middle: Details */}
-                        <div style={{ flex: 1, paddingLeft: '24px' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-                            <h3 style={{ margin: 0, fontSize: '24px', fontWeight: '800', color: '#111827' }}>{v.name}</h3>
-                            <span style={{ border: '1px solid #d1d5db', padding: '2px 8px', borderRadius: '12px', fontSize: '10px', fontWeight: '600', color: '#6b7280' }}>Or Similar</span>
+                        
+                        {/* Details */}
+                        <div style={{ flex: 1 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                            <span style={{ fontSize: '16px', fontWeight: '800', color: '#111827' }}>{v.name}</span>
+                            <span style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px', fontWeight: '700', background: '#dcfce7', color: '#166534', padding: '2px 6px', borderRadius: '4px' }}>
+                              <i className="fa-regular fa-clock"></i> {v.time}
+                            </span>
                           </div>
-                          <p style={{ margin: '0 0 16px 0', fontSize: '13px', color: '#4b5563' }}>{v.models}</p>
-                          
-                          <div style={{ display: 'flex', gap: '20px', fontSize: '13px', color: '#4b5563', fontWeight: '600' }}>
-                            <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><i className="fa-solid fa-user-group" style={{ color: '#9ca3af' }}></i> {v.capacity} People</span>
-                            <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><i className="fa-solid fa-suitcase" style={{ color: '#9ca3af' }}></i> {v.luggage} Luggages</span>
-                            <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><i className="fa-solid fa-snowflake" style={{ color: '#9ca3af' }}></i> AC</span>
+                          <div style={{ fontSize: '12px', color: '#6b7280', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                            <span><i className="fa-solid fa-user-group"></i> {v.capacity}</span>
+                            {v.luggage > 0 && <span><i className="fa-solid fa-suitcase"></i> {v.luggage}</span>}
                           </div>
                         </div>
-
-                        {/* Right: Price Breakup & Select */}
-                        <div style={{ width: '220px', paddingLeft: '24px', borderLeft: '1px solid #f3f4f6', display: 'flex', flexDirection: 'column' }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                            <span style={{ fontSize: '12px', fontWeight: '700', color: '#111827' }}>Fare Breakdown</span>
-                            <span style={{ fontSize: '12px', color: '#3b82f6', cursor: 'pointer' }}>View details <i className="fa-solid fa-angle-down"></i></span>
-                          </div>
-                          
-                          <div style={{ flex: 1 }}>
-                            <div style={{ fontSize: '10px', color: '#e11d48', fontWeight: '800', textTransform: 'uppercase', marginBottom: '4px' }}>Total Fare</div>
-                            <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-                              <span style={{ fontSize: '28px', fontWeight: '800', color: '#111827' }}>₹ {finalPrice}</span>
-                              <span style={{ fontSize: '10px', color: '#6b7280' }}>Inc. of GST</span>
-                            </div>
-                          </div>
-
-                          <button onClick={() => handleFinalBook(v, finalPrice)} style={{ background: '#e11d48', color: '#ffffff', border: 'none', padding: '12px', borderRadius: '8px', fontSize: '14px', fontWeight: '700', cursor: 'pointer', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
-                            Select {v.name.split(' ')[0]} <i className="fa-solid fa-arrow-right"></i>
-                          </button>
+                        
+                        {/* Price */}
+                        <div style={{ fontSize: '18px', fontWeight: '800', color: '#111827' }}>
+                          ₹{price}
                         </div>
                       </div>
-
-                      {/* Bottom Half: Included/Excluded/Best For */}
-                      <div style={{ display: 'flex', padding: '20px 24px', background: '#fdfbfb' }}>
-                        <div style={{ flex: 1 }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', fontWeight: '700', color: '#111827', marginBottom: '12px' }}>
-                            <div style={{ width: '3px', height: '14px', background: '#10b981' }}></div> Included
-                          </div>
-                          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '13px', color: '#4b5563' }}>
-                            <span><i className="fa-regular fa-circle-check" style={{ color: '#10b981', marginRight: '6px' }}></i> Fuel charges + AC</span>
-                            <span><i className="fa-regular fa-circle-check" style={{ color: '#10b981', marginRight: '6px' }}></i> Vehicle charges</span>
-                            <span><i className="fa-regular fa-circle-check" style={{ color: '#10b981', marginRight: '6px' }}></i> Driver allowances</span>
-                          </div>
-                        </div>
-
-                        <div style={{ flex: 1 }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', fontWeight: '700', color: '#111827', marginBottom: '12px' }}>
-                            <div style={{ width: '3px', height: '14px', background: '#ef4444' }}></div> Excluded
-                          </div>
-                          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '13px', color: '#4b5563' }}>
-                            <span><i className="fa-regular fa-circle-xmark" style={{ color: '#9ca3af', marginRight: '6px' }}></i> Private parking charges</span>
-                          </div>
-                        </div>
-
-                        <div style={{ flex: 1 }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', fontWeight: '700', color: '#111827', marginBottom: '12px' }}>
-                            <div style={{ width: '3px', height: '14px', background: '#8b5cf6' }}></div> Best For
-                          </div>
-                          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '13px', color: '#4b5563' }}>
-                            <span><i className="fa-regular fa-star" style={{ color: '#8b5cf6', marginRight: '6px' }}></i> Comfortable seating, good legroom</span>
-                            <span><i className="fa-regular fa-star" style={{ color: '#8b5cf6', marginRight: '6px' }}></i> Fits {v.luggage} bags easily</span>
-                          </div>
-                        </div>
-                      </div>
-
-                    </div>
                     )
                   })}
                 </div>
-
               </div>
+
+              {/* 3. Bottom Action Bar (Offers, Payment, Book) */}
+              <div style={{ borderTop: '1px solid #e5e7eb', padding: '20px', background: '#ffffff', position: 'sticky', bottom: 0 }}>
+                
+                {/* Offers */}
+                <div style={{ marginBottom: '16px' }}>
+                  <div 
+                    onClick={() => setShowOffers(!showOffers)}
+                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', background: offerApplied ? '#dcfce7' : '#fffbeb', borderRadius: '12px', cursor: 'pointer', border: offerApplied ? '1px solid #86efac' : '1px dashed #fcd34d' }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', color: offerApplied ? '#166534' : '#b45309' }}>
+                      <i className="fa-solid fa-tag" style={{ fontSize: '16px' }}></i>
+                      <span style={{ fontSize: '14px', fontWeight: '700' }}>{offerApplied ? '20% Offer Applied!' : 'Apply Promos & Offers'}</span>
+                    </div>
+                    <i className={`fa-solid ${showOffers ? 'fa-chevron-down' : 'fa-chevron-right'}`} style={{ color: offerApplied ? '#166534' : '#b45309' }}></i>
+                  </div>
+
+                  {showOffers && (
+                    <div style={{ marginTop: '8px', padding: '12px', border: '1px solid #e5e7eb', borderRadius: '12px', background: '#ffffff', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div>
+                          <div style={{ fontSize: '13px', fontWeight: '800', color: '#111827' }}>WELCOME20</div>
+                          <div style={{ fontSize: '11px', color: '#6b7280' }}>Get 20% off on this ride</div>
+                        </div>
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); setOfferApplied(!offerApplied); setShowOffers(false); }}
+                          style={{ background: offerApplied ? '#fee2e2' : '#e11d48', color: offerApplied ? '#991b1b' : '#fff', border: 'none', padding: '6px 12px', borderRadius: '6px', fontSize: '12px', fontWeight: '700', cursor: 'pointer' }}
+                        >
+                          {offerApplied ? 'Remove' : 'Apply'}
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Payment & Book Row */}
+                <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                  <select 
+                    value={paymentType} 
+                    onChange={e => setPaymentType(e.target.value)}
+                    style={{ background: '#f3f4f6', border: '1px solid #e5e7eb', padding: '14px 12px', borderRadius: '12px', fontSize: '14px', fontWeight: '700', color: '#111827', outline: 'none', cursor: 'pointer', width: '120px' }}
+                  >
+                    <option>Cash</option>
+                    <option>UPI</option>
+                    <option>Wallet</option>
+                    <option>Card</option>
+                  </select>
+                  
+                  <button 
+                    onClick={handleFinalBook}
+                    style={{ flex: 1, background: '#111827', color: '#ffffff', border: 'none', padding: '14px', borderRadius: '12px', fontSize: '16px', fontWeight: '800', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                  >
+                    <span>Book {selectedVehicle?.name.split(' ')[0]}</span>
+                    <span>₹{currentFinalPrice} <i className="fa-solid fa-arrow-right" style={{ marginLeft: '8px' }}></i></span>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Right Sidebar (Live Map) */}
+            <div style={{ flex: 1, position: 'relative', background: '#e5e7eb', display: 'flex', flexDirection: 'column' }}>
+              <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backgroundImage: 'url("https://www.transparenttextures.com/patterns/cubes.png")', backgroundSize: '200px' }}></div>
+              
+              {/* Map Floating UI Elements */}
+              <div style={{ position: 'absolute', top: '24px', right: '24px', display: 'flex', gap: '12px', zIndex: 10 }}>
+                <div style={{ background: '#ffffff', padding: '10px 16px', borderRadius: '24px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', fontSize: '13px', fontWeight: '700', color: '#111827', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <i className="fa-solid fa-location-crosshairs" style={{ color: '#3b82f6' }}></i> Live GPS Active
+                </div>
+              </div>
+
+              {/* Real Map Integration */}
+              <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1 }}>
+                <LiveTrackerMap vehicleIconClass={selectedVehicle?.icon || 'fa-car'} />
+              </div>
+
+
+
             </div>
 
           </div>

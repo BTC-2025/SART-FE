@@ -206,9 +206,10 @@ function initMap() {
       attributionControl: false
     }).setView(BENGALURU_COORDS, 14);
 
-    // Stylish dark theme tiles (CartoDB Dark)
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      maxZoom: 19
+    // Standard OpenStreetMap tiles for a realistic look
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(leafletMap);
 
     // Custom pulse icon for user location

@@ -1,6 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
+
+const LiveTrackerMap = dynamic(
+  () => import('./LeafletMapClient'),
+  { ssr: false }
+);
 
 const ROAD_CARRIERS = [
   {
@@ -73,13 +79,44 @@ export default function CarrierBookingModal({ isOpen, onClose }: CarrierBookingM
   const [dropoff, setDropoff] = useState('');
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
+  const [scheduleType, setScheduleType] = useState('Now');
+  const [bookingRole, setBookingRole] = useState<'Sender' | 'Receiver'>('Sender');
+
+  const [cargoWeight, setCargoWeight] = useState('');
+
+  const [weightError, setWeightError] = useState('');
 
   React.useEffect(() => {
+    const handleUrlState = () => {
+      const path = window.location.pathname;
+      if (path.startsWith('/home/carrier/')) {
+        const subPath = path.split('/')[3];
+        if (subPath && subPath.includes('-booking')) {
+          setStep(2);
+        } else {
+          setStep(1);
+        }
+      } else if (path === '/home/carrier') {
+        setStep(1);
+      } else if (path === '/' || path === '/home') {
+        const { useSartStore } = require('@/store/useSartStore');
+        useSartStore.getState().setActiveTab('home');
+      }
+    };
+
     const handleReset = () => {
       setStep(1);
     };
+
+    // Check immediately on mount
+    handleUrlState();
+
     window.addEventListener('resetModalSteps', handleReset);
-    return () => window.removeEventListener('resetModalSteps', handleReset);
+    window.addEventListener('popstate', handleUrlState);
+    return () => {
+      window.removeEventListener('resetModalSteps', handleReset);
+      window.removeEventListener('popstate', handleUrlState);
+    };
   }, []);
 
   if (!isOpen) return null;
@@ -93,8 +130,9 @@ export default function CarrierBookingModal({ isOpen, onClose }: CarrierBookingM
   const handleSelectVehicle = (vehicle: any) => {
     setSelectedVehicle(vehicle.id);
     setStep(2);
+    setCargoWeight('');
     const cleanName = vehicle.name.split('/')[0].trim();
-    updateUrl(`/home/carrier/${encodeURIComponent(cleanName)} booking`);
+    updateUrl(`/home/carrier/${encodeURIComponent(cleanName + '-booking')}`);
   };
 
   const handleBackToFleet = () => {
@@ -108,7 +146,56 @@ export default function CarrierBookingModal({ isOpen, onClose }: CarrierBookingM
     onClose();
   };
 
+  const handleSwap = () => {
+    const temp = pickup;
+    setPickup(dropoff);
+    setDropoff(temp);
+  };
+
+  const selectedVehicleObj = ALL_CARRIERS.find(v => v.id === selectedVehicle);
+
+  let mode = 'ROAD';
+  let maxWeightNum = 2000;
+  let maxWeightStr = '2000kg';
+  
+  if (selectedVehicleObj) {
+    if (SEA_CARRIERS[0].vehicles.some(v => v.id === selectedVehicleObj.id)) mode = 'SEA';
+    if (AIR_CARRIERS[0].vehicles.some(v => v.id === selectedVehicleObj.id)) mode = 'AIR';
+    if (RAIL_CARRIERS[0].vehicles.some(v => v.id === selectedVehicleObj.id)) mode = 'RAIL';
+    
+    // Estimate weight based on vehicle name/id
+    if (selectedVehicleObj.id.includes('bike') || selectedVehicleObj.id.includes('moto') || selectedVehicleObj.id.includes('drone')) {
+      maxWeightStr = '20kg';
+      maxWeightNum = 20;
+    } else if (selectedVehicleObj.id.includes('auto') || selectedVehicleObj.id.includes('lcv') || selectedVehicleObj.name.includes('Pickup')) {
+      maxWeightStr = '800kg';
+      maxWeightNum = 800;
+    } else if (selectedVehicleObj.name.includes('Ship') || selectedVehicleObj.name.includes('Train') || selectedVehicleObj.name.includes('Locomotive')) {
+      maxWeightStr = '50,000+ kg';
+      maxWeightNum = 50000;
+    } else {
+      maxWeightStr = '5000kg';
+      maxWeightNum = 5000;
+    }
+  }
+
+  const handleWeightChange = (e: any) => {
+    const val = e.target.value;
+    setCargoWeight(val);
+    const parsed = parseInt(val.replace(/[^0-9]/g, ''));
+    if (!isNaN(parsed) && parsed > maxWeightNum) {
+      setWeightError(`Overweight! Max capacity is ${maxWeightStr}. Please go back and select a larger carrier.`);
+    } else {
+      setWeightError('');
+    }
+  };
+
   const handleBook = () => {
+    if (weightError) {
+      alert("Cannot book: " + weightError);
+      return;
+    }
+
     let vehicleName = 'Cargo Carrier';
     let vehiclePrice = 900;
     
@@ -119,17 +206,39 @@ export default function CarrierBookingModal({ isOpen, onClose }: CarrierBookingM
     }
 
     let subtitle = `${vehicleName} • Logistics Freight`;
-    if (date || time) {
+    if (scheduleType === 'Schedule' && (date || time)) {
       subtitle += ` • Scheduled: ${date} ${time}`.trim();
+    } else {
+      subtitle += ` • Dispatch: Now`;
     }
     
     if ((window as any).executeGenericBooking) {
-      (window as any).executeGenericBooking('carrier', `Cargo: ${pickup} to ${dropoff || 'Destination'}`, subtitle, vehiclePrice, { from: pickup, to: dropoff, date, time });
+      (window as any).executeGenericBooking('carrier', `Cargo: ${pickup} to ${dropoff || 'Destination'}`, subtitle, vehiclePrice, { from: pickup, to: dropoff, date: scheduleType === 'Schedule' ? date : 'Now', time: scheduleType === 'Schedule' ? time : 'Now' });
     }
     handleClose();
   };
 
-  const selectedVehicleObj = ALL_CARRIERS.find(v => v.id === selectedVehicle);
+  let pickupLabel = 'Sender Location';
+  let dropoffLabel = 'Receiver Location';
+  let routeTitle = 'Route';
+  let routeIcon = 'fa-map-location-dot';
+
+  if (mode === 'AIR') {
+    pickupLabel = 'Departure Airport / Cargo Terminal';
+    dropoffLabel = 'Arrival Airport / Cargo Terminal';
+    routeTitle = 'Flight Route';
+    routeIcon = 'fa-plane-departure';
+  } else if (mode === 'SEA') {
+    pickupLabel = 'Departure Port / Freight Terminal';
+    dropoffLabel = 'Arrival Port / Freight Terminal';
+    routeTitle = 'Shipping Route';
+    routeIcon = 'fa-ship';
+  } else if (mode === 'RAIL') {
+    pickupLabel = 'Origin Freight Station';
+    dropoffLabel = 'Destination Freight Station';
+    routeTitle = 'Rail Route';
+    routeIcon = 'fa-train';
+  }
 
   const renderGridSection = (title: string, icon: string, data: typeof ROAD_CARRIERS) => {
     const allVehicles = data.map(c => c.vehicles).flat();
@@ -173,16 +282,18 @@ export default function CarrierBookingModal({ isOpen, onClose }: CarrierBookingM
 
   return (
     <div className="modal-overlay open" style={{ display: 'flex', zIndex: 1000, background: 'rgba(0,0,0,0.6)' }} onClick={handleClose}>
-      <div className="modal-sheet centered-modal" style={{ maxWidth: '900px', width: '95%', height: '90vh', display: 'flex', flexDirection: 'column', backgroundColor: '#f9fafb', borderRadius: '24px', overflow: 'hidden' }} onClick={e => e.stopPropagation()}>
+      <div className="modal-sheet centered-modal" style={{ maxWidth: step === 2 ? '1200px' : '900px', width: '95%', height: '90vh', display: 'flex', flexDirection: 'column', backgroundColor: '#f9fafb', borderRadius: '24px', overflow: 'hidden', transition: 'max-width 0.3s ease' }} onClick={e => e.stopPropagation()}>
         
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px', background: '#ffffff', borderBottom: '1px solid #e5e7eb' }}>
-          <div style={{ fontSize: '22px', fontWeight: '800', color: '#111827', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <i className="fa-solid fa-truck-fast" style={{ color: '#0ea5e9' }}></i> Cargo & Carrier Booking
+        {/* Dummy div to absorb the globals.css >div:first-child { display: none } rule */}
+        <div style={{ display: 'none' }}></div>
+        
+        {step === 1 && (
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px', background: '#ffffff', borderBottom: '1px solid #e5e7eb' }}>
+            <div style={{ fontSize: '22px', fontWeight: '800', color: '#111827', display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <i className="fa-solid fa-truck-fast" style={{ color: '#0ea5e9' }}></i> Cargo & Carrier Booking
+            </div>
           </div>
-          <button onClick={handleClose} style={{ background: '#f3f4f6', border: 'none', width: '36px', height: '36px', borderRadius: '50%', color: '#4b5563', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px' }}>
-            <i className="fa-solid fa-xmark"></i>
-          </button>
-        </div>
+        )}
         
         {step === 1 && (
           <div style={{ flex: 1, overflowY: 'auto', padding: '24px' }}>
@@ -221,61 +332,220 @@ export default function CarrierBookingModal({ isOpen, onClose }: CarrierBookingM
           </div>
         )}
 
+        {/* ================= STEP 2: LOGISTICS DASHBOARD (PORTER/MOVERS STYLE) ================= */}
         {step === 2 && (
-          <div style={{ flex: 1, overflowY: 'auto', padding: '32px' }}>
+          <div style={{ display: 'flex', flex: 1, minHeight: 0, overflow: 'hidden' }}>
             
-            <button 
-              onClick={handleBackToFleet} 
-              style={{ background: 'transparent', border: 'none', color: '#6b7280', cursor: 'pointer', fontSize: '15px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '8px', padding: '0 0 24px 0' }}
-            >
-              <i className="fa-solid fa-arrow-left"></i> Back to Carrier Options
-            </button>
-
-            {selectedVehicleObj && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '20px', background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '16px', padding: '20px', marginBottom: '32px', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)' }}>
-                <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: selectedVehicleObj.color + '20', color: selectedVehicleObj.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '28px' }}>
-                  <i className={`fa-solid ${selectedVehicleObj.icon}`}></i>
-                </div>
-                <div style={{ flex: 1 }}>
-                  <h3 style={{ margin: 0, fontSize: '20px', fontWeight: '800', color: '#111827' }}>{selectedVehicleObj.name}</h3>
-                  <p style={{ margin: '4px 0 0 0', fontSize: '14px', color: '#6b7280' }}>Selected Cargo Carrier</p>
-                </div>
-                <div style={{ fontSize: '24px', fontWeight: '800', color: '#111827' }}>
-                  ₹{selectedVehicleObj.price.toLocaleString('en-IN')}
-                </div>
-              </div>
-            )}
-
-            <div style={{ background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '16px', padding: '24px' }}>
-              <div style={{ marginBottom: '20px' }}>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#4b5563', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px' }}>Pickup Location</label>
-                <input type="text" style={{ width: '100%', padding: '14px', borderRadius: '10px', border: '1px solid #d1d5db', background: '#f9fafb', color: '#111827', fontSize: '15px' }} placeholder="Enter pickup address" value={pickup} onChange={e => setPickup(e.target.value)} />
-              </div>
-              <div style={{ marginBottom: '20px' }}>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#4b5563', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px' }}>Dropoff Destination</label>
-                <input type="text" style={{ width: '100%', padding: '14px', borderRadius: '10px', border: '1px solid #d1d5db', background: '#f9fafb', color: '#111827', fontSize: '15px' }} placeholder="Enter destination address" value={dropoff} onChange={e => setDropoff(e.target.value)} />
-              </div>
+            {/* Left Sidebar (Booking Flow) */}
+            <div style={{ width: '460px', background: '#ffffff', display: 'flex', flexDirection: 'column', borderRight: '1px solid #e5e7eb', zIndex: 10, boxShadow: '4px 0 16px rgba(0,0,0,0.05)', overflowY: 'auto' }}>
               
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '32px' }}>
-                <div>
-                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#4b5563', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px' }}>Date</label>
-                  <input type="date" style={{ width: '100%', padding: '14px', borderRadius: '10px', border: '1px solid #d1d5db', background: '#f9fafb', color: '#111827', fontSize: '15px' }} value={date} onChange={e => setDate(e.target.value)} />
+              {/* Header */}
+              <div style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '16px', borderBottom: '1px solid #f3f4f6', position: 'sticky', top: 0, background: '#fff', zIndex: 20 }}>
+                <button onClick={handleBackToFleet} style={{ background: '#f3f4f6', border: 'none', width: '36px', height: '36px', borderRadius: '50%', color: '#111827', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <i className="fa-solid fa-arrow-left"></i>
+                </button>
+                <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '800', color: '#111827' }}>Logistics & Freight</h2>
+              </div>
+
+              {/* Selected Vehicle Card */}
+              {selectedVehicleObj && (
+                <div style={{ padding: '20px', borderBottom: '8px solid #f9fafb' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px', background: '#ffffff', border: '2px solid #000', borderRadius: '16px', padding: '16px' }}>
+                    <div style={{ width: '56px', height: '56px', borderRadius: '12px', background: selectedVehicleObj.color + '15', color: selectedVehicleObj.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px' }}>
+                      <i className={`fa-solid ${selectedVehicleObj.icon}`}></i>
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: '11px', fontWeight: '800', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>Selected Carrier</div>
+                      <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '800', color: '#111827' }}>{selectedVehicleObj.name}</h3>
+                    </div>
+                    <div style={{ fontSize: '20px', fontWeight: '800', color: '#111827' }}>
+                      ₹{selectedVehicleObj.price.toLocaleString('en-IN')}
+                    </div>
+                  </div>
                 </div>
+              )}
+
+              {/* Form Content */}
+              <div style={{ flex: 1, padding: '20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                
+                {/* 1. Cargo Details */}
                 <div>
-                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#4b5563', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px' }}>Time</label>
-                  <input type="time" style={{ width: '100%', padding: '14px', borderRadius: '10px', border: '1px solid #d1d5db', background: '#f9fafb', color: '#111827', fontSize: '15px' }} value={time} onChange={e => setTime(e.target.value)} />
+                  <h3 style={{ fontSize: '15px', fontWeight: '800', color: '#111827', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <i className="fa-solid fa-box-open" style={{ color: '#0ea5e9' }}></i> Cargo Details
+                  </h3>
+                  <div style={{ display: 'flex', gap: '12px', flexDirection: 'column' }}>
+                    <div style={{ display: 'flex', gap: '12px' }}>
+                      <select style={{ flex: 1, padding: '12px', borderRadius: '12px', border: '1px solid #e5e7eb', background: '#f9fafb', fontSize: '14px', fontWeight: '600', color: '#111827', outline: 'none' }}>
+                        {mode === 'ROAD' && (
+                          <>
+                            <option>Documents & Parcels</option>
+                            <option>Electronics & Appliances</option>
+                            <option>Furniture & Home</option>
+                            <option>Textiles & Apparel</option>
+                            <option>Industrial Goods</option>
+                            <option>Perishables / FMCG</option>
+                          </>
+                        )}
+                        {mode === 'SEA' && (
+                          <>
+                            <option>FCL (Full Container) - 20ft</option>
+                            <option>FCL (Full Container) - 40ft</option>
+                            <option>LCL (Less than Container Load)</option>
+                            <option>Break Bulk / Over-dimensional</option>
+                            <option>Liquid Bulk / Chemicals</option>
+                            <option>Ro-Ro (Vehicles/Machinery)</option>
+                          </>
+                        )}
+                        {mode === 'AIR' && (
+                          <>
+                            <option>General Air Freight (ULD)</option>
+                            <option>Priority / Express Cargo</option>
+                            <option>Temperature Controlled (Pharma)</option>
+                            <option>Dangerous Goods (HAZMAT)</option>
+                            <option>Live Animals</option>
+                            <option>High-Value / Fragile Cargo</option>
+                          </>
+                        )}
+                        {mode === 'RAIL' && (
+                          <>
+                            <option>Standard Freight Container</option>
+                            <option>Bulk Minerals & Coal</option>
+                            <option>Agricultural Produce</option>
+                            <option>Automobiles & Parts</option>
+                            <option>Liquid Tank Wagons</option>
+                          </>
+                        )}
+                      </select>
+                      <input type="text" placeholder={`Max ${maxWeightStr}`} value={cargoWeight} onChange={handleWeightChange} style={{ width: '120px', padding: '12px', borderRadius: '12px', border: weightError ? '1px solid #ef4444' : '1px solid #e5e7eb', background: '#f9fafb', fontSize: '14px', fontWeight: '600', color: '#111827', outline: 'none' }} />
+                    </div>
+                    {weightError && (
+                      <div style={{ color: '#ef4444', fontSize: '13px', fontWeight: '700', paddingLeft: '4px' }}>
+                        <i className="fa-solid fa-circle-exclamation"></i> {weightError}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* 2. Route & Locations */}
+                <div>
+                  <h3 style={{ fontSize: '15px', fontWeight: '800', color: '#111827', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'space-between' }}>
+                    <span><i className={`fa-solid ${routeIcon}`} style={{ color: '#f59e0b' }}></i> {routeTitle}</span>
+                    <button onClick={handleSwap} style={{ background: '#f3f4f6', border: '1px solid #e5e7eb', borderRadius: '8px', padding: '4px 10px', fontSize: '12px', fontWeight: '700', cursor: 'pointer', color: '#4b5563', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <i className="fa-solid fa-arrow-right-arrow-left fa-rotate-90"></i> Swap
+                    </button>
+                  </h3>
+                  <div style={{ position: 'relative', border: '1px solid #e5e7eb', borderRadius: '16px', padding: '16px', background: '#ffffff', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '12px' }}>
+                      <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#10b981', marginRight: '16px', flexShrink: 0 }}></div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontSize: '11px', fontWeight: '700', color: '#6b7280', textTransform: 'uppercase', marginBottom: '2px' }}>Pickup (Sender)</div>
+                        <input type="text" placeholder={pickupLabel} value={pickup} onChange={e => setPickup(e.target.value)} style={{ border: 'none', background: 'transparent', width: '100%', fontSize: '15px', fontWeight: '600', color: '#111827', outline: 'none' }} />
+                      </div>
+                    </div>
+                    
+                    <div style={{ borderLeft: '2px dashed #e5e7eb', marginLeft: '4px', height: '24px', marginBottom: '12px' }}></div>
+                    
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <div style={{ width: '10px', height: '10px', background: '#ef4444', marginRight: '16px', flexShrink: 0 }}></div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontSize: '11px', fontWeight: '700', color: '#6b7280', textTransform: 'uppercase', marginBottom: '2px' }}>Dropoff (Receiver)</div>
+                        <input type="text" placeholder={dropoffLabel} value={dropoff} onChange={e => setDropoff(e.target.value)} style={{ border: 'none', background: 'transparent', width: '100%', fontSize: '15px', fontWeight: '600', color: '#111827', outline: 'none' }} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 3. Contact Details */}
+                <div>
+                  <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+                    <button 
+                      onClick={() => setBookingRole('Sender')}
+                      style={{ flex: 1, padding: '8px', borderRadius: '8px', fontSize: '13px', fontWeight: '700', cursor: 'pointer', border: '1px solid', borderColor: bookingRole === 'Sender' ? '#111827' : '#e5e7eb', background: bookingRole === 'Sender' ? '#111827' : '#ffffff', color: bookingRole === 'Sender' ? '#ffffff' : '#4b5563', transition: 'all 0.2s ease' }}
+                    >{mode === 'ROAD' ? 'I am the Sender' : 'I am the Shipper'}</button>
+                    <button 
+                      onClick={() => setBookingRole('Receiver')}
+                      style={{ flex: 1, padding: '8px', borderRadius: '8px', fontSize: '13px', fontWeight: '700', cursor: 'pointer', border: '1px solid', borderColor: bookingRole === 'Receiver' ? '#111827' : '#e5e7eb', background: bookingRole === 'Receiver' ? '#111827' : '#ffffff', color: bookingRole === 'Receiver' ? '#ffffff' : '#4b5563', transition: 'all 0.2s ease' }}
+                    >{mode === 'ROAD' ? 'I am the Receiver' : 'I am the Consignee'}</button>
+                  </div>
+                  
+                  <h3 style={{ fontSize: '15px', fontWeight: '800', color: '#111827', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <i className="fa-solid fa-address-book" style={{ color: '#8b5cf6' }}></i> 
+                    {bookingRole === 'Sender' 
+                      ? (mode === 'ROAD' ? 'Receiver Contact Details' : 'Consignee Details') 
+                      : (mode === 'ROAD' ? 'Sender Contact Details' : 'Shipper Details')}
+                  </h3>
+                  <div style={{ display: 'flex', gap: '12px' }}>
+                    <input type="text" placeholder={mode === 'ROAD' ? "Name" : "Company / Contact Name"} style={{ flex: 1, padding: '12px', borderRadius: '12px', border: '1px solid #e5e7eb', background: '#f9fafb', fontSize: '14px', fontWeight: '600', color: '#111827', outline: 'none' }} />
+                    <input type="text" placeholder="Phone Number" style={{ flex: 1, padding: '12px', borderRadius: '12px', border: '1px solid #e5e7eb', background: '#f9fafb', fontSize: '14px', fontWeight: '600', color: '#111827', outline: 'none' }} />
+                  </div>
+                </div>
+
+                {/* 4. Scheduling */}
+                <div>
+                  <h3 style={{ fontSize: '15px', fontWeight: '800', color: '#111827', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <i className="fa-regular fa-clock" style={{ color: '#14b8a6' }}></i> Dispatch Time
+                  </h3>
+                  <div style={{ display: 'flex', gap: '12px', marginBottom: scheduleType === 'Schedule' ? '12px' : '0' }}>
+                    <button 
+                      onClick={() => setScheduleType('Now')}
+                      style={{ flex: 1, padding: '10px', borderRadius: '10px', fontSize: '14px', fontWeight: '700', cursor: 'pointer', border: '1px solid', borderColor: scheduleType === 'Now' ? '#111827' : '#e5e7eb', background: scheduleType === 'Now' ? '#111827' : '#ffffff', color: scheduleType === 'Now' ? '#ffffff' : '#4b5563', transition: 'all 0.2s ease' }}
+                    >Now</button>
+                    <button 
+                      onClick={() => setScheduleType('Schedule')}
+                      style={{ flex: 1, padding: '10px', borderRadius: '10px', fontSize: '14px', fontWeight: '700', cursor: 'pointer', border: '1px solid', borderColor: scheduleType === 'Schedule' ? '#111827' : '#e5e7eb', background: scheduleType === 'Schedule' ? '#111827' : '#ffffff', color: scheduleType === 'Schedule' ? '#ffffff' : '#4b5563', transition: 'all 0.2s ease' }}
+                    >Schedule</button>
+                  </div>
+                  {scheduleType === 'Schedule' && (
+                    <div style={{ display: 'flex', gap: '12px' }}>
+                      <input type="date" value={date} onChange={e => setDate(e.target.value)} style={{ flex: 1, padding: '12px', borderRadius: '12px', border: '1px solid #e5e7eb', background: '#f9fafb', fontSize: '14px', fontWeight: '600', color: '#111827', outline: 'none' }} />
+                      <input type="time" value={time} onChange={e => setTime(e.target.value)} style={{ flex: 1, padding: '12px', borderRadius: '12px', border: '1px solid #e5e7eb', background: '#f9fafb', fontSize: '14px', fontWeight: '600', color: '#111827', outline: 'none' }} />
+                    </div>
+                  )}
+                </div>
+
+              </div>
+
+              {/* Bottom Action Bar (Payment & Book) */}
+              <div style={{ borderTop: '1px solid #e5e7eb', padding: '20px', background: '#ffffff', position: 'sticky', bottom: 0 }}>
+                <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                  <select style={{ background: '#f3f4f6', border: '1px solid #e5e7eb', padding: '14px 12px', borderRadius: '12px', fontSize: '14px', fontWeight: '700', color: '#111827', outline: 'none', cursor: 'pointer', width: '140px' }}>
+                    <option>Pay via Cash</option>
+                    <option>Pay via UPI</option>
+                    <option>Corporate Billed</option>
+                  </select>
+                  
+                  <button 
+                    onClick={handleBook}
+                    style={{ flex: 1, background: '#111827', color: '#ffffff', border: 'none', padding: '14px', borderRadius: '12px', fontSize: '16px', fontWeight: '800', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', transition: 'transform 0.1s' }}
+                    onMouseDown={e => e.currentTarget.style.transform = 'scale(0.98)'}
+                    onMouseUp={e => e.currentTarget.style.transform = 'scale(1)'}
+                  >
+                    <span>Confirm Booking</span>
+                    <i className="fa-solid fa-arrow-right"></i>
+                  </button>
                 </div>
               </div>
 
-              <button 
-                onClick={handleBook}
-                style={{ width: '100%', padding: '16px', borderRadius: '12px', background: '#0ea5e9', color: '#ffffff', border: 'none', fontSize: '16px', fontWeight: '700', cursor: 'pointer', transition: 'background 0.2s' }}
-                onMouseEnter={e => e.currentTarget.style.background = '#0284c7'}
-                onMouseLeave={e => e.currentTarget.style.background = '#0ea5e9'}
-              >
-                Confirm Booking
-              </button>
             </div>
+
+            {/* Right Sidebar (Live Map for Logistics) */}
+            <div style={{ flex: 1, position: 'relative', background: '#e5e7eb', display: 'flex', flexDirection: 'column' }}>
+              <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backgroundImage: 'url("https://www.transparenttextures.com/patterns/cubes.png")', backgroundSize: '200px', opacity: 0.6 }}></div>
+              
+              {/* Map Floating UI Elements */}
+              <div style={{ position: 'absolute', top: '24px', right: '24px', display: 'flex', gap: '12px', zIndex: 10 }}>
+                <div style={{ background: '#ffffff', padding: '10px 16px', borderRadius: '24px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', fontSize: '13px', fontWeight: '700', color: '#111827', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <i className="fa-solid fa-location-crosshairs" style={{ color: '#3b82f6' }}></i> Live GPS Active
+                </div>
+              </div>
+
+              {/* Real Map Integration */}
+              <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1 }}>
+                <LiveTrackerMap vehicleIconClass={selectedVehicleObj?.icon || 'fa-truck-fast'} />
+              </div>
+
+            </div>
+
           </div>
         )}
 

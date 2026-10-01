@@ -45,7 +45,12 @@ export default function Navbar() {
   return (
     <header className="web-navbar">
       <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-        <div className="nav-brand" onClick={() => console.log('Home')}>
+        <div className="nav-brand" onClick={() => {
+          if (typeof window !== 'undefined') {
+            const { useSartStore } = require('@/store/useSartStore');
+            useSartStore.getState().setActiveTab('home');
+          }
+        }} style={{ cursor: 'pointer' }}>
           <i className="fa-solid fa-compass-drafting brand-icon"></i>
           <span>SART</span>
           <span className="brand-badge">UNIVERSAL</span>

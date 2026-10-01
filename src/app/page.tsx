@@ -66,7 +66,7 @@ export default function Home() {
       } else {
         // Check for top-level tabs (e.g. /store)
         const tab = path.replace('/', '');
-        if (['store', 'bookings', 'wallet', 'profile', 'support', 'favorites'].includes(tab)) {
+        if (['store', 'booking', 'wallet', 'profile', 'support', 'favorites'].includes(tab)) {
           setActiveTab(tab as any);
         }
       }
