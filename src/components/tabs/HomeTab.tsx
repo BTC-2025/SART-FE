@@ -117,7 +117,7 @@ export default function HomeTab() {
           alt="Carrier"
         />
       </div>
-      <span>Carrier</span>
+      <span>Carrier </span>
     </div>
 
 
