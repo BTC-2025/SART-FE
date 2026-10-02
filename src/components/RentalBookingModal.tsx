@@ -230,6 +230,10 @@ function RentalBookingModal({ isOpen, onClose }: RentalBookingModalProps) {
     <div className="modal-overlay open" style={{ display: 'flex', zIndex: 1000, background: 'rgba(0,0,0,0.6)' }} onClick={handleClose}>
       <div className="modal-sheet centered-modal" style={{ maxWidth: '1000px', width: '95%', height: '90vh', display: 'flex', flexDirection: 'column', backgroundColor: '#f9fafb', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)' }} onClick={e => e.stopPropagation()}>
         
+        {/* HACK: globals.css has `#tab-service-pages .modal-sheet>div:first-child { display: none !important; }`
+            This dummy div absorbs that CSS rule so our actual content doesn't get hidden! */}
+        <div className="dummy-modal-header-for-css-hack"></div>
+
         {/* ================= STEP 1: MASTER CATEGORIES ================= */}
         {step === 1 && (
           <>
