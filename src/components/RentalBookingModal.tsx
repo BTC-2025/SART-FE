@@ -279,7 +279,7 @@ function RentalBookingModal({ isOpen, onClose }: RentalBookingModalProps) {
 
         {/* ================= STEP 2: BOOKING DASHBOARD (ZOOMCAR STYLE) ================= */}
         {step === 2 && activeMaster && (
-          <div style={{ display: 'flex', flex: 1, minHeight: '80vh', overflow: 'hidden' }}>
+          <div style={{ display: 'flex', flex: 1, height: '80vh', overflow: 'hidden' }}>
             
             {/* Left Sidebar (Booking Form) */}
             <div style={{ width: '420px', background: '#ffffff', display: 'flex', flexDirection: 'column', borderRight: '1px solid #e5e7eb', zIndex: 10, boxShadow: '4px 0 16px rgba(0,0,0,0.05)', overflowY: 'auto' }}>
