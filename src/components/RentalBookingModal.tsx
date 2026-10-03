@@ -181,20 +181,32 @@ function RentalBookingModal({ isOpen, onClose }: RentalBookingModalProps) {
 
   if (!isOpen) return null;
 
+  const updateUrl = (path: string) => {
+    if (typeof window !== 'undefined') {
+      window.history.pushState(null, '', path);
+    }
+  };
+
   const handleSelectMaster = (master: any) => {
     setSelectedMasterId(master.id);
     if (master.list.length > 0) {
       setSelectedVehicleId(master.list[0].id);
     }
     setStep(2);
+    
+    // Update URL dynamically
+    const cleanName = master.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    updateUrl(`/home/rental/${cleanName}`);
   };
 
   const handleBackToFleet = () => {
     setStep(1);
+    updateUrl('/home/rental');
   };
 
   const handleClose = () => {
     setStep(1);
+    updateUrl('/');
     useSartStore.getState().setActiveTab('home');
     onClose();
   };
