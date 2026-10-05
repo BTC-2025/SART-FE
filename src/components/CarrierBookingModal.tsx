@@ -75,7 +75,7 @@ export default function CarrierBookingModal({ isOpen, onClose }: CarrierBookingM
   const [step, setStep] = useState<1 | 2>(1);
   const [activeCategory, setActiveCategory] = useState<'ALL' | 'ROAD' | 'SEA' | 'AIR' | 'RAIL'>('ALL');
   const [selectedVehicle, setSelectedVehicle] = useState('c-minitruck');
-  const [pickup, setPickup] = useState('Current Location');
+  const [pickup, setPickup] = useState('');
   const [dropoff, setDropoff] = useState('');
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
@@ -83,8 +83,41 @@ export default function CarrierBookingModal({ isOpen, onClose }: CarrierBookingM
   const [bookingRole, setBookingRole] = useState<'Sender' | 'Receiver'>('Sender');
 
   const [cargoWeight, setCargoWeight] = useState('');
-
+  const [cargoUnit, setCargoUnit] = useState('kg');
+  const [contactName, setContactName] = useState('');
+  const [contactPhone, setContactPhone] = useState('');
   const [weightError, setWeightError] = useState('');
+
+  const [isSearching, setIsSearching] = useState(false);
+  const [isFindingCarrier, setIsFindingCarrier] = useState(false);
+  const [isCarrierFound, setIsCarrierFound] = useState(false);
+  const [showLocationList, setShowLocationList] = useState(false);
+  const [showDropoffList, setShowDropoffList] = useState(false);
+
+  const INDIAN_CITIES = ['Chennai', 'Coimbatore', 'Madurai', 'Trichy', 'Salem', 'Tirunelveli', 'Vellore', 'Erode', 'Bengaluru', 'Mumbai', 'Delhi', 'Hyderabad', 'Pune', 'Kolkata', 'Kochi', 'Thiruvananthapuram', 'Mysuru'];
+  
+  const getFilteredCities = (input: string) => {
+    const term = input.toLowerCase();
+    const match = INDIAN_CITIES.find(c => c.toLowerCase().startsWith(term));
+    return match || (input.charAt(0).toUpperCase() + input.slice(1));
+  };
+
+  const getSimulatedDistance = () => {
+    if (!pickup || !dropoff || pickup === 'Current Location') return 15;
+    return 10 + (pickup.length + dropoff.length) * 3;
+  };
+  const estimatedDistance = getSimulatedDistance();
+
+  React.useEffect(() => {
+    let timer: any;
+    if (isFindingCarrier) {
+      timer = setTimeout(() => {
+        setIsFindingCarrier(false);
+        setIsCarrierFound(true);
+      }, 3000);
+    }
+    return () => clearTimeout(timer);
+  }, [isFindingCarrier]);
 
   React.useEffect(() => {
     const handleUrlState = () => {
@@ -191,19 +224,39 @@ export default function CarrierBookingModal({ isOpen, onClose }: CarrierBookingM
   };
 
   const handleBook = () => {
+    if (!cargoWeight.trim()) {
+      alert("Please enter the cargo weight/quantity.");
+      return;
+    }
+    
     if (weightError) {
       alert("Cannot book: " + weightError);
       return;
     }
 
+    if (!pickup.trim() || !dropoff.trim()) {
+      alert("Please enter valid pickup and dropoff locations.");
+      return;
+    }
+    
+    if (!contactName.trim() || !contactPhone.trim()) {
+      alert("Please fill in the contact details (Name and Phone Number).");
+      return;
+    }
+    
+    setIsSearching(true);
+    setIsFindingCarrier(true);
+  };
+
+  const handleFinalConfirm = () => {
     let vehicleName = 'Cargo Carrier';
-    let vehiclePrice = 900;
     
     const found = ALL_CARRIERS.find(v => v.id === selectedVehicle);
     if (found) {
       vehicleName = found.name;
-      vehiclePrice = found.price;
     }
+    
+    const dynamicPrice = found ? Math.max(found.price, Math.round(found.price * (estimatedDistance / 20))) : 900;
 
     let subtitle = `${vehicleName} • Logistics Freight`;
     if (scheduleType === 'Schedule' && (date || time)) {
@@ -213,7 +266,7 @@ export default function CarrierBookingModal({ isOpen, onClose }: CarrierBookingM
     }
     
     if ((window as any).executeGenericBooking) {
-      (window as any).executeGenericBooking('carrier', `Cargo: ${pickup} to ${dropoff || 'Destination'}`, subtitle, vehiclePrice, { from: pickup, to: dropoff, date: scheduleType === 'Schedule' ? date : 'Now', time: scheduleType === 'Schedule' ? time : 'Now' });
+      (window as any).executeGenericBooking('carrier', `Cargo: ${pickup} to ${dropoff || 'Destination'}`, subtitle, dynamicPrice, { from: pickup, to: dropoff, date: scheduleType === 'Schedule' ? date : 'Now', time: scheduleType === 'Schedule' ? time : 'Now' });
     }
     handleClose();
   };
@@ -347,26 +400,78 @@ export default function CarrierBookingModal({ isOpen, onClose }: CarrierBookingM
                 <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '800', color: '#111827' }}>Logistics & Freight</h2>
               </div>
 
-              {/* Selected Vehicle Card */}
-              {selectedVehicleObj && (
-                <div style={{ padding: '20px', borderBottom: '8px solid #f9fafb' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px', background: '#ffffff', border: '2px solid #000', borderRadius: '16px', padding: '16px' }}>
-                    <div style={{ width: '56px', height: '56px', borderRadius: '12px', background: selectedVehicleObj.color + '15', color: selectedVehicleObj.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px' }}>
-                      <i className={`fa-solid ${selectedVehicleObj.icon}`}></i>
+
+              {/* Form Content OR Carrier Tracking */}
+              {isFindingCarrier ? (
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px 20px', textAlign: 'center' }}>
+                  <div style={{ width: '80px', height: '80px', border: '4px solid #f3f4f6', borderTopColor: '#0ea5e9', borderRadius: '50%', animation: 'spin 1s linear infinite', marginBottom: '24px' }}></div>
+                  <h3 style={{ fontSize: '20px', fontWeight: '800', color: '#111827', margin: '0 0 8px 0' }}>Assigning Carrier...</h3>
+                  <p style={{ margin: 0, color: '#6b7280', fontSize: '15px' }}>Finding the best {selectedVehicleObj?.name} near you.</p>
+                  <style>{`@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`}</style>
+                </div>
+              ) : isCarrierFound ? (
+                <div style={{ flex: 1, padding: '24px', display: 'flex', flexDirection: 'column', background: '#f9fafb' }}>
+                  <div style={{ background: '#dcfce7', color: '#166534', padding: '12px 16px', borderRadius: '12px', fontWeight: '800', fontSize: '15px', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '24px' }}>
+                    <i className="fa-solid fa-circle-check"></i> Carrier Assigned Successfully
+                  </div>
+                  
+                  {/* Carrier Card */}
+                  <div style={{ border: '1px solid #e5e7eb', borderRadius: '16px', padding: '20px', background: '#fff', marginBottom: '16px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+                      <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+                        <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: '#f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', color: '#9ca3af', overflow: 'hidden' }}>
+                          <img src="https://ui-avatars.com/api/?name=Kannan+S&background=random" alt="Driver" style={{ width: '100%', height: '100%' }} />
+                        </div>
+                        <div>
+                          <div style={{ fontSize: '18px', fontWeight: '800', color: '#111827' }}>Kannan S.</div>
+                          <div style={{ fontSize: '14px', color: '#6b7280', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            <i className="fa-solid fa-star" style={{ color: '#f59e0b' }}></i> 4.9 (420 deliveries)
+                          </div>
+                        </div>
+                      </div>
+                      <div style={{ textAlign: 'right' }}>
+                        <div style={{ fontSize: '20px', fontWeight: '900', color: '#111827', letterSpacing: '1px' }}>TN 12 L 4567</div>
+                        <div style={{ fontSize: '13px', color: '#6b7280', fontWeight: '600' }}>{selectedVehicleObj?.name}</div>
+                      </div>
                     </div>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ fontSize: '11px', fontWeight: '800', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>Selected Carrier</div>
-                      <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '800', color: '#111827' }}>{selectedVehicleObj.name}</h3>
-                    </div>
-                    <div style={{ fontSize: '20px', fontWeight: '800', color: '#111827' }}>
-                      ₹{selectedVehicleObj.price.toLocaleString('en-IN')}
+                    
+                    <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', border: '1px solid #e2e8f0' }}>
+                      <div>
+                        <div style={{ fontSize: '12px', color: '#64748b', fontWeight: '700', marginBottom: '4px', textTransform: 'uppercase' }}>Tracking PIN</div>
+                        <div style={{ fontSize: '28px', fontWeight: '900', color: '#0ea5e9', letterSpacing: '4px' }}>5921</div>
+                      </div>
+                      <div style={{ textAlign: 'right' }}>
+                        <div style={{ fontSize: '12px', color: '#64748b', fontWeight: '700', marginBottom: '4px', textTransform: 'uppercase' }}>ETA to Pickup</div>
+                        <div style={{ fontSize: '18px', fontWeight: '800', color: '#10b981' }}>12 mins</div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
 
-              {/* Form Content */}
-              <div style={{ flex: 1, padding: '20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                  <div style={{ display: 'flex', gap: '12px', marginTop: 'auto' }}>
+                    <button style={{ flex: 1, padding: '16px', borderRadius: '12px', border: '2px solid #e2e8f0', background: '#fff', color: '#0f172a', fontWeight: '800', fontSize: '15px', cursor: 'pointer', display: 'flex', justifyContent: 'center', gap: '8px', alignItems: 'center', transition: 'all 0.2s' }}>
+                      <i className="fa-solid fa-message"></i> Message
+                    </button>
+                    <button style={{ flex: 1, padding: '16px', borderRadius: '12px', border: 'none', background: '#0ea5e9', color: '#fff', fontWeight: '800', fontSize: '15px', cursor: 'pointer', display: 'flex', justifyContent: 'center', gap: '8px', alignItems: 'center', boxShadow: '0 4px 12px rgba(14, 165, 233, 0.3)', transition: 'all 0.2s' }}>
+                      <i className="fa-solid fa-phone"></i> Call Driver
+                    </button>
+                  </div>
+                  <div style={{ display: 'flex', gap: '12px', marginTop: '16px' }}>
+                    <button 
+                      onClick={() => { setIsCarrierFound(false); setIsSearching(false); }}
+                      style={{ flex: 1, padding: '16px', borderRadius: '12px', border: '2px solid #ef4444', background: '#fff', color: '#ef4444', fontWeight: '800', fontSize: '15px', cursor: 'pointer', transition: 'background 0.2s' }}
+                    >
+                      Cancel Booking
+                    </button>
+                    <button 
+                      onClick={handleFinalConfirm}
+                      style={{ flex: 1, padding: '16px', borderRadius: '12px', border: 'none', background: '#111827', color: '#fff', fontWeight: '800', fontSize: '15px', cursor: 'pointer', transition: 'background 0.2s' }}
+                    >
+                      Finish
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div style={{ flex: 1, padding: '20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 
                 {/* 1. Cargo Details */}
                 <div>
@@ -416,7 +521,17 @@ export default function CarrierBookingModal({ isOpen, onClose }: CarrierBookingM
                           </>
                         )}
                       </select>
-                      <input type="text" placeholder={`Max ${maxWeightStr}`} value={cargoWeight} onChange={handleWeightChange} style={{ width: '120px', padding: '12px', borderRadius: '12px', border: weightError ? '1px solid #ef4444' : '1px solid #e5e7eb', background: '#f9fafb', fontSize: '14px', fontWeight: '600', color: '#111827', outline: 'none' }} />
+                      
+                      <div style={{ display: 'flex', borderRadius: '12px', border: weightError ? '1px solid #ef4444' : '1px solid #e5e7eb', background: '#f9fafb', width: '150px', overflow: 'hidden' }}>
+                        <input type="text" placeholder={`Max ${maxWeightNum}`} value={cargoWeight} onChange={handleWeightChange} style={{ width: '80px', padding: '12px', border: 'none', background: 'transparent', fontSize: '14px', fontWeight: '600', color: '#111827', outline: 'none' }} />
+                        <select value={cargoUnit} onChange={e => setCargoUnit(e.target.value)} style={{ flex: 1, padding: '12px 8px', border: 'none', borderLeft: '1px solid #e5e7eb', background: 'transparent', fontSize: '13px', fontWeight: '700', color: '#4b5563', outline: 'none', cursor: 'pointer' }}>
+                          <option value="kg">kg</option>
+                          <option value="lbs">lbs</option>
+                          <option value="ton">tons</option>
+                          <option value="cbm">cbm</option>
+                          <option value="pallets">pallets</option>
+                        </select>
+                      </div>
                     </div>
                     {weightError && (
                       <div style={{ color: '#ef4444', fontSize: '13px', fontWeight: '700', paddingLeft: '4px' }}>
@@ -437,9 +552,25 @@ export default function CarrierBookingModal({ isOpen, onClose }: CarrierBookingM
                   <div style={{ position: 'relative', border: '1px solid #e5e7eb', borderRadius: '16px', padding: '16px', background: '#ffffff', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
                     <div style={{ display: 'flex', alignItems: 'center', marginBottom: '12px' }}>
                       <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#10b981', marginRight: '16px', flexShrink: 0 }}></div>
-                      <div style={{ flex: 1 }}>
+                      <div style={{ flex: 1, position: 'relative' }}>
                         <div style={{ fontSize: '11px', fontWeight: '700', color: '#6b7280', textTransform: 'uppercase', marginBottom: '2px' }}>Pickup (Sender)</div>
-                        <input type="text" placeholder={pickupLabel} value={pickup} onChange={e => setPickup(e.target.value)} style={{ border: 'none', background: 'transparent', width: '100%', fontSize: '15px', fontWeight: '600', color: '#111827', outline: 'none' }} />
+                        <input 
+                          type="text" 
+                          placeholder={pickupLabel} 
+                          value={pickup} 
+                          onChange={e => {
+                            setPickup(e.target.value);
+                            setShowLocationList(e.target.value.length > 1);
+                            setIsSearching(false);
+                          }} 
+                          style={{ border: 'none', background: 'transparent', width: '100%', fontSize: '15px', fontWeight: '600', color: '#111827', outline: 'none' }} 
+                        />
+                        {showLocationList && pickup.length > 1 && (
+                          <div style={{ position: 'absolute', top: '100%', left: '0', right: '0', background: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', zIndex: 10, overflow: 'hidden', marginTop: '8px' }}>
+                            <div onClick={() => { setPickup(getFilteredCities(pickup) + (mode === 'AIR' ? ' Airport' : (mode === 'SEA' ? ' Port' : ' Industrial Estate'))); setShowLocationList(false); setIsSearching(false); }} style={{ padding: '12px 16px', cursor: 'pointer', borderBottom: '1px solid #f3f4f6', fontSize: '14px', fontWeight: '600' }}><i className={`fa-solid ${routeIcon}`} style={{ color: '#9ca3af', marginRight: '8px' }}></i> {getFilteredCities(pickup)} {mode === 'AIR' ? 'Airport' : (mode === 'SEA' ? 'Port' : 'Industrial Estate')}</div>
+                            <div onClick={() => { setPickup(getFilteredCities(pickup) + ' City Center'); setShowLocationList(false); setIsSearching(false); }} style={{ padding: '12px 16px', cursor: 'pointer', fontSize: '14px', fontWeight: '600' }}><i className="fa-solid fa-city" style={{ color: '#9ca3af', marginRight: '8px' }}></i> {getFilteredCities(pickup)} City Center</div>
+                          </div>
+                        )}
                       </div>
                     </div>
                     
@@ -447,13 +578,52 @@ export default function CarrierBookingModal({ isOpen, onClose }: CarrierBookingM
                     
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                       <div style={{ width: '10px', height: '10px', background: '#ef4444', marginRight: '16px', flexShrink: 0 }}></div>
-                      <div style={{ flex: 1 }}>
+                      <div style={{ flex: 1, position: 'relative' }}>
                         <div style={{ fontSize: '11px', fontWeight: '700', color: '#6b7280', textTransform: 'uppercase', marginBottom: '2px' }}>Dropoff (Receiver)</div>
-                        <input type="text" placeholder={dropoffLabel} value={dropoff} onChange={e => setDropoff(e.target.value)} style={{ border: 'none', background: 'transparent', width: '100%', fontSize: '15px', fontWeight: '600', color: '#111827', outline: 'none' }} />
+                        <input 
+                          type="text" 
+                          placeholder={dropoffLabel} 
+                          value={dropoff} 
+                          onChange={e => {
+                            setDropoff(e.target.value);
+                            setShowDropoffList(e.target.value.length > 1);
+                            setIsSearching(false);
+                          }} 
+                          style={{ border: 'none', background: 'transparent', width: '100%', fontSize: '15px', fontWeight: '600', color: '#111827', outline: 'none' }} 
+                        />
+                        {showDropoffList && dropoff.length > 1 && (
+                          <div style={{ position: 'absolute', top: '100%', left: '0', right: '0', background: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', zIndex: 10, overflow: 'hidden', marginTop: '8px' }}>
+                            <div onClick={() => { setDropoff(getFilteredCities(dropoff) + (mode === 'AIR' ? ' Airport' : (mode === 'SEA' ? ' Port' : ' Industrial Estate'))); setShowDropoffList(false); setIsSearching(false); }} style={{ padding: '12px 16px', cursor: 'pointer', borderBottom: '1px solid #f3f4f6', fontSize: '14px', fontWeight: '600' }}><i className={`fa-solid ${routeIcon}`} style={{ color: '#9ca3af', marginRight: '8px' }}></i> {getFilteredCities(dropoff)} {mode === 'AIR' ? 'Airport' : (mode === 'SEA' ? 'Port' : 'Industrial Estate')}</div>
+                            <div onClick={() => { setDropoff(getFilteredCities(dropoff) + ' City Center'); setShowDropoffList(false); setIsSearching(false); }} style={{ padding: '12px 16px', cursor: 'pointer', fontSize: '14px', fontWeight: '600' }}><i className="fa-solid fa-city" style={{ color: '#9ca3af', marginRight: '8px' }}></i> {getFilteredCities(dropoff)} City Center</div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
                 </div>
+
+                {/* Selected Vehicle Summary Card */}
+                {selectedVehicleObj && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px', background: '#ffffff', border: '2px solid #000', borderRadius: '16px', padding: '16px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
+                    <div style={{ width: '56px', height: '56px', borderRadius: '12px', background: selectedVehicleObj.color + '15', color: selectedVehicleObj.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px' }}>
+                      <i className={`fa-solid ${selectedVehicleObj.icon}`}></i>
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: '11px', fontWeight: '800', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>Selected Carrier</div>
+                      <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '800', color: '#111827' }}>{selectedVehicleObj.name}</h3>
+                    </div>
+                    <div style={{ textAlign: 'right' }}>
+                      <div style={{ fontSize: '20px', fontWeight: '800', color: '#111827' }}>
+                        {(pickup.length > 1 && dropoff.length > 1 && cargoWeight !== '') ? `₹${Math.max(selectedVehicleObj.price, Math.round(selectedVehicleObj.price * (estimatedDistance / 20))).toLocaleString('en-IN')}` : '--'}
+                      </div>
+                      {pickup && dropoff && pickup !== 'Current Location' && pickup.length > 1 && dropoff.length > 1 && cargoWeight !== '' && (
+                        <div style={{ fontSize: '12px', color: '#3b82f6', fontWeight: '700', marginTop: '4px' }}>
+                          <i className="fa-solid fa-route"></i> ~{estimatedDistance} km route
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
 
                 {/* 3. Contact Details */}
                 <div>
@@ -475,8 +645,8 @@ export default function CarrierBookingModal({ isOpen, onClose }: CarrierBookingM
                       : (mode === 'ROAD' ? 'Sender Contact Details' : 'Shipper Details')}
                   </h3>
                   <div style={{ display: 'flex', gap: '12px' }}>
-                    <input type="text" placeholder={mode === 'ROAD' ? "Name" : "Company / Contact Name"} style={{ flex: 1, padding: '12px', borderRadius: '12px', border: '1px solid #e5e7eb', background: '#f9fafb', fontSize: '14px', fontWeight: '600', color: '#111827', outline: 'none' }} />
-                    <input type="text" placeholder="Phone Number" style={{ flex: 1, padding: '12px', borderRadius: '12px', border: '1px solid #e5e7eb', background: '#f9fafb', fontSize: '14px', fontWeight: '600', color: '#111827', outline: 'none' }} />
+                    <input type="text" value={contactName} onChange={e => setContactName(e.target.value)} placeholder={mode === 'ROAD' ? "Name" : "Company / Contact Name"} style={{ flex: 1, padding: '12px', borderRadius: '12px', border: '1px solid #e5e7eb', background: '#f9fafb', fontSize: '14px', fontWeight: '600', color: '#111827', outline: 'none' }} />
+                    <input type="text" value={contactPhone} onChange={e => setContactPhone(e.target.value)} placeholder="Phone Number" style={{ flex: 1, padding: '12px', borderRadius: '12px', border: '1px solid #e5e7eb', background: '#f9fafb', fontSize: '14px', fontWeight: '600', color: '#111827', outline: 'none' }} />
                   </div>
                 </div>
 
@@ -504,8 +674,10 @@ export default function CarrierBookingModal({ isOpen, onClose }: CarrierBookingM
                 </div>
 
               </div>
+            )}
 
-              {/* Bottom Action Bar (Payment & Book) */}
+            {/* Bottom Action Bar (Payment & Book) */}
+            {!isCarrierFound && !isFindingCarrier && (
               <div style={{ borderTop: '1px solid #e5e7eb', padding: '20px', background: '#ffffff', position: 'sticky', bottom: 0 }}>
                 <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
                   <select style={{ background: '#f3f4f6', border: '1px solid #e5e7eb', padding: '14px 12px', borderRadius: '12px', fontSize: '14px', fontWeight: '700', color: '#111827', outline: 'none', cursor: 'pointer', width: '140px' }}>
@@ -520,13 +692,14 @@ export default function CarrierBookingModal({ isOpen, onClose }: CarrierBookingM
                     onMouseDown={e => e.currentTarget.style.transform = 'scale(0.98)'}
                     onMouseUp={e => e.currentTarget.style.transform = 'scale(1)'}
                   >
-                    <span>Confirm Booking</span>
+                    <span>Find Carrier</span>
                     <i className="fa-solid fa-arrow-right"></i>
                   </button>
                 </div>
               </div>
+            )}
 
-            </div>
+            </div> {/* Close Left Sidebar */}
 
             {/* Right Sidebar (Live Map for Logistics) */}
             <div style={{ flex: 1, position: 'relative', background: '#e5e7eb', display: 'flex', flexDirection: 'column' }}>
@@ -541,7 +714,13 @@ export default function CarrierBookingModal({ isOpen, onClose }: CarrierBookingM
 
               {/* Real Map Integration */}
               <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1 }}>
-                <LiveTrackerMap vehicleIconClass={selectedVehicleObj?.icon || 'fa-truck-fast'} />
+                <LiveTrackerMap 
+                  key="carrier-map"
+                  vehicleIconClass={selectedVehicleObj?.icon || 'fa-truck-fast'} 
+                  pickup={pickup}
+                  dropoff={dropoff}
+                  isSearching={isSearching || isFindingCarrier || isCarrierFound}
+                />
               </div>
 
             </div>

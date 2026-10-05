@@ -242,15 +242,27 @@ export default function ParkingBookingModal({ isOpen, onClose }: ParkingBookingM
                     <i className="fa-solid fa-arrow-left"></i> Back to Options
                   </button>
                   <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: '800', color: '#111827' }}>Find Nearby Parking</h3>
-                  <div style={{ position: 'relative' }}>
-                    <i className="fa-solid fa-magnifying-glass" style={{ position: 'absolute', left: '16px', top: '16px', color: '#9ca3af' }}></i>
-                    <input type="text" style={{ width: '100%', padding: '14px 14px 14px 48px', borderRadius: '12px', border: '1px solid #d1d5db', background: '#f9fafb', color: '#111827', fontSize: '15px', outline: 'none' }} placeholder="Search area or landmark" value={pickup} onChange={e => setPickup(e.target.value)} />
+                  <div style={{ position: 'relative', display: 'flex', gap: '12px' }}>
+                    <div style={{ position: 'relative', flex: 1 }}>
+                      <i className="fa-solid fa-magnifying-glass" style={{ position: 'absolute', left: '16px', top: '16px', color: '#9ca3af' }}></i>
+                      <input type="text" style={{ width: '100%', padding: '14px 14px 14px 48px', borderRadius: '12px', border: '1px solid #d1d5db', background: '#f9fafb', color: '#111827', fontSize: '15px', outline: 'none' }} placeholder="Search area or landmark" value={pickup} onChange={e => setPickup(e.target.value)} />
+                    </div>
+                    <button 
+                      onClick={() => setPickup('Current Location')}
+                      style={{ background: '#f59e0b', color: '#fff', border: 'none', borderRadius: '12px', padding: '0 20px', cursor: 'pointer', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '8px' }}
+                    >
+                      <i className="fa-solid fa-location-crosshairs"></i> Near Me
+                    </button>
                   </div>
                 </div>
                 
                 {/* Real Interactive Map Area */}
                 <div style={{ flex: 1, position: 'relative', minHeight: '300px', zIndex: 0 }}>
-                  <ParkingMapClient vehicleIconClass={selectedVehicleObj?.icon || 'fa-car'} />
+                  <ParkingMapClient 
+                    vehicleIconClass={selectedVehicleObj?.icon || 'fa-car'} 
+                    vehicleTitle={selectedVehicleObj?.name || 'Car'}
+                    searchQuery={pickup}
+                  />
                 </div>
               </div>
 
