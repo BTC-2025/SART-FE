@@ -1,6 +1,16 @@
 'use client';
 
 import React, { useState } from 'react';
+import dynamic from 'next/dynamic';
+
+const ParkingMapClient = dynamic(() => import('./ParkingMapClient'), {
+  ssr: false,
+  loading: () => (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', background: '#e2e8f0', borderRadius: '12px', color: '#64748b' }}>
+      Loading Map...
+    </div>
+  )
+});
 
 const ROAD_PARKING = [
   {
@@ -169,6 +179,9 @@ export default function ParkingBookingModal({ isOpen, onClose }: ParkingBookingM
     <div className="modal-overlay open" style={{ display: 'flex', zIndex: 1000, background: 'rgba(0,0,0,0.6)' }} onClick={handleClose}>
       <div className="modal-sheet centered-modal" style={{ maxWidth: '900px', width: '95%', height: '90vh', display: 'flex', flexDirection: 'column', backgroundColor: '#f9fafb', borderRadius: '24px', overflow: 'hidden' }} onClick={e => e.stopPropagation()}>
         
+        {/* HACK for globals.css */}
+        <div className="dummy-modal-header-for-css-hack"></div>
+
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px', background: '#ffffff', borderBottom: '1px solid #e5e7eb' }}>
           <div style={{ fontSize: '22px', fontWeight: '800', color: '#111827', display: 'flex', alignItems: 'center', gap: '12px' }}>
             <i className="fa-solid fa-square-parking" style={{ color: '#f59e0b' }}></i> Reserve Parking & Docking
@@ -216,66 +229,80 @@ export default function ParkingBookingModal({ isOpen, onClose }: ParkingBookingM
         )}
 
         {step === 2 && (
-          <div style={{ flex: 1, overflowY: 'auto', padding: '32px' }}>
-            
-            <button 
-              onClick={handleBackToFleet} 
-              style={{ background: 'transparent', border: 'none', color: '#6b7280', cursor: 'pointer', fontSize: '15px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '8px', padding: '0 0 24px 0' }}
-            >
-              <i className="fa-solid fa-arrow-left"></i> Back to Parking Types
-            </button>
-
-            {selectedVehicleObj && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '20px', background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '16px', padding: '20px', marginBottom: '32px', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)' }}>
-                <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: selectedVehicleObj.color + '20', color: selectedVehicleObj.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '28px' }}>
-                  <i className={`fa-solid ${selectedVehicleObj.icon}`}></i>
-                </div>
-                <div style={{ flex: 1 }}>
-                  <h3 style={{ margin: 0, fontSize: '20px', fontWeight: '800', color: '#111827' }}>{selectedVehicleObj.name}</h3>
-                  <p style={{ margin: '4px 0 0 0', fontSize: '14px', color: '#6b7280' }}>Selected Parking Slot</p>
-                </div>
-                <div style={{ fontSize: '24px', fontWeight: '800', color: '#111827' }}>
-                  ₹{selectedVehicleObj.price.toLocaleString('en-IN')}<span style={{fontSize: '12px', color: '#6b7280'}}>/hr</span>
-                </div>
-              </div>
-            )}
-
-            <div style={{ background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '16px', padding: '24px' }}>
-              <div style={{ marginBottom: '20px' }}>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#4b5563', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px' }}>Parking Location / Facility</label>
-                <input type="text" style={{ width: '100%', padding: '14px', borderRadius: '10px', border: '1px solid #d1d5db', background: '#f9fafb', color: '#111827', fontSize: '15px' }} placeholder="Enter location or scan facility QR" value={pickup} onChange={e => setPickup(e.target.value)} />
-              </div>
+          <div style={{ flex: 1, overflowY: 'auto', padding: '0' }}>
+            <div style={{ display: 'flex', height: '100%', flexWrap: 'wrap' }}>
               
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
-                <div>
-                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#4b5563', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px' }}>Check-in Date</label>
-                  <input type="date" style={{ width: '100%', padding: '14px', borderRadius: '10px', border: '1px solid #d1d5db', background: '#f9fafb', color: '#111827', fontSize: '15px' }} value={startDate} onChange={e => setStartDate(e.target.value)} />
+              {/* Left Column: Map & Search */}
+              <div style={{ flex: '1 1 400px', borderRight: '1px solid #e5e7eb', display: 'flex', flexDirection: 'column' }}>
+                <div style={{ padding: '24px', background: '#ffffff', borderBottom: '1px solid #e5e7eb' }}>
+                  <button 
+                    onClick={handleBackToFleet} 
+                    style={{ background: 'transparent', border: 'none', color: '#6b7280', cursor: 'pointer', fontSize: '15px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '8px', padding: '0 0 16px 0' }}
+                  >
+                    <i className="fa-solid fa-arrow-left"></i> Back to Options
+                  </button>
+                  <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: '800', color: '#111827' }}>Find Nearby Parking</h3>
+                  <div style={{ position: 'relative' }}>
+                    <i className="fa-solid fa-magnifying-glass" style={{ position: 'absolute', left: '16px', top: '16px', color: '#9ca3af' }}></i>
+                    <input type="text" style={{ width: '100%', padding: '14px 14px 14px 48px', borderRadius: '12px', border: '1px solid #d1d5db', background: '#f9fafb', color: '#111827', fontSize: '15px', outline: 'none' }} placeholder="Search area or landmark" value={pickup} onChange={e => setPickup(e.target.value)} />
+                  </div>
                 </div>
-                <div>
-                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#4b5563', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px' }}>Check-in Time</label>
-                  <input type="time" style={{ width: '100%', padding: '14px', borderRadius: '10px', border: '1px solid #d1d5db', background: '#f9fafb', color: '#111827', fontSize: '15px' }} value={startTime} onChange={e => setStartTime(e.target.value)} />
+                
+                {/* Real Interactive Map Area */}
+                <div style={{ flex: 1, position: 'relative', minHeight: '300px', zIndex: 0 }}>
+                  <ParkingMapClient vehicleIconClass={selectedVehicleObj?.icon || 'fa-car'} />
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '32px' }}>
-                <div>
-                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#4b5563', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px' }}>Check-out Date</label>
-                  <input type="date" style={{ width: '100%', padding: '14px', borderRadius: '10px', border: '1px solid #d1d5db', background: '#f9fafb', color: '#111827', fontSize: '15px' }} value={returnDate} onChange={e => setReturnDate(e.target.value)} />
-                </div>
-                <div>
-                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#4b5563', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px' }}>Check-out Time</label>
-                  <input type="time" style={{ width: '100%', padding: '14px', borderRadius: '10px', border: '1px solid #d1d5db', background: '#f9fafb', color: '#111827', fontSize: '15px' }} value={returnTime} onChange={e => setReturnTime(e.target.value)} />
+              {/* Right Column: Booking Details */}
+              <div style={{ flex: '1 1 350px', background: '#f9fafb', padding: '32px', display: 'flex', flexDirection: 'column' }}>
+                {selectedVehicleObj && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px', background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '16px', padding: '20px', marginBottom: '24px', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)' }}>
+                    <div style={{ width: '56px', height: '56px', borderRadius: '12px', background: selectedVehicleObj.color + '20', color: selectedVehicleObj.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px' }}>
+                      <i className={`fa-solid ${selectedVehicleObj.icon}`}></i>
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '800', color: '#111827' }}>{selectedVehicleObj.name}</h3>
+                      <p style={{ margin: '4px 0 0 0', fontSize: '13px', color: '#6b7280' }}>Vehicle Requirement</p>
+                    </div>
+                  </div>
+                )}
+
+                <div style={{ background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '16px', padding: '24px', flex: 1 }}>
+                  <h3 style={{ margin: '0 0 20px 0', fontSize: '18px', fontWeight: '800', color: '#111827' }}>Schedule Booking</h3>
+                  
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '12px', fontWeight: '700', color: '#4b5563', marginBottom: '6px', textTransform: 'uppercase' }}>Check-in Date</label>
+                      <input type="date" style={{ width: '100%', padding: '12px', borderRadius: '10px', border: '1px solid #d1d5db', background: '#f9fafb', color: '#111827', fontSize: '14px', outline: 'none' }} value={startDate} onChange={e => setStartDate(e.target.value)} />
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '12px', fontWeight: '700', color: '#4b5563', marginBottom: '6px', textTransform: 'uppercase' }}>Check-in Time</label>
+                      <input type="time" style={{ width: '100%', padding: '12px', borderRadius: '10px', border: '1px solid #d1d5db', background: '#f9fafb', color: '#111827', fontSize: '14px', outline: 'none' }} value={startTime} onChange={e => setStartTime(e.target.value)} />
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '32px' }}>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '12px', fontWeight: '700', color: '#4b5563', marginBottom: '6px', textTransform: 'uppercase' }}>Check-out Date</label>
+                      <input type="date" style={{ width: '100%', padding: '12px', borderRadius: '10px', border: '1px solid #d1d5db', background: '#f9fafb', color: '#111827', fontSize: '14px', outline: 'none' }} value={returnDate} onChange={e => setReturnDate(e.target.value)} />
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '12px', fontWeight: '700', color: '#4b5563', marginBottom: '6px', textTransform: 'uppercase' }}>Check-out Time</label>
+                      <input type="time" style={{ width: '100%', padding: '12px', borderRadius: '10px', border: '1px solid #d1d5db', background: '#f9fafb', color: '#111827', fontSize: '14px', outline: 'none' }} value={returnTime} onChange={e => setReturnTime(e.target.value)} />
+                    </div>
+                  </div>
+
+                  <button 
+                    onClick={handleBook}
+                    style={{ width: '100%', padding: '16px', borderRadius: '12px', background: '#f59e0b', color: '#ffffff', border: 'none', fontSize: '16px', fontWeight: '700', cursor: 'pointer', transition: 'background 0.2s', marginTop: 'auto' }}
+                    onMouseEnter={e => e.currentTarget.style.background = '#d97706'}
+                    onMouseLeave={e => e.currentTarget.style.background = '#f59e0b'}
+                  >
+                    Confirm Parking Slot
+                  </button>
                 </div>
               </div>
-
-              <button 
-                onClick={handleBook}
-                style={{ width: '100%', padding: '16px', borderRadius: '12px', background: '#f59e0b', color: '#ffffff', border: 'none', fontSize: '16px', fontWeight: '700', cursor: 'pointer', transition: 'background 0.2s' }}
-                onMouseEnter={e => e.currentTarget.style.background = '#d97706'}
-                onMouseLeave={e => e.currentTarget.style.background = '#f59e0b'}
-              >
-                Confirm Parking
-              </button>
             </div>
           </div>
         )}
