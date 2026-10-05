@@ -42,19 +42,39 @@ export default function BookingsTab() {
 
   const { activeTab: globalActiveTab, setActiveTab: setGlobalActiveTab } = useSartStore();
 
-  // URL parsing is now handled efficiently in the initial useState logic above!
-
   const router = useRouter();
+
+  // Sync state with URL when navigating via Next.js router (e.g., Back button, router.push)
+  useEffect(() => {
+    if (pathname && pathname.startsWith('/booking')) {
+      const slugParts = pathname.split('/');
+      const slug = slugParts[slugParts.length - 1];
+      if (slug && slug !== 'booking') {
+        const match = FLEET_ITEMS.find(item => item.id.toLowerCase() === slug.toLowerCase());
+        if (match) {
+          setSelectedVehicleType(match.id);
+          setNotFoundService(null);
+        } else {
+          setSelectedVehicleType(null);
+          setNotFoundService(slug);
+        }
+      } else {
+        setSelectedVehicleType(null);
+        setNotFoundService(null);
+      }
+    }
+  }, [pathname]);
 
   const handleBackToFleet = () => {
     setSelectedVehicleType(null);
-    window.history.pushState(null, '', '/booking');
+    setNotFoundService(null);
+    router.push('/booking');
   };
 
   const handleSelectFleetItem = (item: any) => {
     setSelectedVehicleType(item.id);
     setNotFoundService(null);
-    window.history.pushState(null, '', `/booking/${item.id}`);
+    router.push(`/booking/${item.id}`);
   };
 
   const getCategory = (id: string) => {
@@ -101,7 +121,7 @@ export default function BookingsTab() {
           <button
             onClick={() => {
               setNotFoundService(null);
-              window.history.pushState(null, '', '/booking');
+              router.push('/booking');
             }}
             style={{ padding: '10px 20px', backgroundColor: 'black', color: 'white', borderRadius: '8px', cursor: 'pointer', border: 'none' }}
           >
