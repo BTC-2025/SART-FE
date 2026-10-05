@@ -69,7 +69,7 @@ export default function HomeTab() {
       </div>
 
       {/* Quick Services Strip replacing the old image click areas */}
-      <div style={{ textAlign: 'center', padding: '3px 20px 0' }}>
+      {/* <div style={{ textAlign: 'center', padding: '3px 20px 0' }}>
         <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#1e293b', margin: 0, letterSpacing: '1px' }}>Book a Service</h2>
         <div style={{ width: '60px', height: '4px', background: '#f59e0b', margin: '12px auto 0', borderRadius: '2px' }}></div>
       </div>
@@ -80,7 +80,109 @@ export default function HomeTab() {
         <div className="service-card" onClick={() => setActiveTab('community')}><i className="fa-solid fa-users"></i> <span>Community</span></div>
         <div className="service-card" onClick={() => setActiveTab('parking')}><i className="fa-solid fa-square-parking"></i> <span>Parking</span></div>
         <div className="service-card" onClick={() => setActiveTab('drivers')}><i className="fa-solid fa-user-tie"></i> <span>Drivers</span></div>
+      </div> */}
+      {/* Quick Services Section */}
+<section className="quick-services-section">
+
+  <div className="services-heading">
+    <h2>Book a Service</h2>
+    <div className="heading-line"></div>
+  </div>
+
+  <div className="quick-services-strip">
+
+    {/* Rides */}
+    <div
+      className={`service-card ${activeTab === 'ride' ? 'active' : ''}`}
+      onClick={() => setActiveTab('ride')}
+    >
+      <div className="service-image-wrapper">
+        <img
+          src="https://img.icons8.com/fluency/96/car.png"
+          alt="Rides"
+        />
       </div>
+      <span>Rides</span>
+    </div>
+
+
+    {/* Carrier */}
+    <div
+      className={`service-card ${activeTab === 'carrier' ? 'active' : ''}`}
+      onClick={() => setActiveTab('carrier')}
+    >
+      <div className="service-image-wrapper">
+        <img
+          src="https://img.icons8.com/fluency/96/delivery.png"
+          alt="Carrier"
+        />
+      </div>
+      <span>Carrier </span>
+    </div>
+
+
+    {/* Rental */}
+    <div
+      className={`service-card ${activeTab === 'rental' ? 'active' : ''}`}
+      onClick={() => setActiveTab('rental')}
+    >
+      <div className="service-image-wrapper">
+        <img
+          src="https://img.icons8.com/fluency/96/car-rental.png"
+          alt="Rental"
+        />
+      </div>
+      <span>Rental</span>
+    </div>
+
+
+    {/* Community */}
+    <div
+      className={`service-card ${activeTab === 'community' ? 'active' : ''}`}
+      onClick={() => setActiveTab('community')}
+    >
+      <div className="service-image-wrapper">
+        <img
+          src="https://img.icons8.com/fluency/96/conference-call.png"
+          alt="Community"
+        />
+      </div>
+      <span>Community</span>
+    </div>
+
+
+    {/* Parking */}
+    <div
+      className={`service-card ${activeTab === 'parking' ? 'active' : ''}`}
+      onClick={() => setActiveTab('parking')}
+    >
+      <div className="service-image-wrapper">
+        <img
+          src="https://img.icons8.com/fluency/96/parking.png"
+          alt="Parking"
+        />
+      </div>
+      <span>Parking</span>
+    </div>
+
+
+    {/* Drivers */}
+    <div
+      className={`service-card ${activeTab === 'drivers' ? 'active' : ''}`}
+      onClick={() => setActiveTab('drivers')}
+    >
+      <div className="service-image-wrapper">
+        <img
+          src="https://img.icons8.com/fluency/96/driver.png"
+          alt="Drivers"
+        />
+      </div>
+      <span>Drivers</span>
+    </div>
+
+  </div>
+
+</section>
 
       {/* Yellow Quick Booking Form (Below Services) */}
       <QuickBookingForm />

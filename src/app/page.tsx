@@ -63,6 +63,8 @@ export default function Home() {
              window.dispatchEvent(new CustomEvent('resetModalSteps'));
           }
         }
+      } else if (path.startsWith('/booking/')) {
+        setActiveTab('booking');
       } else {
         // Check for top-level tabs (e.g. /store)
         const tab = path.replace('/', '');
