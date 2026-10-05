@@ -1,6 +1,16 @@
 'use client';
 
 import React, { useState } from 'react';
+import dynamic from 'next/dynamic';
+
+const ParkingMapClient = dynamic(() => import('./ParkingMapClient'), {
+  ssr: false,
+  loading: () => (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', background: '#e2e8f0', borderRadius: '12px', color: '#64748b' }}>
+      Loading Map...
+    </div>
+  )
+});
 
 const ROAD_PARKING = [
   {
@@ -238,22 +248,9 @@ export default function ParkingBookingModal({ isOpen, onClose }: ParkingBookingM
                   </div>
                 </div>
                 
-                {/* Simulated Map Area */}
-                <div style={{ flex: 1, background: '#e2e8f0', position: 'relative', minHeight: '300px' }}>
-                  <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
-                    <i className="fa-solid fa-map-location-dot" style={{ fontSize: '48px', color: '#94a3b8', opacity: 0.5 }}></i>
-                    <div style={{ marginTop: '12px', color: '#64748b', fontWeight: '600', fontSize: '14px' }}>Interactive Map Area</div>
-                  </div>
-                  
-                  {/* Mock Map Pins */}
-                  <div style={{ position: 'absolute', top: '30%', left: '40%', transform: 'translate(-50%, -50%)', cursor: 'pointer' }}>
-                    <div style={{ background: '#f59e0b', color: '#fff', padding: '4px 8px', borderRadius: '8px', fontWeight: '700', fontSize: '12px', marginBottom: '4px', boxShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>₹50/hr</div>
-                    <i className="fa-solid fa-location-dot" style={{ color: '#f59e0b', fontSize: '24px', textShadow: '0 2px 4px rgba(0,0,0,0.2)' }}></i>
-                  </div>
-                  <div style={{ position: 'absolute', top: '60%', left: '70%', transform: 'translate(-50%, -50%)', cursor: 'pointer' }}>
-                    <div style={{ background: '#10b981', color: '#fff', padding: '4px 8px', borderRadius: '8px', fontWeight: '700', fontSize: '12px', marginBottom: '4px', boxShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>₹40/hr</div>
-                    <i className="fa-solid fa-location-dot" style={{ color: '#10b981', fontSize: '24px', textShadow: '0 2px 4px rgba(0,0,0,0.2)' }}></i>
-                  </div>
+                {/* Real Interactive Map Area */}
+                <div style={{ flex: 1, position: 'relative', minHeight: '300px', zIndex: 0 }}>
+                  <ParkingMapClient vehicleIconClass={selectedVehicleObj?.icon || 'fa-car'} />
                 </div>
               </div>
 
