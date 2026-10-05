@@ -1,0 +1,228 @@
+/* tracking.css */
+
+.live-tracking-dark {
+  background-color: #1e252e;
+  color: #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.live-tracking-header {
+  padding: 16px;
+  background-color: #27313f;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #334155;
+}
+
+.live-tracking-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #f8fafc;
+}
+
+.live-tracking-tabs {
+  display: flex;
+  justify-content: space-around;
+  padding: 12px 16px;
+  background-color: #1e252e;
+  font-size: 14px;
+  color: #94a3b8;
+  border-bottom: 1px solid #334155;
+}
+
+.live-tracking-columns {
+  display: flex;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: #e2e8f0;
+  font-weight: 600;
+  background-color: #151a21;
+}
+
+.col-arrival {
+  flex: 1;
+  text-align: left;
+}
+
+.col-station {
+  flex: 3;
+  text-align: center;
+}
+
+.col-departure {
+  flex: 1;
+  text-align: right;
+}
+
+.live-timeline-container {
+  position: relative;
+  padding: 16px 0;
+  background-color: #1e252e;
+}
+
+.live-timeline-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 8px;
+  background-color: #334155;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.live-timeline-line.active {
+  background-color: #0284c7;
+  height: 50%; /* Just an example, dynamically set via inline styles */
+}
+
+.live-stop-row {
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  margin-bottom: 32px;
+  padding: 0 16px;
+}
+
+.live-stop-time {
+  flex: 1;
+  font-size: 13px;
+  color: #94a3b8;
+  display: flex;
+  flex-direction: column;
+}
+
+.live-stop-time.arrival {
+  text-align: left;
+  padding-right: 24px;
+}
+
+.live-stop-time.departure {
+  text-align: right;
+  padding-left: 24px;
+}
+
+.live-stop-time strong {
+  color: #f8fafc;
+  font-weight: 500;
+}
+
+.live-stop-time .expected {
+  color: #ef4444; /* Red color for delays as in the image */
+}
+
+.live-stop-center {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.live-dot {
+  width: 12px;
+  height: 12px;
+  background-color: #64748b;
+  border: 3px solid #1e252e;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+}
+
+.live-dot.passed {
+  background-color: #0284c7;
+}
+
+.live-station-info {
+  background-color: transparent;
+  text-align: center;
+  padding: 0 24px;
+  width: 100%;
+}
+
+.live-station-info h4 {
+  margin: 0 0 4px 0;
+  font-size: 15px;
+  color: #f8fafc;
+  font-weight: 500;
+}
+
+.live-station-info p {
+  margin: 0;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.live-platform-badge {
+  display: inline-block;
+  margin-top: 4px;
+  border: 1px solid #475569;
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-size: 11px;
+  color: #e2e8f0;
+}
+
+/* The moving vehicle icon */
+.live-vehicle-marker {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 32px;
+  height: 32px;
+  background-color: #0ea5e9;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 16px;
+  z-index: 10;
+  box-shadow: 0 0 0 4px #1e252e, 0 4px 12px rgba(0,0,0,0.5);
+  transition: top 0.5s ease;
+}
+
+.live-status-footer {
+  padding: 16px;
+  background-color: #151a21;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #334155;
+}
+
+.live-status-text h4 {
+  margin: 0 0 4px 0;
+  font-size: 14px;
+  color: #f87171;
+  font-weight: 600;
+}
+
+.live-status-text p {
+  margin: 0;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.live-refresh-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #0284c7;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
