@@ -260,7 +260,7 @@ export default function ParkingBookingModal({ isOpen, onClose }: ParkingBookingM
                 <div style={{ flex: 1, position: 'relative', minHeight: '300px', zIndex: 0 }}>
                   <ParkingMapClient 
                     vehicleIconClass={selectedVehicleObj?.icon || 'fa-car'} 
-                    vehicleTitle={selectedVehicleObj?.title || 'Car'}
+                    vehicleTitle={selectedVehicleObj?.name || 'Car'}
                     searchQuery={pickup}
                   />
                 </div>
