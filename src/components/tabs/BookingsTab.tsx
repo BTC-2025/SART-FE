@@ -23,7 +23,7 @@ export default function BookingsTab() {
     }
     return null;
   });
-  
+
   const [notFoundService, setNotFoundService] = useState<string | null>(() => {
     if (pathname && pathname.startsWith('/booking')) {
       const slugParts = pathname.split('/');
@@ -36,45 +36,29 @@ export default function BookingsTab() {
     return null;
   });
   const [pnrInput, setPnrInput] = useState('');
+  const [trackingType, setTrackingType] = useState('Train — PNR');
   const [dateInput, setDateInput] = useState('');
   const [trackedBooking, setTrackedBooking] = useState<Booking | null>(null);
   const [searchError, setSearchError] = useState<string | null>(null);
 
+  const [overviewTab, setOverviewTab] = useState<'upcoming' | 'past' | 'cancelled'>('upcoming');
+  const [selectedGlobalBooking, setSelectedGlobalBooking] = useState<Booking | null>(null);
+
   const { activeTab: globalActiveTab, setActiveTab: setGlobalActiveTab } = useSartStore();
+
+  // URL parsing is now handled efficiently in the initial useState logic above!
 
   const router = useRouter();
 
-  // Sync state with URL when navigating via Next.js router (e.g., Back button, router.push)
-  useEffect(() => {
-    if (pathname && pathname.startsWith('/booking')) {
-      const slugParts = pathname.split('/');
-      const slug = slugParts[slugParts.length - 1];
-      if (slug && slug !== 'booking') {
-        const match = FLEET_ITEMS.find(item => item.id.toLowerCase() === slug.toLowerCase());
-        if (match) {
-          setSelectedVehicleType(match.id);
-          setNotFoundService(null);
-        } else {
-          setSelectedVehicleType(null);
-          setNotFoundService(slug);
-        }
-      } else {
-        setSelectedVehicleType(null);
-        setNotFoundService(null);
-      }
-    }
-  }, [pathname]);
-
   const handleBackToFleet = () => {
     setSelectedVehicleType(null);
-    setNotFoundService(null);
-    router.push('/booking');
+    window.history.pushState(null, '', '/booking');
   };
 
   const handleSelectFleetItem = (item: any) => {
     setSelectedVehicleType(item.id);
     setNotFoundService(null);
-    router.push(`/booking/${item.id}`);
+    window.history.pushState(null, '', `/booking/${item.id}`);
   };
 
   const getCategory = (id: string) => {
@@ -92,10 +76,10 @@ export default function BookingsTab() {
       return;
     }
     const input = pnrInput.trim().toLowerCase();
-    
+
     // Check mock bookings first
     let found = MOCK_BOOKINGS.find(b => b.pnr?.toLowerCase() === input || b.bookingId?.toLowerCase() === input);
-    
+
     // Check global local storage
     if (!found && typeof window !== 'undefined') {
       const globalStr = localStorage.getItem('sart_global_bookings');
@@ -121,7 +105,7 @@ export default function BookingsTab() {
           <button
             onClick={() => {
               setNotFoundService(null);
-              router.push('/booking');
+              window.history.pushState(null, '', '/booking');
             }}
             style={{ padding: '10px 20px', backgroundColor: 'black', color: 'white', borderRadius: '8px', cursor: 'pointer', border: 'none' }}
           >
@@ -139,97 +123,360 @@ export default function BookingsTab() {
 
     return (
       <section className={`tab-screen ${globalActiveTab === 'booking' ? 'active' : ''}`} id="tab-booking">
-        <div className="bookings-tab-container fleet-selection-container">
-          
-          {/* TRACKING UI */}
-          <div className="pnr-tracking-section">
-            {trackedBooking ? (
-              <div className="tracking-result-screen">
-                <div className="tracking-result-header">
-                  <button className="back-btn" onClick={() => setTrackedBooking(null)}>
-                    <i className="fa-solid fa-arrow-left"></i>
-                  </button>
+        {/* Global Booking Details Modal */}
+        {selectedGlobalBooking && (
+          <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(15,23,42,0.8)', zIndex: 10000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+            <div style={{ width: '100%', maxWidth: '800px', background: 'white', borderRadius: '16px', display: 'flex', overflow: 'hidden', maxHeight: '90vh' }}>
+
+              {/* Left: Details */}
+              <div style={{ flex: 1, padding: '30px', overflowY: 'auto' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
                   <div>
-                    <h4 className="tracking-subtitle">TRACKING RESULT</h4>
-                    <h2 className="tracking-title">{trackedBooking.title} - {trackedBooking.number}</h2>
-                    <p className="tracking-route">
-                      {trackedBooking.source} <i className="fa-solid fa-arrow-right"></i> {trackedBooking.destination}
-                    </p>
+                    <h2 style={{ margin: '0 0 4px 0', fontSize: '20px', color: '#0f172a' }}>{selectedGlobalBooking.title}</h2>
+                    <div style={{ fontSize: '13px', color: '#64748b' }}>Booking ID: {selectedGlobalBooking.bookingId}</div>
                   </div>
+                  <button onClick={() => setSelectedGlobalBooking(null)} style={{ background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer', color: '#64748b' }}>
+                    <i className="fa-solid fa-xmark"></i>
+                  </button>
                 </div>
 
-                <div className="timeline-card" style={{ marginTop: '24px' }}>
+                <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '8px', marginBottom: '24px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
                     <div>
-                      <p style={{ margin: 0, fontSize: '14px', color: '#64748b' }}>Status</p>
-                      <h3 style={{ margin: '4px 0 0 0', color: '#10b981', fontSize: '18px' }}>{trackedBooking.statusText}</h3>
+                      <div style={{ fontSize: '12px', color: '#64748b', fontWeight: 'bold' }}>FROM</div>
+                      <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#0f172a' }}>{selectedGlobalBooking.source}</div>
+                      <div style={{ fontSize: '13px', color: '#0f172a' }}>{selectedGlobalBooking.sourceTime}, {selectedGlobalBooking.sourceDate}</div>
                     </div>
                     <div style={{ textAlign: 'right' }}>
-                      <p style={{ margin: 0, fontSize: '14px', color: '#64748b' }}>PNR / Booking ID</p>
-                      <h4 style={{ margin: '4px 0 0 0', fontSize: '16px' }}>{trackedBooking.pnr || trackedBooking.bookingId}</h4>
+                      <div style={{ fontSize: '12px', color: '#64748b', fontWeight: 'bold' }}>TO</div>
+                      <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#0f172a' }}>{selectedGlobalBooking.destination}</div>
+                      <div style={{ fontSize: '13px', color: '#0f172a' }}>{selectedGlobalBooking.destinationTime}, {selectedGlobalBooking.destinationDate}</div>
+                    </div>
+                  </div>
+                  <div style={{ borderTop: '1px dashed #cbd5e1', paddingTop: '16px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                    <div>
+                      <div style={{ fontSize: '11px', color: '#64748b' }}>Passenger Name</div>
+                      <div style={{ fontSize: '14px', fontWeight: 'bold' }}>John Doe</div>
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '11px', color: '#64748b' }}>Contact Number</div>
+                      <div style={{ fontSize: '14px', fontWeight: 'bold' }}>+91 9876543210</div>
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '11px', color: '#64748b' }}>Email Address</div>
+                      <div style={{ fontSize: '14px', fontWeight: 'bold' }}>john.doe@example.com</div>
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '11px', color: '#64748b' }}>Address</div>
+                      <div style={{ fontSize: '14px', fontWeight: 'bold' }}>123 Main St, Bangalore, India</div>
+                    </div>
+                  </div>
+                </div>
+
+                {selectedGlobalBooking.isCancelled ? (
+                  <>
+                    <h3 style={{ fontSize: '16px', margin: '0 0 16px 0', borderBottom: '1px solid #e2e8f0', paddingBottom: '8px', color: '#ef4444' }}>Cancellation & Refund Details</h3>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', marginBottom: '8px' }}>
+                      <span style={{ color: '#64748b' }}>Base Fare Paid</span>
+                      <span style={{ fontWeight: 'bold' }}>₹4,500</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', marginBottom: '8px' }}>
+                      <span style={{ color: '#64748b' }}>Taxes & Fees Paid</span>
+                      <span style={{ fontWeight: 'bold' }}>₹320</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', marginBottom: '8px', borderBottom: '1px dashed #cbd5e1', paddingBottom: '8px' }}>
+                      <span style={{ color: '#64748b' }}>Total Amount Paid</span>
+                      <span style={{ fontWeight: 'bold' }}>₹4,720</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', marginBottom: '8px', marginTop: '16px' }}>
+                      <span style={{ color: '#64748b' }}>Cancellation Penalty</span>
+                      <span style={{ fontWeight: 'bold', color: '#ef4444' }}>-₹1,200</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', marginBottom: '8px' }}>
+                      <span style={{ color: '#64748b' }}>GST & Govt Taxes on Cancellation</span>
+                      <span style={{ fontWeight: 'bold', color: '#ef4444' }}>-₹216</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', marginBottom: '8px', borderBottom: '1px dashed #cbd5e1', paddingBottom: '8px' }}>
+                      <span style={{ color: '#64748b' }}>Platform Convenience Fee (Non-refundable)</span>
+                      <span style={{ fontWeight: 'bold', color: '#ef4444' }}>-₹100</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '18px', marginBottom: '16px', marginTop: '16px' }}>
+                      <span style={{ fontWeight: 'bold', color: '#10b981' }}>Total Refund Amount</span>
+                      <span style={{ fontWeight: 'bold', color: '#10b981' }}>₹3,204</span>
+                    </div>
+                    <div style={{ display: 'flex', gap: '8px', fontSize: '12px', color: '#64748b' }}>
+                      <span style={{ background: '#ecfdf5', color: '#10b981', padding: '4px 8px', borderRadius: '4px', fontWeight: 'bold' }}><i className="fa-solid fa-check-circle"></i> Refunded Successfully</span>
+                      <span style={{ background: '#f1f5f9', padding: '4px 8px', borderRadius: '4px' }}>Ref: RFND987654321</span>
+                    </div>
+                    <p suppressHydrationWarning style={{ fontSize: '12px', color: '#64748b', marginTop: '16px', background: '#f8fafc', padding: '12px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                      <strong>Note:</strong> The refund of ₹3,204 has been successfully processed and credited to the original payment method (Credit Card **** 1234) on {new Date().toLocaleDateString('en-IN')}. It may take 3-5 business days to reflect in your bank statement.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <h3 style={{ fontSize: '16px', margin: '0 0 16px 0', borderBottom: '1px solid #e2e8f0', paddingBottom: '8px' }}>Transaction & Payment Details</h3>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', marginBottom: '8px' }}>
+                      <span style={{ color: '#64748b' }}>Base Fare</span>
+                      <span style={{ fontWeight: 'bold' }}>₹4,500</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', marginBottom: '8px' }}>
+                      <span style={{ color: '#64748b' }}>Taxes & Fees</span>
+                      <span style={{ fontWeight: 'bold' }}>₹320</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', marginBottom: '8px', borderBottom: '1px dashed #cbd5e1', paddingBottom: '8px' }}>
+                      <span style={{ color: '#64748b' }}>Discount</span>
+                      <span style={{ fontWeight: 'bold', color: '#10b981' }}>-₹100</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '16px', marginBottom: '16px' }}>
+                      <span style={{ fontWeight: 'bold', color: '#0f172a' }}>Total Amount Paid</span>
+                      <span style={{ fontWeight: 'bold', color: '#0f172a' }}>₹4,720</span>
+                    </div>
+                    <div style={{ display: 'flex', gap: '8px', fontSize: '12px', color: '#64748b' }}>
+                      <span style={{ background: '#f1f5f9', padding: '4px 8px', borderRadius: '4px' }}>Paid via Credit Card **** 1234</span>
+                      <span style={{ background: '#f1f5f9', padding: '4px 8px', borderRadius: '4px' }}>Txn ID: TXN987654321</span>
+                    </div>
+                  </>
+                )}
+              </div>
+
+            </div>
+          </div>
+        )}
+
+        <div className="bookings-tab-container fleet-selection-container">
+
+          {/* TRACKING UI */}
+          <div className="pnr-tracking-section" style={{ marginBottom: '40px', display: 'flex', justifyContent: 'center' }}>
+            <div style={{ width: '100%', maxWidth: '650px' }}>
+              {trackedBooking ? (
+                <div className="tracking-result-screen" style={{ width: '100%' }}>
+                  <div className="tracking-result-header">
+                    <button className="back-btn" onClick={() => setTrackedBooking(null)}>
+                      <i className="fa-solid fa-arrow-left"></i>
+                    </button>
+                    <div>
+                      <h4 className="tracking-subtitle">TRACKING RESULT</h4>
+                      <h2 className="tracking-title">{trackedBooking.title} - {trackedBooking.number}</h2>
+                      <p className="tracking-route">
+                        {trackedBooking.source} <i className="fa-solid fa-arrow-right"></i> {trackedBooking.destination}
+                      </p>
                     </div>
                   </div>
 
-                  <div style={{ display: 'flex', gap: '24px', borderTop: '1px solid #e2e8f0', paddingTop: '16px', flexWrap: 'wrap' }}>
-                    <div style={{ flex: '1 1 45%' }}>
-                      <p style={{ margin: 0, fontSize: '12px', color: '#94a3b8' }}>Departure</p>
-                      <p style={{ margin: '4px 0 0 0', fontWeight: 'bold' }}>{trackedBooking.sourceTime}, {trackedBooking.sourceDate}</p>
-                      <p style={{ margin: 0, fontSize: '13px', color: '#475569' }}>{trackedBooking.sourceCode} - {trackedBooking.sourcePlatform || 'Main Terminal'}</p>
+                  <div className="timeline-card" style={{ marginTop: '24px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
+                      <div>
+                        <p style={{ margin: 0, fontSize: '14px', color: '#64748b' }}>Status</p>
+                        <h3 style={{ margin: '4px 0 0 0', color: '#10b981', fontSize: '18px' }}>{trackedBooking.statusText}</h3>
+                      </div>
+                      <div style={{ textAlign: 'right' }}>
+                        <p style={{ margin: 0, fontSize: '14px', color: '#64748b' }}>PNR / Booking ID</p>
+                        <h4 style={{ margin: '4px 0 0 0', fontSize: '16px' }}>{trackedBooking.pnr || trackedBooking.bookingId}</h4>
+                      </div>
                     </div>
-                    <div style={{ flex: '1 1 45%' }}>
-                      <p style={{ margin: 0, fontSize: '12px', color: '#94a3b8' }}>Arrival</p>
-                      <p style={{ margin: '4px 0 0 0', fontWeight: 'bold' }}>{trackedBooking.destinationTime}, {trackedBooking.destinationDate}</p>
-                      <p style={{ margin: 0, fontSize: '13px', color: '#475569' }}>{trackedBooking.destinationCode} - {trackedBooking.destinationPlatform || 'Main Terminal'}</p>
+
+                    <div style={{ display: 'flex', gap: '24px', borderTop: '1px solid #e2e8f0', paddingTop: '16px', flexWrap: 'wrap' }}>
+                      <div style={{ flex: '1 1 45%' }}>
+                        <p style={{ margin: 0, fontSize: '12px', color: '#94a3b8' }}>Departure</p>
+                        <p style={{ margin: '4px 0 0 0', fontWeight: 'bold' }}>{trackedBooking.sourceTime}, {trackedBooking.sourceDate}</p>
+                        <p style={{ margin: 0, fontSize: '13px', color: '#475569' }}>{trackedBooking.sourceCode} - {trackedBooking.sourcePlatform || 'Main Terminal'}</p>
+                      </div>
+                      <div style={{ flex: '1 1 45%' }}>
+                        <p style={{ margin: 0, fontSize: '12px', color: '#94a3b8' }}>Arrival</p>
+                        <p style={{ margin: '4px 0 0 0', fontWeight: 'bold' }}>{trackedBooking.destinationTime}, {trackedBooking.destinationDate}</p>
+                        <p style={{ margin: 0, fontSize: '13px', color: '#475569' }}>{trackedBooking.destinationCode} - {trackedBooking.destinationPlatform || 'Main Terminal'}</p>
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', borderTop: '1px solid #e2e8f0', paddingTop: '16px', marginTop: '16px' }}>
+                      <div>
+                        <p style={{ margin: 0, fontSize: '12px', color: '#94a3b8' }}>Passenger Name</p>
+                        <p style={{ margin: '4px 0 0 0', fontWeight: 'bold', fontSize: '14px' }}>{trackedBooking.passengerName}</p>
+                      </div>
+                      <div>
+                        <p style={{ margin: 0, fontSize: '12px', color: '#94a3b8' }}>Seat / Allocation</p>
+                        <p style={{ margin: '4px 0 0 0', fontWeight: 'bold', fontSize: '14px' }}>{trackedBooking.seatStatus}</p>
+                      </div>
+                      <div>
+                        <p style={{ margin: 0, fontSize: '12px', color: '#94a3b8' }}>Travel Class</p>
+                        <p style={{ margin: '4px 0 0 0', fontWeight: 'bold', fontSize: '14px' }}>Economy / General</p>
+                      </div>
+                      <div>
+                        <p style={{ margin: 0, fontSize: '12px', color: '#94a3b8' }}>Baggage Allowance</p>
+                        <p style={{ margin: '4px 0 0 0', fontWeight: 'bold', fontSize: '14px' }}>15 Kg (Check-in)</p>
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
+                      <button style={{ flex: 1, padding: '10px', background: '#f97316', color: 'white', border: 'none', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                        <i className="fa-solid fa-download"></i> Download Ticket
+                      </button>
+                      <button style={{ flex: 1, padding: '10px', background: '#e2e8f0', color: '#334155', border: 'none', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                        <i className="fa-solid fa-share-nodes"></i> Share Status
+                      </button>
+                    </div>
+
+                    {trackedBooking.stops && trackedBooking.stops.length > 0 && (
+                      <div style={{ marginTop: '24px', padding: '16px', background: '#f8fafc', borderRadius: '8px' }}>
+                        <h4 style={{ margin: '0 0 12px 0', fontSize: '14px', color: '#334155' }}>Live Journey Details</h4>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                          {trackedBooking.stops.map((stop, idx) => (
+                            <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                              <div style={{
+                                width: '12px', height: '12px', borderRadius: '50%',
+                                background: stop.status === 'past' ? '#cbd5e1' : stop.status === 'current' ? '#3b82f6' : '#fff',
+                                border: `2px solid ${stop.status === 'future' ? '#cbd5e1' : (stop.status === 'current' ? '#3b82f6' : '#cbd5e1')}`
+                              }}></div>
+                              <div style={{ flex: 1, display: 'flex', justifyContent: 'space-between' }}>
+                                <span style={{ fontSize: '14px', color: stop.status === 'past' ? '#94a3b8' : '#0f172a', fontWeight: stop.status === 'current' ? 'bold' : 'normal' }}>{stop.name}</span>
+                                <span style={{ fontSize: '13px', color: stop.status === 'past' ? '#94a3b8' : '#64748b' }}>{stop.time}</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <div style={{ border: '1px solid #e2e8f0', background: 'white', width: '100%', boxShadow: '0 4px 6px rgba(0,0,0,0.05)' }}>
+                    <div style={{ background: '#f97316', color: 'white', padding: '12px', textAlign: 'center', fontSize: '20px' }}>
+                      Passenger Current Status Enquiry
+                    </div>
+                    <div style={{ padding: '20px' }}>
+                      <p suppressHydrationWarning style={{ fontSize: '12px', color: '#64748b', margin: '0 0 20px 0' }}>
+                        {new Date().toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })} [IST]
+                      </p>
+                      <p style={{ textAlign: 'center', fontSize: '16px', color: '#334155', margin: '0 0 30px 0' }}>
+                        Enter the details for your booking below to get the current status. You will find it on the top left corner of the ticket.
+                      </p>
+
+                      {searchError && <p style={{ color: '#ef4444', fontSize: '13px', textAlign: 'center', marginTop: '-10px', marginBottom: '20px' }}>{searchError}</p>}
+
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '20px', marginBottom: '20px' }}>
+                        <select
+                          value={trackingType}
+                          onChange={(e) => setTrackingType(e.target.value)}
+                          style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #cbd5e1', fontSize: '14px', outline: 'none', background: 'white', fontWeight: 'bold', color: '#334155' }}
+                        >
+                          <option value="Train — PNR">Train — PNR</option>
+                          <option value="Airline — Flight Number">Airline — Flight Number</option>
+                          <option value="Ship / Cruise Ship — IMO Number">Ship / Cruise Ship — IMO Number</option>
+                        </select>
+
+                        <input
+                          type="text"
+                          placeholder={trackingType.includes('PNR') ? 'Enter PNR No.' : trackingType.includes('Flight') ? 'Enter Flight No.' : 'Enter IMO No.'}
+                          value={pnrInput}
+                          onChange={(e) => setPnrInput(e.target.value)}
+                          style={{ border: '1px solid #cbd5e1', padding: '6px 12px', fontSize: '14px', width: '200px', outline: 'none', borderRadius: '4px' }}
+                        />
+                      </div>
+
+                      <div style={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
+                        <button onClick={handlePnrSearch} style={{ background: '#3b82f6', color: 'white', border: 'none', padding: '8px 24px', fontSize: '14px', cursor: 'pointer', borderRadius: '4px' }}>
+                          Submit
+                        </button>
+                        <button onClick={() => setPnrInput('')} style={{ background: '#3b82f6', color: 'white', border: 'none', padding: '8px 24px', fontSize: '14px', cursor: 'pointer', borderRadius: '4px' }}>
+                          Clear
+                        </button>
+                      </div>
                     </div>
                   </div>
-                  
-                  {trackedBooking.stops && trackedBooking.stops.length > 0 && (
-                     <div style={{ marginTop: '24px', padding: '16px', background: '#f8fafc', borderRadius: '8px' }}>
-                       <h4 style={{ margin: '0 0 12px 0', fontSize: '14px', color: '#334155' }}>Live Journey Details</h4>
-                       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                         {trackedBooking.stops.map((stop, idx) => (
-                           <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                             <div style={{ 
-                               width: '12px', height: '12px', borderRadius: '50%', 
-                               background: stop.status === 'past' ? '#cbd5e1' : stop.status === 'current' ? '#3b82f6' : '#fff',
-                               border: `2px solid ${stop.status === 'future' ? '#cbd5e1' : (stop.status === 'current' ? '#3b82f6' : '#cbd5e1')}`
-                             }}></div>
-                             <div style={{ flex: 1, display: 'flex', justifyContent: 'space-between' }}>
-                               <span style={{ fontSize: '14px', color: stop.status === 'past' ? '#94a3b8' : '#0f172a', fontWeight: stop.status === 'current' ? 'bold' : 'normal' }}>{stop.name}</span>
-                               <span style={{ fontSize: '13px', color: stop.status === 'past' ? '#94a3b8' : '#64748b' }}>{stop.time}</span>
-                             </div>
-                           </div>
-                         ))}
-                       </div>
-                     </div>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* MY BOOKINGS OVERVIEW */}
+          <div style={{ maxWidth: '1000px', margin: '0 auto 40px auto', background: 'white', borderRadius: '12px', padding: '24px', boxShadow: '0 4px 10px rgba(0,0,0,0.03)' }}>
+            <div style={{ display: 'flex', borderBottom: '1px solid #e2e8f0', marginBottom: '24px' }}>
+              <button
+                onClick={() => setOverviewTab('upcoming')}
+                style={{ background: 'none', border: 'none', borderBottom: overviewTab === 'upcoming' ? '2px solid #6366f1' : '2px solid transparent', padding: '12px 24px', cursor: 'pointer', fontWeight: 'bold', color: overviewTab === 'upcoming' ? '#0f172a' : '#64748b' }}
+              >
+                Upcoming
+              </button>
+              <button
+                onClick={() => setOverviewTab('past')}
+                style={{ background: 'none', border: 'none', borderBottom: overviewTab === 'past' ? '2px solid #6366f1' : '2px solid transparent', padding: '12px 24px', cursor: 'pointer', fontWeight: 'bold', color: overviewTab === 'past' ? '#0f172a' : '#64748b' }}
+              >
+                Past Bookings
+              </button>
+              <button
+                onClick={() => setOverviewTab('cancelled')}
+                style={{ background: 'none', border: 'none', borderBottom: overviewTab === 'cancelled' ? '2px solid #6366f1' : '2px solid transparent', padding: '12px 24px', cursor: 'pointer', fontWeight: 'bold', color: overviewTab === 'cancelled' ? '#0f172a' : '#64748b' }}
+              >
+                Cancellations
+              </button>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(400px, 1fr))', gap: '20px' }}>
+              {MOCK_BOOKINGS.filter(b => {
+                 if (overviewTab === 'upcoming') return b.isActive && !b.isCancelled;
+                 if (overviewTab === 'past') return !b.isActive && !b.isCancelled;
+                 if (overviewTab === 'cancelled') return b.isCancelled;
+                 return false;
+              }).map((booking, idx) => (
+                <div key={idx} style={{ border: '1px solid #e2e8f0', borderRadius: '12px', padding: '20px', display: 'flex', flexDirection: 'column' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <div style={{ width: '36px', height: '36px', background: '#f1f5f9', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                        {booking.image ? (
+                          <img src={booking.image} alt={booking.type} style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
+                        ) : (
+                          <i className={`fa-solid ${booking.title.includes('AUTO') ? 'fa-motorcycle' : booking.title.includes('CRUISE') ? 'fa-ship' : booking.title.includes('EXPRESS') ? 'fa-train' : 'fa-plane'}`} style={{ color: '#0f172a' }}></i>
+                        )}
+                      </div>
+                      <div>
+                        <div style={{ fontSize: '11px', color: '#64748b' }}>{booking.number}</div>
+                        <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#0f172a' }}>{booking.title}</div>
+                      </div>
+                    </div>
+                    {overviewTab === 'cancelled' && (
+                      <div style={{ color: '#ef4444', fontSize: '12px', fontWeight: 'bold' }}>CANCELLED</div>
+                    )}
+                    {overviewTab !== 'cancelled' && (
+                      <div style={{ color: '#cbd5e1', fontSize: '14px', fontWeight: 'bold' }}>P</div>
+                    )}
+                  </div>
+
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                    <div>
+                      <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#0f172a' }}>{booking.sourceCode || booking.source}</div>
+                      <div style={{ fontSize: '13px', color: '#0f172a', fontWeight: '500', marginTop: '4px' }}>{booking.sourceTime}</div>
+                      <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px' }}>{booking.sourceDate}</div>
+                    </div>
+                    <i className="fa-solid fa-arrow-right-long" style={{ color: '#cbd5e1' }}></i>
+                    <div style={{ textAlign: 'right' }}>
+                      <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#0f172a' }}>{booking.destinationCode || booking.destination}</div>
+                      <div style={{ fontSize: '13px', color: '#0f172a', fontWeight: '500', marginTop: '4px' }}>{booking.destinationTime}</div>
+                      <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px' }}>{booking.destinationDate}</div>
+                    </div>
+                  </div>
+
+                  <div style={{ fontSize: '12px', color: '#64748b', marginBottom: '16px' }}>
+                    Booking ID {booking.bookingId}
+                  </div>
+
+                  {overviewTab === 'cancelled' ? (
+                    <button onClick={() => setSelectedGlobalBooking(booking)} style={{ width: '100%', padding: '10px', background: '#ef4444', color: 'white', border: 'none', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer' }}>
+                      Refund Details
+                    </button>
+                  ) : (
+                    <div style={{ display: 'flex', gap: '12px', marginTop: 'auto' }}>
+                      <button style={{ flex: 1, padding: '10px', background: 'transparent', color: '#0ea5e9', border: '1px solid #0ea5e9', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer' }}>
+                        Download Ticket
+                      </button>
+                      <button onClick={() => setSelectedGlobalBooking(booking)} style={{ flex: 1, padding: '10px', background: '#8b5cf6', color: 'white', border: 'none', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer' }}>
+                        View Details
+                      </button>
+                    </div>
                   )}
                 </div>
-              </div>
-            ) : (
-              <>
-                <h4 className="pnr-tracking-subtitle" style={{ textAlign: 'center' }}>TRACK LIVE STATUS</h4>
-                <h2 className="pnr-tracking-title" style={{ textAlign: 'center' }}>Use PNR number to get the status</h2>
-                <p className="pnr-tracking-desc" style={{ margin: '0 auto 32px auto', textAlign: 'center' }}>
-                  With our tracker, you can now track the live status of domestic and international rides, trains, and more. Just enter a few details such as PNR number, travel date and get the live status.
-                </p>
-                
-                <div className="pnr-search-card" style={{ maxWidth: '800px', margin: '0 auto' }}>
-                  <div className="pnr-input-group">
-                    <i className="fa-solid fa-magnifying-glass"></i>
-                    <input 
-                      type="text" 
-                      placeholder="Search by PNR" 
-                      value={pnrInput}
-                      onChange={(e) => setPnrInput(e.target.value)}
-                    />
-                  </div>
-                  
-                  {searchError && <p style={{ color: '#ef4444', fontSize: '13px', margin: '0' }}>{searchError}</p>}
-                  
-                  <button className="pnr-search-btn" onClick={handlePnrSearch}>Search Ride</button>
-                </div>
-              </>
-            )}
+              ))}
+            </div>
           </div>
 
           <div className="fleet-header">
@@ -273,56 +520,56 @@ export default function BookingsTab() {
           <div className="offers-section" style={{ marginTop: '48px', marginBottom: '24px' }}>
             <h2 style={{ fontSize: '24px', fontWeight: '800', marginBottom: '24px', color: '#0f172a' }}>Special Offers</h2>
             <div className="offers-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
-               
-               {/* Offer 1 */}
-               <div className="offer-card" style={{ background: '#0f172a', borderRadius: '16px', overflow: 'hidden', color: 'white', display: 'flex', flexDirection: 'column', position: 'relative' }}>
-                 <div style={{ padding: '32px', flex: 1, position: 'relative', zIndex: 1 }}>
-                   <p style={{ margin: '0 0 8px 0', fontSize: '15px' }}>Stand a chance to win</p>
-                   <h4 style={{ fontSize: '36px', margin: '0 0 4px 0', fontWeight: '800' }}>2,00,000</h4>
-                   <p style={{ fontSize: '15px', color: '#38bdf8', marginBottom: '32px' }}>IndiGo BluChips</p>
-                   
-                   <p style={{ fontSize: '13px', margin: '0 0 4px 0' }}>Earn <strong style={{ fontSize: '18px' }}>2x</strong> IndiGo BluChips</p>
-                   <p style={{ fontSize: '12px', color: '#94a3b8' }}>on IndiGoStretch, flights & partner spends</p>
-                 </div>
-                 <div style={{ position: 'absolute', top: '24px', left: '24px', border: '1px solid #38bdf8', padding: '12px', borderRadius: '8px', transform: 'rotate(-15deg)', opacity: 0.8 }}>
-                    <h3 style={{ margin: 0, color: '#38bdf8', fontSize: '18px', textAlign: 'center', lineHeight: 1.2 }}>Blu<br/>October<br/>Festival</h3>
-                 </div>
-                 <p style={{ position: 'absolute', bottom: '16px', left: '24px', fontSize: '10px', color: '#64748b', margin: 0 }}>T&C apply.</p>
-               </div>
 
-               {/* Offer 2 */}
-               <div className="offer-card" style={{ background: '#0a0a0a', borderRadius: '16px', overflow: 'hidden', color: 'white', display: 'flex', flexDirection: 'column', position: 'relative' }}>
-                 <div style={{ padding: '32px', flex: 1, zIndex: 1 }}>
-                   <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '16px' }}>
-                     <span style={{ fontSize: '12px', fontWeight: 'bold', color: '#94a3b8' }}>IndiGo BluChip</span>
-                   </div>
-                   <h3 style={{ fontSize: '22px', margin: '0 0 12px 0', lineHeight: 1.4, fontWeight: '600' }}>Earn 2x IndiGo Bluchips on every<br/>Cab booking</h3>
-                   <p style={{ fontSize: '16px', color: '#e2e8f0', marginBottom: '32px' }}>Reserve your ride for just ₹1*</p>
-                   <button style={{ background: '#334155', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '24px', fontSize: '12px', cursor: 'pointer' }}>Limited-time offer</button>
-                 </div>
-                 <div style={{ position: 'absolute', bottom: '24px', right: '24px', border: '1px solid #38bdf8', padding: '12px', borderRadius: '8px', transform: 'rotate(15deg)', opacity: 0.8 }}>
-                    <h3 style={{ margin: 0, color: '#38bdf8', fontSize: '14px', textAlign: 'center', lineHeight: 1.2 }}>Blu<br/>October<br/>Festival</h3>
-                 </div>
-               </div>
+              {/* Offer 1 */}
+              <div className="offer-card" style={{ background: '#0f172a', borderRadius: '16px', overflow: 'hidden', color: 'white', display: 'flex', flexDirection: 'column', position: 'relative' }}>
+                <div style={{ padding: '32px', flex: 1, position: 'relative', zIndex: 1 }}>
+                  <p style={{ margin: '0 0 8px 0', fontSize: '15px' }}>Stand a chance to win</p>
+                  <h4 style={{ fontSize: '36px', margin: '0 0 4px 0', fontWeight: '800' }}>2,00,000</h4>
+                  <p style={{ fontSize: '15px', color: '#38bdf8', marginBottom: '32px' }}>IndiGo BluChips</p>
 
-               {/* Offer 3 */}
-               <div className="offer-card" style={{ background: '#0284c7', borderRadius: '16px', overflow: 'hidden', color: 'white', display: 'flex', flexDirection: 'column', position: 'relative' }}>
-                 <div style={{ padding: '32px', flex: 1, zIndex: 1 }}>
-                   <h3 style={{ fontSize: '28px', margin: '0 0 8px 0', fontWeight: '800' }}>Hotels on IndiGo</h3>
-                   <p style={{ fontSize: '15px', margin: '0 0 24px 0', opacity: 0.9, lineHeight: 1.4 }}>Earn IndiGo BluChips on hotels and<br/>redeem for flights.</p>
-                   
-                   <div style={{ display: 'flex', gap: '8px', fontSize: '12px', flexWrap: 'wrap', marginBottom: '48px' }}>
-                     <span style={{ border: '1px dashed rgba(255,255,255,0.6)', padding: '6px 10px', borderRadius: '4px' }}><i className="fa-solid fa-bed"></i> 7 lakh+ hotels</span>
-                     <span style={{ border: '1px dashed rgba(255,255,255,0.6)', padding: '6px 10px', borderRadius: '4px' }}><i className="fa-regular fa-calendar-check"></i> Free cancellation</span>
-                   </div>
+                  <p style={{ fontSize: '13px', margin: '0 0 4px 0' }}>Earn <strong style={{ fontSize: '18px' }}>2x</strong> IndiGo BluChips</p>
+                  <p style={{ fontSize: '12px', color: '#94a3b8' }}>on IndiGoStretch, flights & partner spends</p>
+                </div>
+                <div style={{ position: 'absolute', top: '24px', left: '24px', border: '1px solid #38bdf8', padding: '12px', borderRadius: '8px', transform: 'rotate(-15deg)', opacity: 0.8 }}>
+                  <h3 style={{ margin: 0, color: '#38bdf8', fontSize: '18px', textAlign: 'center', lineHeight: 1.2 }}>Blu<br />October<br />Festival</h3>
+                </div>
+                <p style={{ position: 'absolute', bottom: '16px', left: '24px', fontSize: '10px', color: '#64748b', margin: 0 }}>T&C apply.</p>
+              </div>
 
-                   <button style={{ background: 'transparent', color: 'white', border: '1px solid white', padding: '8px 16px', borderRadius: '24px', fontSize: '12px', cursor: 'pointer' }}>Book now on goIndiGo.in</button>
-                 </div>
-                 
-                 {/* Decorative background image simulation */}
-                 <div style={{ position: 'absolute', bottom: 0, right: 0, width: '100%', height: '50%', background: 'linear-gradient(to top, rgba(14,165,233,1) 0%, rgba(14,165,233,0) 100%)', zIndex: 0 }}></div>
-               </div>
-               
+              {/* Offer 2 */}
+              <div className="offer-card" style={{ background: '#0a0a0a', borderRadius: '16px', overflow: 'hidden', color: 'white', display: 'flex', flexDirection: 'column', position: 'relative' }}>
+                <div style={{ padding: '32px', flex: 1, zIndex: 1 }}>
+                  <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '16px' }}>
+                    <span style={{ fontSize: '12px', fontWeight: 'bold', color: '#94a3b8' }}>IndiGo BluChip</span>
+                  </div>
+                  <h3 style={{ fontSize: '22px', margin: '0 0 12px 0', lineHeight: 1.4, fontWeight: '600' }}>Earn 2x IndiGo Bluchips on every<br />Cab booking</h3>
+                  <p style={{ fontSize: '16px', color: '#e2e8f0', marginBottom: '32px' }}>Reserve your ride for just ₹1*</p>
+                  <button style={{ background: '#334155', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '24px', fontSize: '12px', cursor: 'pointer' }}>Limited-time offer</button>
+                </div>
+                <div style={{ position: 'absolute', bottom: '24px', right: '24px', border: '1px solid #38bdf8', padding: '12px', borderRadius: '8px', transform: 'rotate(15deg)', opacity: 0.8 }}>
+                  <h3 style={{ margin: 0, color: '#38bdf8', fontSize: '14px', textAlign: 'center', lineHeight: 1.2 }}>Blu<br />October<br />Festival</h3>
+                </div>
+              </div>
+
+              {/* Offer 3 */}
+              <div className="offer-card" style={{ background: '#0284c7', borderRadius: '16px', overflow: 'hidden', color: 'white', display: 'flex', flexDirection: 'column', position: 'relative' }}>
+                <div style={{ padding: '32px', flex: 1, zIndex: 1 }}>
+                  <h3 style={{ fontSize: '28px', margin: '0 0 8px 0', fontWeight: '800' }}>Hotels on IndiGo</h3>
+                  <p style={{ fontSize: '15px', margin: '0 0 24px 0', opacity: 0.9, lineHeight: 1.4 }}>Earn IndiGo BluChips on hotels and<br />redeem for flights.</p>
+
+                  <div style={{ display: 'flex', gap: '8px', fontSize: '12px', flexWrap: 'wrap', marginBottom: '48px' }}>
+                    <span style={{ border: '1px dashed rgba(255,255,255,0.6)', padding: '6px 10px', borderRadius: '4px' }}><i className="fa-solid fa-bed"></i> 7 lakh+ hotels</span>
+                    <span style={{ border: '1px dashed rgba(255,255,255,0.6)', padding: '6px 10px', borderRadius: '4px' }}><i className="fa-regular fa-calendar-check"></i> Free cancellation</span>
+                  </div>
+
+                  <button style={{ background: 'transparent', color: 'white', border: '1px solid white', padding: '8px 16px', borderRadius: '24px', fontSize: '12px', cursor: 'pointer' }}>Book now on goIndiGo.in</button>
+                </div>
+
+                {/* Decorative background image simulation */}
+                <div style={{ position: 'absolute', bottom: 0, right: 0, width: '100%', height: '50%', background: 'linear-gradient(to top, rgba(14,165,233,1) 0%, rgba(14,165,233,0) 100%)', zIndex: 0 }}></div>
+              </div>
+
             </div>
           </div>
         </div>
@@ -334,6 +581,126 @@ export default function BookingsTab() {
 
   return (
     <section className={`tab-screen ${globalActiveTab === 'booking' ? 'active' : ''}`} id="tab-booking">
+
+      {/* Global Booking Details Modal */}
+      {selectedGlobalBooking && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(15,23,42,0.8)', zIndex: 10000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+          <div style={{ width: '100%', maxWidth: '800px', background: 'white', borderRadius: '16px', display: 'flex', overflow: 'hidden', maxHeight: '90vh' }}>
+
+            {/* Left: Details */}
+            <div style={{ flex: 1, padding: '30px', overflowY: 'auto' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
+                <div>
+                  <h2 style={{ margin: '0 0 4px 0', fontSize: '20px', color: '#0f172a' }}>{selectedGlobalBooking.title}</h2>
+                  <div style={{ fontSize: '13px', color: '#64748b' }}>Booking ID: {selectedGlobalBooking.bookingId}</div>
+                </div>
+                <button onClick={() => setSelectedGlobalBooking(null)} style={{ background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer', color: '#64748b' }}>
+                  <i className="fa-solid fa-xmark"></i>
+                </button>
+              </div>
+
+              <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '8px', marginBottom: '24px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
+                  <div>
+                    <div style={{ fontSize: '12px', color: '#64748b', fontWeight: 'bold' }}>FROM</div>
+                    <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#0f172a' }}>{selectedGlobalBooking.source}</div>
+                    <div style={{ fontSize: '13px', color: '#0f172a' }}>{selectedGlobalBooking.sourceTime}, {selectedGlobalBooking.sourceDate}</div>
+                  </div>
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ fontSize: '12px', color: '#64748b', fontWeight: 'bold' }}>TO</div>
+                    <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#0f172a' }}>{selectedGlobalBooking.destination}</div>
+                    <div style={{ fontSize: '13px', color: '#0f172a' }}>{selectedGlobalBooking.destinationTime}, {selectedGlobalBooking.destinationDate}</div>
+                  </div>
+                </div>
+                <div style={{ borderTop: '1px dashed #cbd5e1', paddingTop: '16px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                  <div>
+                    <div style={{ fontSize: '11px', color: '#64748b' }}>Passenger Name</div>
+                    <div style={{ fontSize: '14px', fontWeight: 'bold' }}>John Doe</div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '11px', color: '#64748b' }}>Contact Number</div>
+                    <div style={{ fontSize: '14px', fontWeight: 'bold' }}>+91 9876543210</div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '11px', color: '#64748b' }}>Email Address</div>
+                    <div style={{ fontSize: '14px', fontWeight: 'bold' }}>john.doe@example.com</div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '11px', color: '#64748b' }}>Address</div>
+                    <div style={{ fontSize: '14px', fontWeight: 'bold' }}>123 Main St, Bangalore, India</div>
+                  </div>
+                </div>
+              </div>
+
+              {selectedGlobalBooking.isCancelled ? (
+                <>
+                  <h3 style={{ fontSize: '16px', margin: '0 0 16px 0', borderBottom: '1px solid #e2e8f0', paddingBottom: '8px', color: '#ef4444' }}>Cancellation & Refund Details</h3>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', marginBottom: '8px' }}>
+                    <span style={{ color: '#64748b' }}>Base Fare Paid</span>
+                    <span style={{ fontWeight: 'bold' }}>₹4,500</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', marginBottom: '8px' }}>
+                    <span style={{ color: '#64748b' }}>Taxes & Fees Paid</span>
+                    <span style={{ fontWeight: 'bold' }}>₹320</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', marginBottom: '8px', borderBottom: '1px dashed #cbd5e1', paddingBottom: '8px' }}>
+                    <span style={{ color: '#64748b' }}>Total Amount Paid</span>
+                    <span style={{ fontWeight: 'bold' }}>₹4,720</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', marginBottom: '8px', marginTop: '16px' }}>
+                    <span style={{ color: '#64748b' }}>Cancellation Penalty</span>
+                    <span style={{ fontWeight: 'bold', color: '#ef4444' }}>-₹1,200</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', marginBottom: '8px' }}>
+                    <span style={{ color: '#64748b' }}>GST & Govt Taxes on Cancellation</span>
+                    <span style={{ fontWeight: 'bold', color: '#ef4444' }}>-₹216</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', marginBottom: '8px', borderBottom: '1px dashed #cbd5e1', paddingBottom: '8px' }}>
+                    <span style={{ color: '#64748b' }}>Platform Convenience Fee (Non-refundable)</span>
+                    <span style={{ fontWeight: 'bold', color: '#ef4444' }}>-₹100</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '18px', marginBottom: '16px', marginTop: '16px' }}>
+                    <span style={{ fontWeight: 'bold', color: '#10b981' }}>Total Refund Amount</span>
+                    <span style={{ fontWeight: 'bold', color: '#10b981' }}>₹3,204</span>
+                  </div>
+                  <div style={{ display: 'flex', gap: '8px', fontSize: '12px', color: '#64748b' }}>
+                    <span style={{ background: '#ecfdf5', color: '#10b981', padding: '4px 8px', borderRadius: '4px', fontWeight: 'bold' }}><i className="fa-solid fa-check-circle"></i> Refunded Successfully</span>
+                    <span style={{ background: '#f1f5f9', padding: '4px 8px', borderRadius: '4px' }}>Ref: RFND987654321</span>
+                  </div>
+                  <p suppressHydrationWarning style={{ fontSize: '12px', color: '#64748b', marginTop: '16px', background: '#f8fafc', padding: '12px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                    <strong>Note:</strong> The refund of ₹3,204 has been successfully processed and credited to the original payment method (Credit Card **** 1234) on {new Date().toLocaleDateString('en-IN')}. It may take 3-5 business days to reflect in your bank statement.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <h3 style={{ fontSize: '16px', margin: '0 0 16px 0', borderBottom: '1px solid #e2e8f0', paddingBottom: '8px' }}>Transaction & Payment Details</h3>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', marginBottom: '8px' }}>
+                    <span style={{ color: '#64748b' }}>Base Fare</span>
+                    <span style={{ fontWeight: 'bold' }}>₹4,500</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', marginBottom: '8px' }}>
+                    <span style={{ color: '#64748b' }}>Taxes & Fees</span>
+                    <span style={{ fontWeight: 'bold' }}>₹320</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', marginBottom: '8px', borderBottom: '1px dashed #cbd5e1', paddingBottom: '8px' }}>
+                    <span style={{ color: '#64748b' }}>Discount</span>
+                    <span style={{ fontWeight: 'bold', color: '#10b981' }}>-₹100</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '16px', marginBottom: '16px' }}>
+                    <span style={{ fontWeight: 'bold', color: '#0f172a' }}>Total Amount Paid</span>
+                    <span style={{ fontWeight: 'bold', color: '#0f172a' }}>₹4,720</span>
+                  </div>
+                  <div style={{ display: 'flex', gap: '8px', fontSize: '12px', color: '#64748b' }}>
+                    <span style={{ background: '#f1f5f9', padding: '4px 8px', borderRadius: '4px' }}>Paid via Credit Card **** 1234</span>
+                    <span style={{ background: '#f1f5f9', padding: '4px 8px', borderRadius: '4px' }}>Txn ID: TXN987654321</span>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {category === 'Road' && <RoadBooking selectedVehicleType={selectedVehicleType} handleBackToFleet={handleBackToFleet} />}
       {category === 'Sea' && <SeaBooking selectedVehicleType={selectedVehicleType} handleBackToFleet={handleBackToFleet} />}
       {category === 'Air' && <AirBooking selectedVehicleType={selectedVehicleType} handleBackToFleet={handleBackToFleet} />}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Booking } from '../data/mockBookings';
+import { Booking } from './tabs/BookingsTab';
 import './tracking.css';
 
 interface TrackingProps {

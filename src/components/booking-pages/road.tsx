@@ -2,14 +2,19 @@ import React, { useState, useEffect } from 'react';
 import '../tabs/BookingsTab.css';
 
 export default function RoadBooking({ selectedVehicleType, handleBackToFleet }: { selectedVehicleType: string, handleBackToFleet: () => void }) {
-  const [activeSubTab, setActiveSubTab] = useState<'book' | 'upcoming' | 'past' | 'cancelled'>(() => {
+  const [activeSubTab, setActiveSubTab] = useState<'book' | 'upcoming' | 'past' | 'cancelled'>('book');
+
+  // Load saved tab on mount
+  useEffect(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem(`sart_road_activeTab_${selectedVehicleType}`);
-      return (saved as any) || 'book';
+      if (saved) {
+        setActiveSubTab(saved as any);
+      }
     }
-    return 'book';
-  });
+  }, [selectedVehicleType]);
 
+  // Save tab on change
   useEffect(() => {
     localStorage.setItem(`sart_road_activeTab_${selectedVehicleType}`, activeSubTab);
   }, [activeSubTab, selectedVehicleType]);

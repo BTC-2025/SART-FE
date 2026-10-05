@@ -37,7 +37,6 @@
     ".next/dev/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules",
-    "SART-FE-1-main"
+    "node_modules"
   ]
 }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Booking } from '../data/mockBookings';
+import { Booking } from './tabs/BookingsTab';
 import './Ticket.css';
 
 interface TicketProps {
