@@ -163,7 +163,7 @@ function RentalBookingModal({ isOpen, onClose }: RentalBookingModalProps) {
         const parts = path.split('/');
         if (parts.length > 3) {
           const name = decodeURIComponent(parts[3].split('-')[0]);
-          const found = MASTER_CATEGORIES.find(m => m.name.startsWith(name) || m.id === name);
+          const found = RENTAL_MASTER_CATEGORIES.find(m => m.name.startsWith(name) || m.id === name);
           if (found) setSelectedMasterId(found.id);
         }
       } else if (path === '/home/rental') {

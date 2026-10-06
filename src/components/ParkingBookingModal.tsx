@@ -69,7 +69,7 @@ interface ParkingBookingModalProps {
 }
 
 export default function ParkingBookingModal({ isOpen, onClose }: ParkingBookingModalProps) {
-  const [step, setStep] = useState<1 | 2>(1);
+  const [step, setStep] = useState<1 | 2 | 3>(1);
   const [selectedVehicle, setSelectedVehicle] = useState('p-car');
 
   useEffect(() => {
